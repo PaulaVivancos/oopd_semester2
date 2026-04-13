@@ -13,6 +13,10 @@ public abstract class BaseView extends JPanel {
 
     private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
 
+    //COLOR CONSTANTS
+    protected final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
+    protected final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
+
     public BaseView() {
         panel = new JImagePanel(BACKGROUND_URL);
         setLayout(new BorderLayout());
