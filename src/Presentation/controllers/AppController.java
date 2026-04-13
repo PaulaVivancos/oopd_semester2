@@ -5,7 +5,7 @@ import Presentation.views.MainFrame;
 import javax.swing.*;
 
 public class AppController {
-    static private MainFrame mainFrame;
+    private static MainFrame mainFrame;
 
     public AppController() {
         mainFrame = new MainFrame(this);
