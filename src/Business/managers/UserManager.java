@@ -2,7 +2,6 @@ package Business.managers;
 
 import Business.entities.User;
 import Persistence.SQLDaos.UserSQLDao;
-import Persistence.UserDAO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,13 +20,29 @@ public class UserManager {
         this.userDao = new UserSQLDao();
     }
 
-    public boolean login(String username, String email, String password) {
-        User user = userDao.findByUsernameAndPassword(username, password);
-        return user != null;
+    public boolean login(String username_email, String password) {
+        if (!username_email.isEmpty() && !password.isEmpty()) {
+            User user = userDao.findByNameEmailAndPassword(username_email, password);
+            return user != null;
+        }
+        return false;
     }
 
-    public void addStudent(User user) {
-        userDao.insertUser(user);
+    public boolean register(String username, String email, String password, String password_confirmation) {
+        if (password.equals(password_confirmation) && !password.isEmpty()) {
+            User user = new User(username, email, password);
+            addStudent(user);
+            return user != null;
+        }
+        return false;
+    }
+
+    private void addStudent(User user) {
+        try {
+            userDao.insertUser(user);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<User> getUsers() {

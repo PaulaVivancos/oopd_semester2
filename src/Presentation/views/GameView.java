@@ -3,12 +3,12 @@ package Presentation.views;
 import Presentation.JImagePanel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameView extends BaseView {
-
     private JImagePanel jipMain;
     private JPanel jpTop, jpBot, jpCentre, jpEast, jpWest;
     private JImagePanel jipTitle, jipCoffeeCup, jipCoffeeCupSmall;
@@ -24,9 +24,9 @@ public class GameView extends BaseView {
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
     // IMAGES
-    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
-    private final String TITLE_URL = "src/Presentation/Images/title.png";
-    private final String COFFEE_CUP = "src/Presentation/Images/coffee_cup.png";
+    private static final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+    private static final String TITLE_URL = "src/Presentation/Images/title.png";
+    private static final String COFFEE_CUP = "src/Presentation/Images/coffee_cup.png";
 
     public GameView() {
         super(); // llama a initMenu() + initComponents()
@@ -42,8 +42,6 @@ public class GameView extends BaseView {
         addMenuItem(menu, "Volver al menú", e -> System.out.println("go home"));
         addMenuItem(menu, "Salir", e -> System.exit(0));
     }
-
-    // ── Construcción de componentes ───────────────────────────────
 
     @Override
     protected void initComponents() {
@@ -123,6 +121,18 @@ public class GameView extends BaseView {
 
         jtTable = new JTable(data, columns);
         JScrollPane scrollPane = new JScrollPane(jtTable);
+
+        //instance table model
+        DefaultTableModel tableModel = new DefaultTableModel(data, columns) {
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+        jtTable.getTableHeader().setReorderingAllowed(false);
+        jtTable.setModel(tableModel);
 
         jpBot.setLayout(new BorderLayout());
         jpBot.add(scrollPane, BorderLayout.CENTER);

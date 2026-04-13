@@ -4,10 +4,10 @@ import Presentation.JImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
-public class MenuView extends BaseView {
+public class MenuView extends JPanel {
     private JImagePanel jipMain;
     private JPanel jpTop, jpCentre, jpBot;
     private JImagePanel jipTitleTop, jipTitleBottom, jipCoffeeCup;
@@ -27,19 +27,8 @@ public class MenuView extends BaseView {
     private final String COFFEE_CUP     = "src/Presentation/Images/coffee_cup.png";
 
     public MenuView() {
-        super();
-    }
+        setLayout(new BorderLayout());
 
-    public void showView() { setVisible(true); }
-    public void hideView() { setVisible(false); }
-
-    @Override
-    protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Salir", e -> System.exit(0));
-    }
-
-    @Override
-    protected void initComponents() {
         //panels
         jipMain    = new JImagePanel(BACKGROUND_URL);
         jpTop      = new JPanel();
@@ -111,6 +100,7 @@ public class MenuView extends BaseView {
         jpBot.setBorder(BorderFactory.createEmptyBorder(20, 0, 40, 0));
 
         setButton(jbPlay,   DIMENSION_BUTTON);
+        jbPlay.setBackground(BACKGROUND_BUTTON);
         setButton(jbStats,  DIMENSION_BUTTON);
         setButton(jbConfig, DIMENSION_BUTTON);
 
@@ -124,19 +114,24 @@ public class MenuView extends BaseView {
         button.setMaximumSize(dimension);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setAlignmentY(Component.CENTER_ALIGNMENT);
-        button.setBackground(BACKGROUND_BUTTON);
+
         button.setOpaque(true);
+        button.setBackground(BACKGROUND_BUTTON);
+        button.setForeground(Color.WHITE);
         button.setContentAreaFilled(true);
-        button.setBorderPainted(false);
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                button.setBackground(BACKGROUND_BUTTON_PRESSED);
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                button.setBackground(BACKGROUND_BUTTON);
-            }
-        });
+
     }
+
+    public JButton getGameButton() {
+        return jbPlay;
+    }
+
+    public JButton getStatsButton() {
+        return jbStats;
+    }
+
+    public JButton getConfigButton() {
+        return jbConfig;
+    }
+
 }

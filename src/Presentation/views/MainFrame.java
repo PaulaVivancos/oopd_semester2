@@ -14,12 +14,15 @@ public class MainFrame extends JFrame {
     private LoginView loginView;
     private RegisterView registerView;
     private MenuView menuView;
+    private GameView gameView;
+    private ConfigView configView;
     private StatsView statsView;
 
     private final int WIDTH_MAIN_FRAME = 1150;
     private final int HEIGHT_MAIN_FRAME = 800;
 
     public MainFrame(AppController appController) {
+
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
@@ -27,15 +30,21 @@ public class MainFrame extends JFrame {
         loginView = new LoginView();
         registerView = new RegisterView();
         menuView = new MenuView();
+        gameView = new GameView();
+        configView = new ConfigView();
+        statsView = new StatsView();
         // ...
 
         // Create controllers and passing as the navigator
-        new UserController(appController, loginView);
+        new UserController(appController, loginView, registerView);
 
         // Add cards
         mainPanel.add(loginView, "login");
         mainPanel.add(registerView, "register");
         mainPanel.add(menuView, "menu");
+        mainPanel.add(gameView, "game");
+        mainPanel.add(statsView, "stats");
+        mainPanel.add(configView, "config");
 
         loginView.getSingUpButton().addActionListener(e -> {
             cardLayout.show(mainPanel, "register");
@@ -44,6 +53,21 @@ public class MainFrame extends JFrame {
         registerView.getLogInButton().addActionListener(e -> {
             cardLayout.show(mainPanel, "login");
         });
+
+        menuView.getGameButton().addActionListener(e -> {
+            cardLayout.show(mainPanel, "game");
+        });
+
+        menuView.getConfigButton().addActionListener(e -> {
+            cardLayout.show(mainPanel, "config");
+        });
+
+        menuView.getStatsButton().addActionListener(e -> {
+            cardLayout.show(mainPanel, "stats");
+        });
+
+        setTitle("CoffeeClicker");
+        setIconImage(new ImageIcon("src/Presentation/Images/coffee_cup.png").getImage());
 
         add(mainPanel);
         switchCard("login"); //start on login

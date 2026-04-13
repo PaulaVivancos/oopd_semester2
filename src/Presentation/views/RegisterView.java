@@ -4,12 +4,9 @@ import Presentation.JImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
-public class RegisterView extends BaseView {
+public class RegisterView extends JPanel {
     private JImagePanel jpiMain;
     private JPanel jpCentral, jpUsername, jpPassword, jpButtons, jpEmail, jpPasswordConfirmation;
     private JPanel jpLogin;
@@ -31,16 +28,8 @@ public class RegisterView extends BaseView {
     private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
 
     public RegisterView() {
-        super();
-    }
+        setLayout(new BorderLayout());
 
-    @Override
-    protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Ir al login", e -> System.out.println("go login"));
-    }
-
-    @Override
-    protected void initComponents() {
         //Panels
         jpiMain = new JImagePanel(BACKGROUND_URL);
         jpCentral = new JPanel();
@@ -49,6 +38,7 @@ public class RegisterView extends BaseView {
         jpButtons = new JPanel();
         jpEmail = new JPanel();
         jpPasswordConfirmation = new JPanel();
+
         jpLogin = new JPanel();
 
         //Labels
@@ -59,6 +49,7 @@ public class RegisterView extends BaseView {
         jtfPassword = new JPasswordField();
         jtfEmail = new JTextField();
         jtfPasswordConfirmation = new JPasswordField();
+
 
         //Buttons
         jbLogIn = new JButton("Already have an account. Log in.");
@@ -296,7 +287,31 @@ public class RegisterView extends BaseView {
         jbLogIn.setContentAreaFilled(true);
     }
 
+    public void addRegisterListener(ActionListener listener) {
+        jbSignUp.addActionListener(listener);
+    }
+
     public JButton getLogInButton() {
         return jbLogIn;
+    }
+
+    public String getUsername() {
+        return jtfUsername.getText();
+    }
+
+    public String getPassword() {
+        return new String(jtfPassword.getPassword());
+    }
+
+    public String getEmail() {
+        return jtfEmail.getText();
+    }
+
+    public String getPasswordConfirmation() {
+        return new String(jtfPasswordConfirmation.getPassword());
+    }
+
+    public void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

@@ -9,14 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Class that implements the methods described in the {@link UserDao} interface.
+ * Class that implements the methods described in the {@link UserDAO} interface.
  *
  * Specifically, it implements the user persistence in a SQL database.
  */
 public class UserSQLDao implements UserDAO {
 
     @Override
-    public void insertUser(User user) {
+    public void insertUser(User user) throws SQLException {
         String query = "INSERT INTO User(username, email, password) VALUES ('" +
                 user.getUsername() + "', '" +
                 user.getEmail() + "', '" +
@@ -26,8 +26,8 @@ public class UserSQLDao implements UserDAO {
     }
 
 
-    public User findByUsernameAndPassword(String username, String password) {
-        String query = "SELECT * FROM user WHERE username = '" + username + "' AND password = '" + password + "';";
+    public User findByNameEmailAndPassword(String username, String password) {
+        String query = "SELECT * FROM user WHERE (username = '" + username + "' OR email = '" + username + "') AND password = '" + password + "';";
 
         ResultSet result = SQLConnector.getInstance().selectQuery(query);
 

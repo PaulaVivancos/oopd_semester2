@@ -1,5 +1,7 @@
 package Presentation.views;
 
+import Presentation.JImagePanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,25 +9,30 @@ import java.awt.event.*;
 public abstract class BaseView extends JPanel {
     private JButton menuButton;
     private JPopupMenu popupMenu;
+    private JImagePanel panel;
+
+    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
 
     public BaseView() {
+        panel = new JImagePanel(BACKGROUND_URL);
         setLayout(new BorderLayout());
         initMenu();
         initComponents();
     }
 
-    // ── Menú de tres puntos ──────────────────────────────────────
-
     private void initMenu() {
+        setLayout(new OverlayLayout(this));
         JPanel topBar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 4));
         topBar.setOpaque(false);
 
-        menuButton = new JButton("⋮");
+        menuButton = new JButton("Menu");
+        menuButton.setMargin(new Insets(2, 8, 2, 8));
         menuButton.setFont(new Font("SansSerif", Font.BOLD, 18));
         menuButton.setBorderPainted(false);
         menuButton.setContentAreaFilled(false);
         menuButton.setFocusPainted(false);
         menuButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        menuButton.setOpaque(false);
 
         popupMenu = new JPopupMenu();
         buildMenu(popupMenu);   // las subclases rellenan el menú
@@ -34,7 +41,7 @@ public abstract class BaseView extends JPanel {
                 popupMenu.show(menuButton, 0, menuButton.getHeight())
         );
 
-        topBar.add(menuButton);
+        topBar.add(menuButton, BorderLayout.EAST);
         add(topBar, BorderLayout.NORTH);
     }
 

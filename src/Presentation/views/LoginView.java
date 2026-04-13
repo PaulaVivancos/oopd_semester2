@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class LoginView extends BaseView {
+public class LoginView extends JPanel {
     private JImagePanel jpiMain;
     private JPanel jpCentral, jpUsername, jpPassword, jpButtons, jpLogin;
     private JLabel jlTitle;
@@ -27,16 +27,8 @@ public class LoginView extends BaseView {
     private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
 
     public LoginView() {
-        super();
-    }
+        setLayout(new BorderLayout());
 
-    @Override
-    protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Ir al registro", e -> System.out.println("go register"));
-    }
-
-    @Override
-    protected void initComponents() {
         //Panels
         jpiMain = new JImagePanel(BACKGROUND_URL);
         jpCentral = new JPanel();
@@ -101,7 +93,7 @@ public class LoginView extends BaseView {
         jpUsername.setLayout(new BoxLayout(jpUsername, BoxLayout.Y_AXIS));
         jpUsername.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
 
-        JLabel topLabel = new JLabel("Username: ");
+        JLabel topLabel = new JLabel("Username / Email: ");
         topLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         topLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
         setUsernameTextField();
@@ -234,7 +226,7 @@ public class LoginView extends BaseView {
         jbLogIn.addActionListener(listener);
     }
 
-    public String getUsername() {
+    public String getUsernameEmail() {
         return jtfUsername.getText();
     }
 
