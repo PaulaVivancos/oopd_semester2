@@ -57,7 +57,7 @@ public class StatsView extends BaseView {
         setGamesPanel();
         setNumGamesPanel(10);
 
-        topPanel.setBorder(BorderFactory.createEmptyBorder(100, 120, 0, 100));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(100, 130, 0, 100));
         topPanel.setOpaque(false);
         topPanel.add(playersPanel);
         topPanel.add(Box.createHorizontalStrut(100));
