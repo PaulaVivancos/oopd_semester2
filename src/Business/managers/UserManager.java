@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class UserManager {
     private final UserSQLDao userDao;
+    private User loggedInUser;
 
     public UserManager() {
         this.userDao = new UserSQLDao();
@@ -22,10 +23,13 @@ public class UserManager {
 
     public boolean login(String username_email, String password) {
         if (!username_email.isEmpty() && !password.isEmpty()) {
-            User user = userDao.findByNameEmailAndPassword(username_email, password);
-            return user != null;
+             loggedInUser = userDao.findByNameEmailAndPassword(username_email, password);
+            return loggedInUser != null;
         }
         return false;
+    }
+    public void logout(){
+        loggedInUser = null;
     }
 
     public boolean register(String username, String email, String password, String password_confirmation) {
@@ -49,8 +53,17 @@ public class UserManager {
         return userDao.getAllUsers();
     }
 
-    public void deleteUser(int id) throws SQLException {
-        userDao.deleteUser(id);
+    public boolean deleteUser(){
+        if(loggedInUser == null)
+            return false;
+        try{
+            userDao.deleteUser(loggedInUser.getId());
+            loggedInUser = null;
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

@@ -74,5 +74,7 @@ public class UserSQLDao implements UserDAO {
 
     @Override
     public void deleteUser(int id) {
+        String query = "DELETE FROM User WHERE user_id = " + id + ";";
+        SQLConnector.getInstance().insertQuery(query);
     }
 }
