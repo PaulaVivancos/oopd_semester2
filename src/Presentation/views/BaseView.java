@@ -15,6 +15,7 @@ public abstract class BaseView extends JPanel {
 
     public BaseView() {
         panel = new JImagePanel(BACKGROUND_URL);
+        panel.setOpacityValue(0.5f);
         setLayout(new BorderLayout());
         initMenu();
         initComponents();

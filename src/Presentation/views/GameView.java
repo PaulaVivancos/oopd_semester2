@@ -67,7 +67,7 @@ public class GameView extends BaseView {
         jbGen = new JButton("GENERATORS");
         jbUpg = new JButton("UPGRADES");
 
-        // Montar todo
+        // Sets everything
         setJipMain();
     }
 
