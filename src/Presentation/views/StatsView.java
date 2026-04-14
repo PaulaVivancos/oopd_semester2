@@ -46,6 +46,7 @@ public class StatsView extends BaseView {
         setTopPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.NORTH);
+        mainPanel.setOpacityValue(0.5f);
         add(mainPanel);
         setVisible(true);
     }

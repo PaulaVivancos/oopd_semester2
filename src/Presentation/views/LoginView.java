@@ -137,7 +137,7 @@ public class LoginView extends JPanel {
         jtfUsername.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.BLACK, 2),
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
-    }
+        }
 
     private void setPasswordTextField() {
         jtfPassword.setAlignmentX(Component.LEFT_ALIGNMENT);
