@@ -54,10 +54,6 @@ public class MainFrame extends JFrame {
             cardLayout.show(mainPanel, "login");
         });
 
-        menuView.getGameButton().addActionListener(e -> {
-            cardLayout.show(mainPanel, "game");
-        });
-
         menuView.getConfigButton().addActionListener(e -> {
             cardLayout.show(mainPanel, "config");
         });
@@ -65,6 +61,15 @@ public class MainFrame extends JFrame {
         menuView.getStatsButton().addActionListener(e -> {
             cardLayout.show(mainPanel, "stats");
         });
+
+        menuView.addPlayListener(e ->
+                menuView.showGamesPopUp(
+                        e1 -> {cardLayout.show(mainPanel, "game"); gameView.showNewGameDialog(); },
+                        e2 -> cardLayout.show(mainPanel, "game"),
+                        e3 -> cardLayout.show(mainPanel, "game")
+                )
+        );
+
 
         setTitle("CoffeeClicker");
         setIconImage(new ImageIcon("src/Presentation/Images/coffee_cup.png").getImage());

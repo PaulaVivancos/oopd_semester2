@@ -4,6 +4,7 @@ import Presentation.JImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -105,8 +106,66 @@ public class MenuView extends JPanel {
         setButton(jbConfig, DIMENSION_BUTTON);
 
         jpBot.add(jbPlay);
+
         jpBot.add(jbStats);
         jpBot.add(jbConfig);
+    }
+
+    public void showGamesPopUp(ActionListener onNewGame, ActionListener onLoadGame, ActionListener onViewGame) {
+        JDialog dialog = new JDialog();
+        dialog.setUndecorated(true);
+
+        JPanel dialogContent = new JPanel();
+        dialogContent.setLayout(new BoxLayout(dialogContent, BoxLayout.Y_AXIS));
+        dialogContent.setBackground(BACKGROUND_BUTTON_PRESSED);
+        dialogContent.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
+
+        JLabel title = new JLabel("WHAT DO YOU WANT TO DO");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font(title.getFont().getFontName(), Font.BOLD, 16));
+
+        JButton newGame = createDialogButton("NEW GAME");
+        JButton loadGame = createDialogButton("LOAD GAME");
+        JButton viewGame = createDialogButton("VIEW GAME");
+
+        newGame.addActionListener(e -> {dialog.dispose(); onNewGame.actionPerformed(e);});
+        loadGame.addActionListener(e -> {dialog.dispose(); onLoadGame.actionPerformed(e);});
+        viewGame.addActionListener(e -> {dialog.dispose(); onViewGame.actionPerformed(e);});
+
+        dialogContent.add(title);
+        dialogContent.add(Box.createVerticalStrut(15));
+        dialogContent.add(newGame);
+        dialogContent.add(Box.createVerticalStrut(10));
+        dialogContent.add(loadGame);
+        dialogContent.add(Box.createVerticalStrut(10));
+        dialogContent.add(viewGame);
+
+        dialog.add(dialogContent);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    public void addPlayListener(ActionListener actionListener) {
+        jbPlay.addActionListener(actionListener);
+    }
+
+    private JButton createDialogButton(String title) {
+        JButton button = new JButton(title);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setMaximumSize(new Dimension(200, 45));
+        button.setBackground(BACKGROUND_BUTTON);
+        button.setForeground(Color.WHITE);
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(false);
+        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        button.setOpaque(false);
+
+        return button;
     }
 
     private void setButton(JButton button, Dimension dimension) {

@@ -218,6 +218,60 @@ public class GameView extends BaseView {
         });
     }
 
+    public void showNewGameDialog() {
+        JDialog dialog = new JDialog();
+        dialog.setUndecorated(true);
+
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBackground(new Color(245, 240, 230));
+        content.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(103, 51, 25), 2),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
+
+        JLabel title = new JLabel("CREATING NEW GAME");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Times New Roman", Font.BOLD, 14));
+
+        JTextField nameField = new JTextField();
+        nameField.setMaximumSize(new Dimension(200, 35));
+        nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton startGame = createDialogButton("START GAME");
+        startGame.addActionListener(e -> {
+            String gameName = nameField.getText();
+            dialog.dispose();
+            // usa gameName para lo que necesites
+        });
+
+        content.add(title);
+        content.add(Box.createVerticalStrut(20));
+        content.add(nameField);
+        content.add(Box.createVerticalStrut(20));
+        content.add(startGame);
+
+        dialog.add(content);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    private JButton createDialogButton(String title) {
+        JButton button = new JButton(title);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setMaximumSize(new Dimension(200, 45));
+        button.setBackground(BACKGROUND_BUTTON);
+        button.setForeground(Color.WHITE);
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(false);
+        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        button.setOpaque(false);
+
+        return button;
+    }
+
     // ── Getters para el controlador ───────────────────────────────
 
     public JButton getJbBuy() {

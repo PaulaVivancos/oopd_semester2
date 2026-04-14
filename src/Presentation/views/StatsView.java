@@ -72,7 +72,6 @@ public class StatsView extends BaseView {
         playersPanel.setPreferredSize(new Dimension(200, 100));
         playersPanel.setMaximumSize(new Dimension(200, 100));
 
-
         jlPlayers.setAlignmentX(Component.LEFT_ALIGNMENT);
         jlPlayers.setFont(new Font("Times New Roman", Font.BOLD, 20));
         jcbPlayers.setAlignmentX(Component.LEFT_ALIGNMENT);
