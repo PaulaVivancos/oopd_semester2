@@ -4,6 +4,7 @@ import Presentation.JImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class StatsView extends BaseView {
     private JImagePanel mainPanel;
@@ -13,6 +14,9 @@ public class StatsView extends BaseView {
     private String[] playersOptions, gamesOptions;
 
     private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+
+    private ActionListener logoutListener;
+    public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
 
     public StatsView() {
         super();
@@ -40,6 +44,8 @@ public class StatsView extends BaseView {
     @Override
     protected void buildMenu(JPopupMenu menu) {
         addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
+        menu.addSeparator();
+        addMenuItem(menu, "Log out", e -> { if (logoutListener != null) logoutListener.actionPerformed(e); });
     }
 
     private void setMainPanel() {

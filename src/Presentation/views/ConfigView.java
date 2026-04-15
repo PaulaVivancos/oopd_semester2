@@ -4,8 +4,7 @@ import Presentation.JImagePanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -19,6 +18,12 @@ public class ConfigView extends BaseView {
     private JImagePanel ipProfile, mainPanel;
     private JPanel buttonsPanel, centralPanel;
     private JButton jbLanguage, jbLogOut, jbDeleteAccount;
+
+    private ActionListener logoutListener;
+    private ActionListener deleteListener;
+
+    public void addLogoutListener(ActionListener l)  { this.logoutListener = l; }
+    public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
 
 
     public ConfigView() {
@@ -128,6 +133,7 @@ public class ConfigView extends BaseView {
                 jbLogOut.setBackground(BACKGROUND_BUTTON);
             }
         });
+        jbLogOut.addActionListener(e -> { if (logoutListener != null) logoutListener.actionPerformed(e); });
     }
 
     private void setDeleteAccountButton() {
@@ -147,6 +153,7 @@ public class ConfigView extends BaseView {
                 jbDeleteAccount.setBackground(BACKGROUND_BUTTON);
             }
         });
+        jbDeleteAccount.addActionListener(e -> { if (deleteListener != null) deleteListener.actionPerformed(e); });
     }
 
     private void setProfileImage() {

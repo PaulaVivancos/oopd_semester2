@@ -3,7 +3,6 @@ package Persistence;
 import Business.entities.User;
 
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Interface that abstracts the persistence of users from the rest of the code.
@@ -29,13 +28,10 @@ public interface UserDAO {
      */
     public void updateUser(User user) throws SQLException;
 
-    /**
-     * Method that reads the persisted information, returning all stored users.
-     *
-     * @return A list containing all persisted users.
-     */
-    List<User> getAllUsers();
-
     public void deleteUser(int id) throws SQLException;
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }
 

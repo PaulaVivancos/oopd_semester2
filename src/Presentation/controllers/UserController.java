@@ -1,9 +1,7 @@
 package Presentation.controllers;
 
 import Business.managers.UserManager;
-import Presentation.views.GameView;
-import Presentation.views.LoginView;
-import Presentation.views.RegisterView;
+import Presentation.views.*;
 
 import javax.swing.*;
 
@@ -12,23 +10,37 @@ public class UserController {
     private final LoginView loginView;
     private final RegisterView registerView;
     private final GameView gameView;
+    private final ConfigView configView;
+    private final StatsView statsView;
+    private final MenuView menuView;
     private final UserManager userManager;
 
-    public UserController(AppController appController, LoginView loginView, RegisterView registerView, GameView gameView) {
+    public UserController(AppController appController, LoginView loginView, RegisterView registerView,
+                          GameView gameView, ConfigView configView, StatsView statsView, MenuView menuView) {
         this.appController = appController;
-        this.loginView = loginView;
+        this.loginView  = loginView;
         this.registerView = registerView;
-        this.gameView = gameView;
+        this.gameView   = gameView;
+        this.configView = configView;
+        this.statsView  = statsView;
+        this.menuView   = menuView;
         this.userManager = new UserManager();
 
         loginView.addLoginListener(e -> handleLogin());
-        registerView.addRegisterListener(e -> handleRegister());
+        registerView.addRegisterListener(e -> handleSignUp());
 
-        gameView.addDeleteListener(e -> handleDelete());
         gameView.addLogoutListener(e -> handleLogout());
+        gameView.addDeleteListener(e -> handleDelete());
+
+        configView.addLogoutListener(e -> handleLogout());
+        configView.addDeleteListener(e -> handleDelete());
+
+        statsView.addLogoutListener(e -> handleLogout());
+
+        menuView.getLogOutButton().addActionListener(e -> handleLogout());
     }
 
-    private void handleLogin() {
+    public void handleLogin() {
         String username_email = loginView.getUsernameEmail();
         String password = loginView.getPassword();
 
@@ -39,12 +51,12 @@ public class UserController {
         }
     }
 
-    private void handleLogout(){
+    public void handleLogout(){
         userManager.logout();
         appController.switchCard("login");
     }
 
-    private void handleDelete(){
+    public void handleDelete(){
         int choice = JOptionPane.showConfirmDialog(
                 gameView,
                 "Are you sure you want to delete the account?",
@@ -62,16 +74,17 @@ public class UserController {
             }
         }
     }
-    private void handleRegister() {
+    public void handleSignUp() {
         String username = registerView.getUsername();
         String email = registerView.getEmail();
         String password = registerView.getPassword();
         String password_confirmation = registerView.getPasswordConfirmation();
 
-        if (userManager.register(username, email, password, password_confirmation)) {
+        String error = userManager.signUp(username, email, password, password_confirmation);
+        if (error == null) {
             appController.switchCard("menu");
         } else {
-            registerView.showError("Ops! There has been an error!");
+            registerView.showError(error);
         }
     }
 }

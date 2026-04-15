@@ -4,7 +4,6 @@ import Business.entities.User;
 import Persistence.SQLDaos.UserSQLDao;
 
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * The UserManager class will act as the system's model, storing and
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public class UserManager {
     private final UserSQLDao userDao;
-    private User loggedInUser;
+    private User currentUser;
 
     public UserManager() {
         this.userDao = new UserSQLDao();
@@ -23,22 +22,36 @@ public class UserManager {
 
     public boolean login(String username_email, String password) {
         if (!username_email.isEmpty() && !password.isEmpty()) {
-             loggedInUser = userDao.findByNameEmailAndPassword(username_email, password);
-            return loggedInUser != null;
+             currentUser = userDao.findByNameEmailAndPassword(username_email, password);
+            return currentUser != null;
         }
         return false;
     }
     public void logout(){
-        loggedInUser = null;
+        currentUser = null;
     }
 
-    public boolean register(String username, String email, String password, String password_confirmation) {
-        if (password.equals(password_confirmation) && !password.isEmpty()) {
-            User user = new User(username, email, password);
-            addStudent(user);
-            return user != null;
-        }
-        return false;
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    // Returns null on success, or an error message string on failure.
+    public String signUp(String username, String email, String password, String password_confirmation) {
+        if (password.length() < 8)
+            return "Password must be at least 8 characters.";
+        if (!password.equals(password_confirmation))
+            return "Passwords do not match.";
+        if (!email.contains("@"))
+            return "Invalid email address.";
+        if (userDao.existsByUsername(username))
+            return "Username is already taken.";
+        if (userDao.existsByEmail(email))
+            return "Email is already registered.";
+
+        User user = new User(username, email, password);
+        addStudent(user);
+        currentUser = userDao.findByNameEmailAndPassword(username, password);
+        return null;
     }
 
     private void addStudent(User user) {
@@ -49,16 +62,12 @@ public class UserManager {
         }
     }
 
-    public List<User> getUsers() {
-        return userDao.getAllUsers();
-    }
-
     public boolean deleteUser(){
-        if(loggedInUser == null)
+        if(currentUser == null)
             return false;
         try{
-            userDao.deleteUser(loggedInUser.getId());
-            loggedInUser = null;
+            userDao.deleteUser(currentUser.getId());
+            currentUser = null;
             return true;
         }catch(Exception e){
             e.printStackTrace();
