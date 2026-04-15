@@ -226,6 +226,10 @@ public class LoginView extends JPanel {
         jbLogIn.addActionListener(listener);
     }
 
+    public void addForgotPasswordListener(ActionListener listener) {
+        jbForgotPassword.addActionListener(listener);
+    }
+
     public String getUsernameEmail() {
         return jtfUsername.getText();
     }

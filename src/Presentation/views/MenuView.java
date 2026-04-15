@@ -5,11 +5,6 @@ import Presentation.JImagePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-<<<<<<< Updated upstream
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-=======
->>>>>>> Stashed changes
 
 public class MenuView extends JPanel {
     private JImagePanel jipMain;
@@ -155,10 +150,6 @@ public class MenuView extends JPanel {
         dialog.setVisible(true);
     }
 
-    public void addPlayListener(ActionListener actionListener) {
-        jbPlay.addActionListener(actionListener);
-    }
-
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -187,6 +178,9 @@ public class MenuView extends JPanel {
 
     }
 
+    public void addPlayListener(ActionListener actionListener) {
+        jbPlay.addActionListener(actionListener);
+    }
     public JButton getGameButton()   { return jbPlay; }
     public JButton getStatsButton()  { return jbStats; }
     public JButton getConfigButton() { return jbConfig; }

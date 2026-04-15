@@ -17,6 +17,7 @@ public class MainFrame extends JFrame {
     private GameView gameView;
     private ConfigView configView;
     private StatsView statsView;
+    private ForgotPasswordView forgotPasswordView;
 
     private final int WIDTH_MAIN_FRAME = 1150;
     private final int HEIGHT_MAIN_FRAME = 800;
@@ -33,6 +34,7 @@ public class MainFrame extends JFrame {
         gameView = new GameView();
         configView = new ConfigView();
         statsView = new StatsView();
+        forgotPasswordView = new ForgotPasswordView();
         // ...
 
         // Create controllers and passing as the navigator
@@ -45,6 +47,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(gameView, "game");
         mainPanel.add(statsView, "stats");
         mainPanel.add(configView, "config");
+        mainPanel.add(forgotPasswordView, "forgotPassword");
 
         loginView.getSingUpButton().addActionListener(e -> {
             cardLayout.show(mainPanel, "register");
@@ -69,6 +72,10 @@ public class MainFrame extends JFrame {
                         e3 -> cardLayout.show(mainPanel, "game")
                 )
         );
+
+        loginView.addForgotPasswordListener(e -> {
+            cardLayout.show(mainPanel, "forgotPassword");
+        });
 
 
         setTitle("CoffeeClicker");
