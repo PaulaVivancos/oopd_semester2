@@ -124,6 +124,7 @@ public class GameView extends BaseView {
     private void setJpBot() {
         jpBot.setPreferredSize(new Dimension(600, 200));
         jpBot.setMaximumSize(new Dimension(600, 200));
+        jpBot.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         jpBot.setOpaque(false);
 
         String[] columns = {"ID", "Name", "Price"};
@@ -197,6 +198,7 @@ public class GameView extends BaseView {
 
     private void setButton(JButton button, Dimension dimension) {
         button.setPreferredSize(dimension);
+        button.setMinimumSize(dimension);
         button.setMaximumSize(dimension);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setAlignmentY(Component.CENTER_ALIGNMENT);

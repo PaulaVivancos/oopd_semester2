@@ -5,14 +5,17 @@ import Presentation.JImagePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+<<<<<<< Updated upstream
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+=======
+>>>>>>> Stashed changes
 
 public class MenuView extends JPanel {
     private JImagePanel jipMain;
     private JPanel jpTop, jpCentre, jpBot;
     private JImagePanel jipTitleTop, jipTitleBottom, jipCoffeeCup;
-    private JButton jbPlay, jbStats, jbConfig;
+    private JButton jbPlay, jbStats, jbConfig, jbLogOut;
 
     //DIMENSION CONSTANTS
     private final Dimension DIMENSION_BUTTON = new Dimension(150, 50);
@@ -42,9 +45,10 @@ public class MenuView extends JPanel {
         jipCoffeeCup   = new JImagePanel(COFFEE_CUP);
 
         //buttons
-        jbPlay   = new JButton("PLAY");
-        jbStats  = new JButton("STATS");
-        jbConfig = new JButton("CONFIG");
+        jbPlay    = new JButton("PLAY");
+        jbStats   = new JButton("STATS");
+        jbConfig  = new JButton("CONFIG");
+        jbLogOut  = new JButton("LOG OUT");
 
         setJipMain();
     }
@@ -100,15 +104,17 @@ public class MenuView extends JPanel {
         jpBot.setOpaque(false);
         jpBot.setBorder(BorderFactory.createEmptyBorder(20, 0, 40, 0));
 
-        setButton(jbPlay,   DIMENSION_BUTTON);
+        setButton(jbPlay,    DIMENSION_BUTTON);
         jbPlay.setBackground(BACKGROUND_BUTTON);
-        setButton(jbStats,  DIMENSION_BUTTON);
-        setButton(jbConfig, DIMENSION_BUTTON);
+        setButton(jbStats,   DIMENSION_BUTTON);
+        setButton(jbConfig,  DIMENSION_BUTTON);
+        setButton(jbLogOut,  DIMENSION_BUTTON);
 
         jpBot.add(jbPlay);
 
         jpBot.add(jbStats);
         jpBot.add(jbConfig);
+        jpBot.add(jbLogOut);
     }
 
     public void showGamesPopUp(ActionListener onNewGame, ActionListener onLoadGame, ActionListener onViewGame) {
@@ -181,16 +187,9 @@ public class MenuView extends JPanel {
 
     }
 
-    public JButton getGameButton() {
-        return jbPlay;
-    }
-
-    public JButton getStatsButton() {
-        return jbStats;
-    }
-
-    public JButton getConfigButton() {
-        return jbConfig;
-    }
+    public JButton getGameButton()   { return jbPlay; }
+    public JButton getStatsButton()  { return jbStats; }
+    public JButton getConfigButton() { return jbConfig; }
+    public JButton getLogOutButton() { return jbLogOut; }
 
 }

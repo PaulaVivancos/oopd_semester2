@@ -5,8 +5,6 @@ import Persistence.UserDAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Class that implements the methods described in the {@link UserDAO} interface.
@@ -49,32 +47,32 @@ public class UserSQLDao implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() {
-        List<User> users = new LinkedList<>();
-        /*
-        List<User> students = new LinkedList<>();
-        String query = "SELECT id, login, full_name, birth_date FROM user;";
-        ResultSet result = SQLConnector.getInstance().selectQuery(query);
-
-        try {
-            while (result.next()) {
-                int id = result.getInt("id");
-                String login = result.getString("login");
-                String studentName = result.getString("full_name");
-                String birthDate = result.getString("birth_date");
-
-                students.add(new User(id, login, studentName, birthDate));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        */
-        return users;
-    }
-
-    @Override
     public void deleteUser(int id) {
         String query = "DELETE FROM User WHERE user_id = " + id + ";";
         SQLConnector.getInstance().insertQuery(query);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        String query = "SELECT user_id FROM user WHERE username = '" + username + "';";
+        ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+        try {
+            return rs != null && rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        String query = "SELECT user_id FROM user WHERE email = '" + email + "';";
+        ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+        try {
+            return rs != null && rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

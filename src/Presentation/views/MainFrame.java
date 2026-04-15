@@ -36,7 +36,7 @@ public class MainFrame extends JFrame {
         // ...
 
         // Create controllers and passing as the navigator
-        new UserController(appController, loginView, registerView, gameView);
+        new UserController(appController, loginView, registerView, gameView, configView, statsView, menuView);
 
         // Add cards
         mainPanel.add(loginView, "login");
