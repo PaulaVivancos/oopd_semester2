@@ -9,9 +9,9 @@ import java.awt.event.*;
 public class ForgotPasswordView extends JPanel {
 
     private JImagePanel jpiMain;
-    private JPanel jpCentral, jpCode, jpPassword, jpButtons, jpLogin;
+    private JPanel jpCentral, jpUsername, jpPassword, jpButtons, jpLogin;
     private JLabel jlTitle;
-    private JButton jbValidateCode, jbBackLogIn;
+    private JButton jbValidateCode;
     private JTextField jtfCode;
     private JPasswordField jtfPassword;
 
@@ -33,7 +33,7 @@ public class ForgotPasswordView extends JPanel {
         //Panels
         jpiMain = new JImagePanel(BACKGROUND_URL);
         jpCentral = new JPanel();
-        jpCode = new JPanel();
+        jpUsername = new JPanel();
         jpPassword = new JPanel();
         jpButtons = new JPanel();
         jpLogin = new JPanel();
@@ -43,7 +43,6 @@ public class ForgotPasswordView extends JPanel {
 
         //Buttons
         jbValidateCode = new JButton("Validate code");
-        jbBackLogIn = new JButton("Go back to log in");
 
         //Text fields
         jtfCode = new JTextField();
@@ -79,28 +78,27 @@ public class ForgotPasswordView extends JPanel {
         jpCentral.setBorder(BorderFactory.createEmptyBorder(60, 0, 0, 0));
         jpCentral.setOpaque(false);
 
-        jpCode.setAlignmentX(Component.CENTER_ALIGNMENT);
+        jpUsername.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        jpCentral.add(jpCode);
+        jpCentral.add(jpUsername);
         jpCentral.add(jpLogin);
-        jpCentral.add(jpButtons);
     }
 
     private void setCodePanel() {
-        jpCode.setLayout(new BoxLayout(jpCode, BoxLayout.Y_AXIS));
-        jpCode.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
+        jpUsername.setLayout(new BoxLayout(jpUsername, BoxLayout.Y_AXIS));
+        jpUsername.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
 
         JLabel topLabel = new JLabel("Enter code: ");
         topLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         topLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
-        setCodeField();
+        setUsernameTextField();
 
-        jpCode.setOpaque(false);
-        jpCode.add(topLabel);
-        jpCode.add(jtfCode);
+        jpUsername.setOpaque(false);
+        jpUsername.add(topLabel);
+        jpUsername.add(jtfCode);
     }
 
-    private void setCodeField() {
+    private void setUsernameTextField() {
         jtfCode.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfCode.setPreferredSize(DIMENSION_TEXTFIELD);
         jtfCode.setMaximumSize(DIMENSION_TEXTFIELD);
@@ -147,27 +145,6 @@ public class ForgotPasswordView extends JPanel {
         });
     }
 
-    private void setButtons() {
-        jpButtons.setLayout(new BoxLayout(jpButtons, BoxLayout.Y_AXIS));
-        jpButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
-        jpButtons.setOpaque(false);
-
-        setGoBackLoginButton();
-
-        jpButtons.add(jbBackLogIn);
-        jpButtons.add(Box.createVerticalStrut(10));
-    }
-
-    private void setGoBackLoginButton() {
-        jbBackLogIn.setPreferredSize(DIMENSION_BUTTON_SIGNIN);
-        jbBackLogIn.setMaximumSize(DIMENSION_BUTTON_SIGNIN);
-        jbBackLogIn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        jbBackLogIn.setAlignmentY(Component.CENTER_ALIGNMENT);
-        jbBackLogIn.setBackground(BACKGROUND_BUTTON);
-        jbBackLogIn.setOpaque(true);
-        jbBackLogIn.setContentAreaFilled(true);
-    }
-
     public void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
@@ -179,7 +156,6 @@ public class ForgotPasswordView extends JPanel {
     public void showEnterEmailPopUp() {
 
     }
-
 
     public String getCode() {
         return jtfCode.getText();
