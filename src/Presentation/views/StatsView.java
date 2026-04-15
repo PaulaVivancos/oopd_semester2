@@ -7,7 +7,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class StatsView extends BaseView {
-    private JImagePanel mainPanel;
+    //private JImagePanel mainPanel;
+    private JPanel mainPanel;
     private JPanel topPanel, playersPanel, userGamePanel, numGamesPanel;
     private JLabel jlPlayers, jlGames, jlNumGames;
     private JComboBox<String> jcbPlayers, jcbGames;
@@ -24,7 +25,9 @@ public class StatsView extends BaseView {
 
     @Override
     protected void initComponents() {
-        mainPanel = new JImagePanel(BACKGROUND_URL);
+        //mainPanel = new JImagePanel(BACKGROUND_URL);
+        mainPanel = new JPanel();
+        mainPanel.setOpaque(false);
 
         topPanel = new JPanel();
         playersPanel = new JPanel();
@@ -52,9 +55,8 @@ public class StatsView extends BaseView {
         setTopPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.NORTH);
-        mainPanel.setOpacityValue(0.5f);
-        add(mainPanel);
-        setVisible(true);
+       // mainPanel.setOpacityValue(0.5f);
+        addToCenter(mainPanel);
     }
 
     private void setTopPanel() {

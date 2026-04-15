@@ -5,11 +5,6 @@ import Presentation.JImagePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-<<<<<<< Updated upstream
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-=======
->>>>>>> Stashed changes
 
 public class MenuView extends JPanel {
     private JImagePanel jipMain;
