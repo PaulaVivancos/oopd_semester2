@@ -10,7 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class GameView extends BaseView {
-    private JImagePanel jipMain;
+    private JPanel mainPanel;
     private JPanel jpTop, jpBot, jpCentre, jpEast, jpWest;
     private JImagePanel jipTitle, jipCoffeeCup, jipCoffeeCupSmall;
     private JButton jbBuy, jbGen, jbUpg;
@@ -59,24 +59,24 @@ public class GameView extends BaseView {
 
     @Override
     protected void initComponents() {
-        // Inicialización de paneles
-        jipMain = new JImagePanel(BACKGROUND_URL);
+        // Panels
+        mainPanel = new JPanel();
         jpTop = new JPanel();
         jpCentre = new JPanel();
         jpBot = new JPanel();
         jpEast = new JPanel();
         jpWest = new JPanel();
 
-        // Inicialización de imágenes
+        // Images
         jipTitle = new JImagePanel(TITLE_URL);
         jipCoffeeCup = new JImagePanel(COFFEE_CUP);
         jipCoffeeCupSmall = new JImagePanel(COFFEE_CUP);
 
-        // Inicialización de otros componentes
+        // Other components
         jlCounter = new JLabel("100.00");
         jtTable = new JTable();
 
-        // Botones
+        // Buttons
         jbBuy = new JButton("BUY COFFEE");
         jbGen = new JButton("GENERATORS");
         jbUpg = new JButton("UPGRADES");
@@ -85,8 +85,6 @@ public class GameView extends BaseView {
         setJipMain();
     }
 
-    // ── Layout interno ────────────────────────────────────────────
-
     private void setJipMain() {
         setJpTop();
         setJpCentre();
@@ -94,17 +92,18 @@ public class GameView extends BaseView {
         setJpEast();
         setJpWest();
 
-        jipMain.setLayout(new BorderLayout());
-        jipMain.setOpacityValue(0.5f);
-        jipMain.add(jpTop, BorderLayout.NORTH);
-        jipMain.add(jpCentre, BorderLayout.CENTER);
-        jipMain.add(jpBot, BorderLayout.SOUTH);
-        jipMain.add(jpEast, BorderLayout.EAST);
-        jipMain.add(jpWest, BorderLayout.WEST);
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setOpaque(false);
+        mainPanel.add(jpTop, BorderLayout.NORTH);
+        mainPanel.add(jpCentre, BorderLayout.CENTER);
+        mainPanel.add(jpBot, BorderLayout.SOUTH);
+        mainPanel.add(jpEast, BorderLayout.EAST);
+        mainPanel.add(jpWest, BorderLayout.WEST);
 
         // BaseView ya tiene BorderLayout y NORTH ocupado por el menuButton,
         // así que el contenido va en CENTER
-        add(jipMain, BorderLayout.CENTER);
+        //add(jipMain, BorderLayout.CENTER);
+        addToCenter(mainPanel);
     }
 
     private void setJpTop() {
@@ -274,7 +273,7 @@ public class GameView extends BaseView {
         return button;
     }
 
-    // ── Getters para el controlador ───────────────────────────────
+    // Getters
 
     public JButton getJbBuy() {
         return jbBuy;

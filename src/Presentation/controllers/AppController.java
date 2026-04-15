@@ -5,7 +5,7 @@ import Presentation.views.MainFrame;
 import javax.swing.*;
 
 public class AppController {
-    private static MainFrame mainFrame;
+    private MainFrame mainFrame;
 
     public AppController() {
         mainFrame = new MainFrame(this);
@@ -20,4 +20,5 @@ public class AppController {
     public void switchCard(String cardName) {
         mainFrame.switchCard(cardName);
     }
+
 }

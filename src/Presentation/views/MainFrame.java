@@ -5,12 +5,15 @@ import Presentation.controllers.UserController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainFrame extends JFrame {
+    private List<String> viewsStack = new ArrayList<>();
     private CardLayout cardLayout;
     private JPanel mainPanel;
 
-    // ALL VIEWS
     private LoginView loginView;
     private RegisterView registerView;
     private MenuView menuView;
@@ -23,11 +26,9 @@ public class MainFrame extends JFrame {
     private final int HEIGHT_MAIN_FRAME = 800;
 
     public MainFrame(AppController appController) {
-
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-        // Create views
         loginView = new LoginView();
         registerView = new RegisterView();
         menuView = new MenuView();
@@ -37,10 +38,8 @@ public class MainFrame extends JFrame {
         forgotPasswordView = new ForgotPasswordView();
         // ...
 
-        // Create controllers and passing as the navigator
         new UserController(appController, loginView, registerView, gameView, configView, statsView, menuView);
 
-        // Add cards
         mainPanel.add(loginView, "login");
         mainPanel.add(registerView, "register");
         mainPanel.add(menuView, "menu");
@@ -49,30 +48,22 @@ public class MainFrame extends JFrame {
         mainPanel.add(configView, "config");
         mainPanel.add(forgotPasswordView, "forgotPassword");
 
-        loginView.getSingUpButton().addActionListener(e -> {
-            cardLayout.show(mainPanel, "register");
-        });
-
-        registerView.getLogInButton().addActionListener(e -> {
-            cardLayout.show(mainPanel, "login");
-        });
-
-        menuView.getConfigButton().addActionListener(e -> {
-            cardLayout.show(mainPanel, "config");
-        });
-
-        menuView.getStatsButton().addActionListener(e -> {
-            cardLayout.show(mainPanel, "stats");
-        });
+        loginView.getSingUpButton().addActionListener(e -> switchCard("register"));
+        registerView.getLogInButton().addActionListener(e -> switchCard("login"));
+        menuView.getConfigButton().addActionListener(e -> switchCard("config"));
+        menuView.getStatsButton().addActionListener(e -> switchCard("stats"));
 
         menuView.addPlayListener(e ->
                 menuView.showGamesPopUp(
-                        e1 -> {cardLayout.show(mainPanel, "game"); gameView.showNewGameDialog(); },
-                        e2 -> cardLayout.show(mainPanel, "game"),
-                        e3 -> cardLayout.show(mainPanel, "game")
+                        e1 -> { switchCard("game"); gameView.showNewGameDialog(); },
+                        e2 -> switchCard("game"),
+                        e3 -> switchCard("game")
                 )
         );
 
+        configView.addBackListener(e -> showPrevious());
+        statsView.addBackListener(e -> showPrevious());
+        gameView.addBackListener(e -> showPrevious());
         loginView.addForgotPasswordListener(e -> {
             cardLayout.show(mainPanel, "forgotPassword");
         });
@@ -82,21 +73,33 @@ public class MainFrame extends JFrame {
         setIconImage(new ImageIcon("src/Presentation/Images/coffee_cup.png").getImage());
 
         add(mainPanel);
-        switchCard("login"); //start on login
     }
 
     public void switchCard(String cardName) {
+        viewsStack.add(cardName);
         cardLayout.show(mainPanel, cardName);
     }
 
-    private void configureFrame() {
+    public void showMainFrame() {
         setSize(WIDTH_MAIN_FRAME, HEIGHT_MAIN_FRAME);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    }
-
-    public void showMainFrame() {
-        configureFrame();
+        setLocationRelativeTo(null);
+        switchCard("login");
         setVisible(true);
     }
 
+    public void showPrevious() {
+        if (viewsStack.size() <= 1) return;
+        viewsStack.remove(viewsStack.size() - 1);
+        String previous = viewsStack.get(viewsStack.size() - 1);
+        cardLayout.show(mainPanel, previous);
+    }
+
+    public JPanel getContainer() {
+        return mainPanel;
+    }
+
+    public BaseView getGameView()   { return gameView; }
+    public BaseView getStatsView()  { return statsView; }
+    public BaseView getConfigView() { return configView; }
 }

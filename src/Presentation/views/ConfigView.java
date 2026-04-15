@@ -15,16 +15,17 @@ public class ConfigView extends BaseView {
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
-    private JImagePanel ipProfile, mainPanel;
+    private JImagePanel ipProfile;
+    private JPanel mainPanel;
     private JPanel buttonsPanel, centralPanel;
     private JButton jbLanguage, jbLogOut, jbDeleteAccount;
 
     private ActionListener logoutListener;
     private ActionListener deleteListener;
+    private ActionListener backListener;
 
     public void addLogoutListener(ActionListener l)  { this.logoutListener = l; }
     public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
-
 
     public ConfigView() {
         super();
@@ -37,8 +38,8 @@ public class ConfigView extends BaseView {
 
     @Override
     protected void initComponents() {
-        mainPanel = new JImagePanel(BACKGROUND_URL);
-        mainPanel.setOpacityValue(0.5f);
+        //mainPanel = new JImagePanel(BACKGROUND_URL);
+        mainPanel = new JPanel();
 
         centralPanel = new JPanel();
         ipProfile = new JImagePanel(PROFILE_PICTURE_URL);
@@ -53,6 +54,7 @@ public class ConfigView extends BaseView {
 
     private void setMainPanel() {
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.setOpaque(false);
 
         JPanel wrapper = new JPanel(new GridBagLayout());
         setCentralPanel();
@@ -61,7 +63,7 @@ public class ConfigView extends BaseView {
         wrapper.setOpaque(false);
 
         mainPanel.add(wrapper, BorderLayout.CENTER);
-        add(mainPanel, BorderLayout.CENTER);
+        addToCenter(mainPanel);
     }
 
     private void setCentralPanel(){
