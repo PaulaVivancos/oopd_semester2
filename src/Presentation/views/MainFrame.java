@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
         // ...
 
         // Create controllers and passing as the navigator
-        new UserController(appController, loginView, registerView, gameView, configView, statsView, menuView);
+        new UserController(appController, loginView, registerView, gameView, configView, statsView, menuView,  forgotPasswordView);
 
         // Add cards
         mainPanel.add(loginView, "login");
@@ -75,7 +75,9 @@ public class MainFrame extends JFrame {
 
         loginView.addForgotPasswordListener(e -> {
             cardLayout.show(mainPanel, "forgotPassword");
+            forgotPasswordView.showEnterEmailPopUp();
         });
+
 
 
         setTitle("CoffeeClicker");

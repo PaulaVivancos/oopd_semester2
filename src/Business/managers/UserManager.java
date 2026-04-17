@@ -1,9 +1,9 @@
 package Business.managers;
 
+import Business.Exceptions.SendEmailException;
+import Business.entities.EmailService;
 import Business.entities.User;
 import Persistence.SQLDaos.UserSQLDao;
-
-import java.sql.SQLException;
 
 /**
  * The UserManager class will act as the system's model, storing and
@@ -15,9 +15,12 @@ import java.sql.SQLException;
 public class UserManager {
     private final UserSQLDao userDao;
     private User currentUser;
+    private EmailService emailService;
+    private String sendedCode;
 
     public UserManager() {
         this.userDao = new UserSQLDao();
+        emailService = new EmailService();
     }
 
     public boolean login(String username_email, String password) {
@@ -27,12 +30,9 @@ public class UserManager {
         }
         return false;
     }
+
     public void logout(){
         currentUser = null;
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
     }
 
     // Returns null on success, or an error message string on failure.
@@ -49,12 +49,22 @@ public class UserManager {
             return "Email is already registered.";
 
         User user = new User(username, email, password);
-        addStudent(user);
+        addUser(user);
         currentUser = userDao.findByNameEmailAndPassword(username, password);
         return null;
     }
 
-    private void addStudent(User user) {
+
+    public void handleSendCode(String email) {
+        try {
+            sendedCode =  emailService.sendVerificationCode(email);
+
+        } catch (SendEmailException e) {
+            sendedCode = null;
+        }
+
+    }
+    private void addUser(User user) {
         try {
             userDao.insertUser(user);
         } catch(Exception e) {
@@ -75,4 +85,15 @@ public class UserManager {
         }
     }
 
+    public String getSendCode() {
+        return sendedCode;
+    }
+
+    public void resetSendCode() {
+        sendedCode = null;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 }

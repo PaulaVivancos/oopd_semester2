@@ -11,6 +11,7 @@ public class MenuView extends JPanel {
     private JPanel jpTop, jpCentre, jpBot;
     private JImagePanel jipTitleTop, jipTitleBottom, jipCoffeeCup;
     private JButton jbPlay, jbStats, jbConfig, jbLogOut;
+    JButton newGame, loadGame, viewGame;
 
     //DIMENSION CONSTANTS
     private final Dimension DIMENSION_BUTTON = new Dimension(150, 50);
@@ -44,6 +45,9 @@ public class MenuView extends JPanel {
         jbStats   = new JButton("STATS");
         jbConfig  = new JButton("CONFIG");
         jbLogOut  = new JButton("LOG OUT");
+        newGame = createDialogButton("NEW GAME");
+        loadGame = createDialogButton("LOAD GAME");
+        viewGame = createDialogButton("VIEW GAME");
 
         setJipMain();
     }
@@ -118,31 +122,24 @@ public class MenuView extends JPanel {
 
         JPanel dialogContent = new JPanel();
         dialogContent.setLayout(new BoxLayout(dialogContent, BoxLayout.Y_AXIS));
-        dialogContent.setBackground(BACKGROUND_BUTTON_PRESSED);
+        dialogContent.setMaximumSize(new Dimension(380, 250));
+        dialogContent.setPreferredSize(new Dimension(380, 250));
+        dialogContent.setBackground(BACKGROUND_BUTTON);
         dialogContent.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2),
                 BorderFactory.createEmptyBorder(20, 30, 20, 30)
         ));
 
-        JLabel title = new JLabel("WHAT DO YOU WANT TO DO");
+        JLabel title = new JLabel("CHOOSE AN OPTION");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font(title.getFont().getFontName(), Font.BOLD, 16));
-
-        JButton newGame = createDialogButton("NEW GAME");
-        JButton loadGame = createDialogButton("LOAD GAME");
-        JButton viewGame = createDialogButton("VIEW GAME");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Times New Roman", Font.BOLD, 20));
 
         newGame.addActionListener(e -> {dialog.dispose(); onNewGame.actionPerformed(e);});
         loadGame.addActionListener(e -> {dialog.dispose(); onLoadGame.actionPerformed(e);});
         viewGame.addActionListener(e -> {dialog.dispose(); onViewGame.actionPerformed(e);});
 
-        dialogContent.add(title);
-        dialogContent.add(Box.createVerticalStrut(15));
-        dialogContent.add(newGame);
-        dialogContent.add(Box.createVerticalStrut(10));
-        dialogContent.add(loadGame);
-        dialogContent.add(Box.createVerticalStrut(10));
-        dialogContent.add(viewGame);
+        addComponentsDialogPanel(dialogContent, title);
 
         dialog.add(dialogContent);
         dialog.pack();
@@ -150,15 +147,24 @@ public class MenuView extends JPanel {
         dialog.setVisible(true);
     }
 
+    private void addComponentsDialogPanel(JPanel dialogContent, JLabel title) {
+        dialogContent.add(title);
+        dialogContent.add(Box.createVerticalStrut(15));
+        dialogContent.add(newGame);
+        dialogContent.add(Box.createVerticalStrut(10));
+        dialogContent.add(loadGame);
+        dialogContent.add(Box.createVerticalStrut(10));
+        dialogContent.add(viewGame);
+    }
+
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(new Dimension(200, 45));
-        button.setBackground(BACKGROUND_BUTTON);
-        button.setForeground(Color.WHITE);
+        button.setMaximumSize(new Dimension(200, 50));
+        button.setBackground(Color.WHITE);
+        button.setForeground(BACKGROUND_BUTTON);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
-        button.setBorderPainted(false);
         button.setFont(new Font("Times New Roman", Font.BOLD, 16));
         button.setOpaque(false);
 

@@ -10,17 +10,20 @@ public class UserController {
     private final LoginView loginView;
     private final RegisterView registerView;
     private final GameView gameView;
+    private final ForgotPasswordView forgotPasswordView;
     private final ConfigView configView;
     private final StatsView statsView;
     private final MenuView menuView;
     private final UserManager userManager;
 
     public UserController(AppController appController, LoginView loginView, RegisterView registerView,
-                          GameView gameView, ConfigView configView, StatsView statsView, MenuView menuView) {
+                          GameView gameView, ConfigView configView, StatsView statsView, MenuView menuView,
+                          ForgotPasswordView forgotPasswordView) {
         this.appController = appController;
         this.loginView  = loginView;
         this.registerView = registerView;
         this.gameView   = gameView;
+        this.forgotPasswordView = forgotPasswordView;
         this.configView = configView;
         this.statsView  = statsView;
         this.menuView   = menuView;
@@ -35,8 +38,16 @@ public class UserController {
         configView.addLogoutListener(e -> handleLogout());
         configView.addDeleteListener(e -> handleDelete());
 
-        statsView.addLogoutListener(e -> handleLogout());
+        forgotPasswordView.addSendCodeListener(e -> handleSendingEmail());
+        forgotPasswordView.addValidateCodeListener(e -> handleCodeVerification());
+        forgotPasswordView.addBackLoginListener(e -> {
+                forgotPasswordView.clearTextFields();
+                userManager.resetSendCode();
+                appController.switchCard("login");
+        });
 
+
+        statsView.addLogoutListener(e -> handleLogout());
         menuView.getLogOutButton().addActionListener(e -> handleLogout());
     }
 
@@ -74,6 +85,7 @@ public class UserController {
             }
         }
     }
+
     public void handleSignUp() {
         String username = registerView.getUsername();
         String email = registerView.getEmail();
@@ -85,6 +97,30 @@ public class UserController {
             appController.switchCard("menu");
         } else {
             registerView.showError(error);
+        }
+    }
+
+    public void handleSendingEmail() {
+        forgotPasswordView.clearTextFields();
+        String email = forgotPasswordView.getEmail();
+        userManager.handleSendCode(email);
+
+        if(userManager.getSendCode() == null) {
+            forgotPasswordView.showError("This email is invalid or could not be reached.");
+        }
+        else {
+            forgotPasswordView.clearTextFields();
+            appController.switchCard("forgotPassword");
+        }
+
+    }
+
+    public void handleCodeVerification() {
+        if(forgotPasswordView.getCode().equals(userManager.getSendCode())) {
+            forgotPasswordView.showChangePassword();
+        }
+        else {
+            forgotPasswordView.showError("This code is invalid.");
         }
     }
 }
