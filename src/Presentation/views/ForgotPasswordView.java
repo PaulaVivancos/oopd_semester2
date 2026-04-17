@@ -9,11 +9,11 @@ import java.awt.event.*;
 public class ForgotPasswordView extends JPanel {
 
     private JImagePanel jpiMain;
-    private JPanel jpCentral, jpCode, jpPassword, jpButtons, jpLogin;
+    private JPanel jpCentral, jpCode, jpPassword, jpButtons, jpValidateCode;
     private JLabel jlTitle;
-    private JButton jbValidateCode, jbBackLogIn;
-    private JTextField jtfCode;
-    private JPasswordField jtfPassword;
+    private JButton jbValidateCode, jbBackLogIn, jbSendCode, jbChangePassword;
+    private JTextField jtfCode, jtfEmail, jtfNewPassword, jtfPasswordConfirmation;
+    private String email, newPassword, confirmationPassword, code;
 
     //DIMENSION CONSTANTS
     private final Dimension DIMENSION_TEXTFIELD = new Dimension(300, 50);
@@ -36,18 +36,22 @@ public class ForgotPasswordView extends JPanel {
         jpCode = new JPanel();
         jpPassword = new JPanel();
         jpButtons = new JPanel();
-        jpLogin = new JPanel();
+        jpValidateCode = new JPanel();
 
         //Labels
         jlTitle = new JLabel("FORGOTTEN PASSWORD");
 
         //Buttons
         jbValidateCode = new JButton("Validate code");
-        jbBackLogIn = new JButton("Go back to log in");
+        jbBackLogIn = new JButton("GO BACK TO LOG IN");
+        jbSendCode = createDialogButton("SEND CODE");
+        jbChangePassword = createDialogButton("CHANGE PASSWORD");
 
         //Text fields
         jtfCode = new JTextField();
-        jtfPassword = new JPasswordField();
+        jtfEmail = new JTextField();
+        jtfNewPassword = new JTextField();
+        jtfPasswordConfirmation = new JTextField();
 
         setMainPanel();
     }
@@ -73,7 +77,8 @@ public class ForgotPasswordView extends JPanel {
 
     private void setCenterPanel() {
         setCodePanel();
-        setLogInPanel();
+        setValidateCodePanel();
+        setButtons();
 
         jpCentral.setLayout(new BoxLayout(jpCentral, BoxLayout.Y_AXIS));
         jpCentral.setBorder(BorderFactory.createEmptyBorder(60, 0, 0, 0));
@@ -82,7 +87,7 @@ public class ForgotPasswordView extends JPanel {
         jpCode.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         jpCentral.add(jpCode);
-        jpCentral.add(jpLogin);
+        jpCentral.add(jpValidateCode);
         jpCentral.add(jpButtons);
     }
 
@@ -93,14 +98,14 @@ public class ForgotPasswordView extends JPanel {
         JLabel topLabel = new JLabel("Enter code: ");
         topLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         topLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
-        setCodeField();
+        setCodeTextField();
 
         jpCode.setOpaque(false);
         jpCode.add(topLabel);
         jpCode.add(jtfCode);
     }
 
-    private void setCodeField() {
+    private void setCodeTextField() {
         jtfCode.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfCode.setPreferredSize(DIMENSION_TEXTFIELD);
         jtfCode.setMaximumSize(DIMENSION_TEXTFIELD);
@@ -122,18 +127,19 @@ public class ForgotPasswordView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
     }
 
-    private void setLogInPanel() {
-        jpLogin = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    private void setValidateCodePanel() {
+        jpValidateCode = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
         jbValidateCode.setPreferredSize(DIMENSION_BUTTON_LOGIN);
         jbValidateCode.setAlignmentX(Component.CENTER_ALIGNMENT);
         jbValidateCode.setAlignmentY(Component.CENTER_ALIGNMENT);
         jbValidateCode.setForeground(Color.WHITE);
         jbValidateCode.setBackground(BACKGROUND_BUTTON);
-        jpLogin.setOpaque(false);
         jbValidateCode.setOpaque(true);
         jbValidateCode.setContentAreaFilled(true);
-        jpLogin.add(jbValidateCode);
+
+        jpValidateCode.setOpaque(false);
+        jpValidateCode.add(jbValidateCode);
 
         jbValidateCode.addMouseListener(new MouseAdapter() {
             @Override
@@ -172,16 +178,138 @@ public class ForgotPasswordView extends JPanel {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void addValidateCodeListener(ActionListener listener) {
-        jbValidateCode.addActionListener(listener);
-    }
-
     public void showEnterEmailPopUp() {
+        JDialog dialog = new JDialog();
+        dialog.setUndecorated(true);
 
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBackground(BACKGROUND_BUTTON);
+        content.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
+
+        JLabel title = new JLabel("ENTER YOUR EMAIL");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        title.setForeground(Color.WHITE);
+
+        jtfEmail.setPreferredSize(new Dimension(300, 40));
+        jtfEmail.setMaximumSize(new Dimension(300, 40));
+        jtfEmail.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
+        jbSendCode.addActionListener(e -> {
+            email = jtfEmail.getText();
+            dialog.dispose();
+        });
+
+        content.add(title);
+        content.add(Box.createVerticalStrut(20));
+        content.add(jtfEmail);
+        content.add(Box.createVerticalStrut(20));
+        content.add(jbSendCode);
+
+        dialog.add(content);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
+    private JButton createDialogButton(String title) {
+        JButton button = new JButton(title);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setMaximumSize(new Dimension(200, 55));
+        button.setBackground(Color.WHITE);
+        button.setForeground(BACKGROUND_BUTTON);
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
+        button.setOpaque(false);
+
+        return button;
+    }
 
     public String getCode() {
         return jtfCode.getText();
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void addBackLoginListener(ActionListener listener) {
+        jbBackLogIn.addActionListener(listener);
+    }
+
+    public void addValidateCodeListener(ActionListener listener) {
+        jbValidateCode.addActionListener(listener);
+    }
+
+    public void addSendCodeListener(ActionListener listener) {
+        jbSendCode.addActionListener(listener);
+    }
+
+    public void showChangePassword() {
+        JDialog dialog = new JDialog();
+        dialog.setUndecorated(true);
+
+        JPanel content = new JPanel();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        content.setBackground(BACKGROUND_BUTTON);
+        content.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
+
+        JLabel title = new JLabel("ENTER YOUR NEW PASSWORD");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Times New Roman", Font.BOLD, 20));
+        title.setForeground(Color.WHITE);
+
+        JLabel jlNewPassword = new JLabel("Password: ");
+        jlNewPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
+        jlNewPassword.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+        jlNewPassword.setForeground(Color.WHITE);
+
+        JLabel jlPasswordConfirmation = new JLabel("Password confirmation: ");
+        jlPasswordConfirmation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        jlPasswordConfirmation.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+        jlPasswordConfirmation.setForeground(Color.WHITE);
+
+        jtfNewPassword.setPreferredSize(new Dimension(300, 40));
+        jtfNewPassword.setMaximumSize(new Dimension(300, 40));
+        jtfNewPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        jtfPasswordConfirmation.setPreferredSize(new Dimension(300, 40));
+        jtfPasswordConfirmation.setMaximumSize(new Dimension(300, 40));
+        jtfPasswordConfirmation.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        content.add(title);
+        content.add(Box.createVerticalStrut(20));
+        content.add(jlNewPassword);
+        content.add(Box.createVerticalStrut(5));
+        content.add(jtfNewPassword);
+        content.add(Box.createVerticalStrut(25));
+        content.add(jlPasswordConfirmation);
+        content.add(Box.createVerticalStrut(5));
+        content.add(jtfPasswordConfirmation);
+        content.add(Box.createVerticalStrut(20));
+        content.add(jbChangePassword);
+
+        dialog.add(content);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    public void clearTextFields() {
+        jtfCode.setText("");
+        jtfEmail.setText("");
+        jtfNewPassword.setText("");
+        jtfPasswordConfirmation.setText("");
+    }
+
+
 }
