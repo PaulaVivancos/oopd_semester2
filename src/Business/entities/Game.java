@@ -1,6 +1,8 @@
 package Business.entities;
 
+import java.lang.reflect.GenericArrayType;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Game {
 
@@ -10,22 +12,26 @@ public class Game {
     private LocalDateTime endTime;
     private double numCoffees;
     private boolean finished;
+    private ArrayList<Generator> generators;
 
-    public Game(int userId, LocalDateTime startTime, double numCoffees, boolean finished) {
+    public Game(int userId, LocalDateTime startTime, double numCoffees, boolean finished, ArrayList<Generator> generators) {
         this.userId = userId;
         this.startTime = startTime;
         this.endTime = null;
         this.numCoffees = numCoffees;
         this.finished = finished;
+        this.generators = generators;
     }
 
-    public Game(int gameId, int userId, LocalDateTime startTime, LocalDateTime endTime, double numCoffees, boolean finished) {
+    public Game(int gameId, int userId, LocalDateTime startTime, LocalDateTime endTime,
+                double numCoffees, boolean finished, ArrayList<Generator> generators) {
         this.gameId = gameId;
         this.userId = userId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.numCoffees = numCoffees;
         this.finished = finished;
+        this.generators = generators;
     }
 
     public int getGameId() { return gameId; }
