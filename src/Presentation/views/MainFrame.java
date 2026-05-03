@@ -21,6 +21,7 @@ public class MainFrame extends JFrame {
     private ConfigView configView;
     private StatsView statsView;
     private ForgotPasswordView forgotPasswordView;
+    private ShopView shopView;
 
     private final int WIDTH_MAIN_FRAME = 1150;
     private final int HEIGHT_MAIN_FRAME = 800;
@@ -36,6 +37,7 @@ public class MainFrame extends JFrame {
         configView = new ConfigView();
         statsView = new StatsView();
         forgotPasswordView = new ForgotPasswordView();
+        shopView = new ShopView();
         // ...
 
         new UserController(appController, loginView, registerView, gameView, configView, statsView, menuView);
@@ -47,6 +49,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(statsView, "stats");
         mainPanel.add(configView, "config");
         mainPanel.add(forgotPasswordView, "forgotPassword");
+        mainPanel.add(shopView, "shop");
 
         loginView.getSingUpButton().addActionListener(e -> switchCard("register"));
         registerView.getLogInButton().addActionListener(e -> switchCard("login"));
@@ -84,7 +87,7 @@ public class MainFrame extends JFrame {
         setSize(WIDTH_MAIN_FRAME, HEIGHT_MAIN_FRAME);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        switchCard("login");
+        switchCard("shop");    //TEST VIEW
         setVisible(true);
     }
 
