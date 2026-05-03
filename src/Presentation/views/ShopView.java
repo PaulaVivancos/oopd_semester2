@@ -150,8 +150,6 @@ public class ShopView extends BaseView {
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
 
         //Image for gen (optional)
-
-
         JImagePanel img = new JImagePanel(GENERATOR_IMAGES[index]);
         img.setPreferredSize(new Dimension(60, 60));
         img.setMaximumSize(new Dimension(60, 60));
@@ -253,10 +251,10 @@ public class ShopView extends BaseView {
     }
 
     //TODO: move to logic?
-    public double[] getBaseCosts()       { return BASE_COSTS; }
+    public double[] getBaseCosts() { return BASE_COSTS; }
     public double[] getBaseProductions() { return BASE_PRODUCTIONS; }
-    public double[] getIncrementCosts()  { return INCREMENT_COSTS; }
-    public int[]    getOwnedCounts()     { return ownedCounts; }
+    public double[] getIncrementCosts() { return INCREMENT_COSTS; }
+    public int[] getOwnedCounts() { return ownedCounts; }
 }
 
 
