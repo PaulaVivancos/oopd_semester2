@@ -5,6 +5,8 @@ import Presentation.JImagePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +19,14 @@ public class ShopView extends BaseView {
     private JLabel jlTitle;
 
     //Generator parts
-    private final List<JLabel> jlNames = new ArrayList<>();
-    private final List<JLabel> jlCosts = new ArrayList<>();
-    private final List<JLabel> jlProductions = new ArrayList<>();
-    private final List<JLabel> jlOwned = new ArrayList<>();
-    private final List<JButton> jbBuyButtons = new ArrayList<>();
-    private final List<JImagePanel> jipImages = new ArrayList<>();
+    private List<JLabel> jlNames;
+    private List<JLabel> jlCosts;
+    private List<JLabel> jlProductions;
+    private List<JLabel> jlOwned;
+    private List<JButton> jbBuyButtons;
+    private List<JImagePanel> jipImages;
 
-
+    //decides how many generators there are in other parts as well
     private static final String[] GENERATOR_NAMES = {
             "Gas station clerk",
             "Starsbuck barista",
@@ -47,7 +49,13 @@ public class ShopView extends BaseView {
 
     // COLOR CONSTANTS
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
+    private final Color BACKGROUND_MEDIUM = new Color(156, 98, 74);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
+
+    private final Color BACKGROUND_ROW = new Color(210, 190, 165);
+    private final Color BACKGROUND_ROW_DISABLED = new Color(190, 175, 158);
+    private static final Color TEXT_DARK = new Color(60, 30, 10);
+
 
     // SIZE CONSTANTS
     private static final Dimension DIM_BUY_BUTTON = new Dimension(90, 36);
@@ -82,10 +90,173 @@ public class ShopView extends BaseView {
 
     @Override
     protected void initComponents() {
+        jlNames = new ArrayList<>();
+        jlCosts = new ArrayList<>();
+        jlProductions = new ArrayList<>();
+        jlOwned = new ArrayList<>();
+        jbBuyButtons = new ArrayList<>();
+        jipImages = new ArrayList<>();
+
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.setOpaque(false);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 40, 50));
 
+        buildNorth();
+        buildCenter();
+
+        mainPanel.add(jpNorth,  BorderLayout.NORTH);
+        mainPanel.add(jpCenter, BorderLayout.CENTER);
+
         addToCenter(mainPanel);
     }
+
+    private void buildNorth() {
+        jpNorth = new JPanel();
+        jpNorth.setOpaque(false);
+        jpNorth.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+
+        jlTitle = new JLabel("Generators shop");
+        jlTitle.setFont(new Font("Times New Roman", Font.BOLD, 22));
+        jlTitle.setForeground(BACKGROUND_BUTTON);
+        jlTitle.setBackground(BACKGROUND_BUTTON_PRESSED);
+        jlTitle.setOpaque(true);
+        jlTitle.setBorder(BorderFactory.createEmptyBorder(6, 20, 6, 20));
+
+        jpNorth.add(jlTitle);
+    }
+
+    private void buildCenter() {
+        jpCenter = new JPanel();
+        jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.Y_AXIS));
+        jpCenter.setOpaque(false);
+
+        for (int i = 0; i < GENERATOR_NAMES.length; i++) {
+            JPanel row = buildGeneratorRow(i);
+            jpCenter.add(row);
+            if (i < GENERATOR_NAMES.length - 1) {
+                jpCenter.add(Box.createVerticalStrut(12));
+            }
+        }
+    }
+
+    private JPanel buildGeneratorRow(int index) {
+        JPanel row = new JPanel(new BorderLayout(10, 0));
+        row.setBackground(BACKGROUND_ROW);
+        row.setOpaque(true);
+        row.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 2, 0, BACKGROUND_BUTTON),
+                BorderFactory.createEmptyBorder(10, 14, 10, 14)
+        ));
+        row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
+
+        //Image for gen (optional)
+
+
+        JImagePanel img = new JImagePanel(GENERATOR_IMAGES[index]);
+        img.setPreferredSize(new Dimension(60, 60));
+        img.setMaximumSize(new Dimension(60, 60));
+        img.setOpaque(false);
+        jipImages.add(img);
+
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setOpaque(false);
+
+        JLabel nameLabel = new JLabel(GENERATOR_NAMES[index]);
+        nameLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
+        nameLabel.setForeground(TEXT_DARK);
+        jlNames.add(nameLabel);
+
+        double nextCost = BASE_COSTS[index];
+        JLabel costLabel = new JLabel(String.format("Cost: %.0f", nextCost));
+        costLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+        costLabel.setForeground(TEXT_DARK);
+        jlCosts.add(costLabel);
+
+        JLabel prodLabel = new JLabel(String.format("Production: %.1f /s", BASE_PRODUCTIONS[index]));
+        prodLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+        prodLabel.setForeground(TEXT_DARK);
+        jlProductions.add(prodLabel);
+
+        JLabel ownedLabel = new JLabel("Owned: 0");
+        ownedLabel.setFont(new Font("Times New Roman", Font.ITALIC, 12));
+        ownedLabel.setForeground(BACKGROUND_BUTTON);
+        jlOwned.add(ownedLabel);
+
+        infoPanel.add(nameLabel);
+        infoPanel.add(Box.createVerticalStrut(3));
+        infoPanel.add(costLabel);
+        infoPanel.add(prodLabel);
+        infoPanel.add(ownedLabel);
+
+        JButton buyBtn = new JButton("BUY");
+        styleButton(buyBtn, DIM_BUY_BUTTON);
+        buyBtn.setEnabled(false);
+        jbBuyButtons.add(buyBtn);
+
+        JPanel eastPanel = new JPanel(new GridBagLayout());
+        eastPanel.setOpaque(false);
+        eastPanel.add(buyBtn);
+
+        row.add(img, BorderLayout.WEST);
+        row.add(infoPanel, BorderLayout.CENTER);
+        row.add(eastPanel, BorderLayout.EAST);
+
+        return row;
+    }
+
+    private void styleButton(JButton button, Dimension dimension) {
+        button.setPreferredSize(dimension);
+        button.setMinimumSize(dimension);
+        button.setMaximumSize(dimension);
+        button.setBackground(BACKGROUND_BUTTON);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Times New Roman", Font.BOLD, 13));
+        button.setOpaque(true);
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(false);
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (button.isEnabled()) button.setBackground(BACKGROUND_BUTTON_PRESSED);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (button.isEnabled()) button.setBackground(BACKGROUND_BUTTON);
+            }
+        });
+    }
+
+    public void updateGeneratorRow(int index, double nextCost, int owned, boolean canAfford) {
+        ownedCounts[index] = owned;
+        jlCosts.get(index).setText(String.format("Cost: %.0f", nextCost));
+        jlOwned.get(index).setText("Owned: " + owned);
+
+        JButton btn = jbBuyButtons.get(index);
+        btn.setEnabled(canAfford);
+
+        Container row = btn.getParent().getParent();
+        if (row instanceof JPanel) {
+            ((JPanel) row).setBackground(canAfford ? BACKGROUND_ROW : BACKGROUND_ROW_DISABLED);
+        }
+    }
+
+    public JButton getBuyButton(int index) {
+        return jbBuyButtons.get(index);
+    }
+
+    public List<JButton> getAllBuyButtons() {
+        return jbBuyButtons;
+    }
+
+    //TODO: move to logic?
+    public double[] getBaseCosts()       { return BASE_COSTS; }
+    public double[] getBaseProductions() { return BASE_PRODUCTIONS; }
+    public double[] getIncrementCosts()  { return INCREMENT_COSTS; }
+    public int[]    getOwnedCounts()     { return ownedCounts; }
 }
+
+
