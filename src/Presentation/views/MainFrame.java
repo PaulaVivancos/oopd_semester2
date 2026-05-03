@@ -87,7 +87,7 @@ public class MainFrame extends JFrame {
         setSize(WIDTH_MAIN_FRAME, HEIGHT_MAIN_FRAME);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        switchCard("shop");    //TEST VIEW
+        switchCard("login");    //TEST VIEW
         setVisible(true);
     }
 
