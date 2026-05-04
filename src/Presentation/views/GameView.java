@@ -25,21 +25,25 @@ public class GameView extends BaseView {
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
     // IMAGES
-    private static final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
-    private static final String TITLE_URL = "src/Presentation/Images/title.png";
-    private static final String COFFEE_CUP = "src/Presentation/Images/coffee_cup.png";
+    private final String BACKGROUND_URL = "resources/background.jpg";
+    private final String TITLE_URL = "resources/title.png";
+    private final String COFFEE_CUP = "resources/coffee_cup.png";
+
+    public static final String NEW_GAME = "NEW_GAME";
+    public static final String LOAD_GAME = "LOAD_GAME";
+    public static final String VIEW_GAME = "VIEW_GAME";
+    public static final String BUY_COFFEE = "BUY_COFFEE";
+
 
     public GameView() {
-        super(); // llama a initMenu() + initComponents()
+        super(); // initMenu() + initComponents()
     }
-
-    // ── Menú ─────────────────────────────────────────────────────
 
     private ActionListener logoutListener;
     private ActionListener deleteListener;
-
-    public void addLogoutListener(ActionListener l)  { this.logoutListener = l; }
-    public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
+    private ActionListener newGameListener;
+    private ActionListener loadGameListener;
+    private ActionListener viewGameListener;
 
     @Override
     protected void buildMenu(JPopupMenu menu) {
@@ -73,11 +77,12 @@ public class GameView extends BaseView {
         jipCoffeeCupSmall = new JImagePanel(COFFEE_CUP);
 
         // Other components
-        jlCounter = new JLabel("100.00");
+        jlCounter = new JLabel();
         jtTable = new JTable();
 
         // Buttons
         jbBuy = new JButton("BUY COFFEE");
+        jbBuy.setActionCommand(BUY_COFFEE);
         jbGen = new JButton("GENERATORS");
         jbUpg = new JButton("UPGRADES");
 
@@ -100,9 +105,7 @@ public class GameView extends BaseView {
         mainPanel.add(jpEast, BorderLayout.EAST);
         mainPanel.add(jpWest, BorderLayout.WEST);
 
-        // BaseView ya tiene BorderLayout y NORTH ocupado por el menuButton,
-        // así que el contenido va en CENTER
-        //add(jipMain, BorderLayout.CENTER);
+
         addToCenter(mainPanel);
     }
 
@@ -219,6 +222,65 @@ public class GameView extends BaseView {
         });
     }
 
+    public void showGamesPopUp(ActionListener actionListener) {
+        JDialog dialog = new JDialog();
+        dialog.setUndecorated(true);
+        dialog.setModal(true);
+
+        JPanel dialogContent = new JPanel();
+        dialogContent.setLayout(new BoxLayout(dialogContent, BoxLayout.Y_AXIS));
+        dialogContent.setBackground(BACKGROUND_BUTTON_PRESSED);
+        dialogContent.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2),
+                BorderFactory.createEmptyBorder(20, 30, 20, 30)
+        ));
+
+        JLabel title = new JLabel("WHAT DO YOU WANT TO DO");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font(title.getFont().getFontName(), Font.BOLD, 16));
+
+        JButton newGame = createDialogButton("NEW GAME");
+        JButton loadGame = createDialogButton("LOAD GAME");
+        JButton viewGame = createDialogButton("VIEW GAME");
+
+        newGame.setActionCommand(NEW_GAME);
+        newGame.addActionListener(e -> {
+            dialog.dispose();
+            if (newGameListener != null) {
+                newGameListener.actionPerformed(e);
+            }
+        });
+
+        loadGame.setActionCommand(LOAD_GAME);
+        loadGame.addActionListener(e -> {
+            dialog.dispose();
+            if (loadGameListener != null) {
+                loadGameListener.actionPerformed(e);
+            }
+        });
+
+        viewGame.setActionCommand(VIEW_GAME);
+        viewGame.addActionListener(e -> {
+            dialog.dispose();
+            if (viewGameListener != null) {
+                viewGameListener.actionPerformed(e);
+            }
+        });
+
+        dialogContent.add(title);
+        dialogContent.add(Box.createVerticalStrut(15));
+        dialogContent.add(newGame);
+        dialogContent.add(Box.createVerticalStrut(10));
+        dialogContent.add(loadGame);
+        dialogContent.add(Box.createVerticalStrut(10));
+        dialogContent.add(viewGame);
+
+        dialog.add(dialogContent);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
     public void showNewGameDialog() {
         JDialog dialog = new JDialog();
         dialog.setUndecorated(true);
@@ -256,6 +318,7 @@ public class GameView extends BaseView {
         dialog.pack();
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+        dialog.setModal(true);
     }
 
     private JButton createDialogButton(String title) {
@@ -271,6 +334,26 @@ public class GameView extends BaseView {
         button.setOpaque(false);
 
         return button;
+    }
+
+    public void addLogoutListener(ActionListener l)  { this.logoutListener = l; }
+    public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
+
+
+    public void addBuyListener(ActionListener actionListener) {
+        jbBuy.addActionListener(actionListener);
+    }
+
+    public void addNewGameListener(ActionListener actionListener) {
+        this.newGameListener = actionListener;
+    }
+
+    public void addLoadGameListener(ActionListener actionListener) {
+        this.loadGameListener = actionListener;
+    }
+
+    public void addViewGameListener(ActionListener actionListener) {
+        this.viewGameListener = actionListener;
     }
 
     // Getters
@@ -293,5 +376,11 @@ public class GameView extends BaseView {
 
     public JTable getJtTable() {
         return jtTable;
+    }
+
+    public void updateCounter(double numCoffees) {
+        jlCounter.setText(String.valueOf(numCoffees));
+        jlCounter.revalidate();
+        jlCounter.repaint();
     }
 }

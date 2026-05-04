@@ -13,7 +13,7 @@ public abstract class BaseView extends JPanel {
     private JPopupMenu popupMenu;
     private JImagePanel panel;
 
-    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+    private final String BACKGROUND_URL = "resources/background.jpg";
 
     protected final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     protected final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
@@ -26,12 +26,12 @@ public abstract class BaseView extends JPanel {
         panel.setLayout(new BorderLayout());
         panel.setOpaque(false);
 
-        initMenu(); // primero la barra superior
+        initMenu();
         panel.add(topBarGrid, BorderLayout.NORTH);
 
-        add(panel, BorderLayout.CENTER); // <-- explícito y seguro
+        add(panel, BorderLayout.CENTER);
 
-        initComponents(); // ahora las vistas hijas pueden añadir contenido
+        initComponents();
     }
 
 
@@ -87,7 +87,7 @@ public abstract class BaseView extends JPanel {
     }
 
     private void setArrowBackButton() {
-        arrowBackButton = new JButton("Go back");
+        arrowBackButton = new JButton("Back");
         arrowBackButton.setMargin(new Insets(2, 8, 2, 8));
         arrowBackButton.setFont(new Font("SansSerif", Font.BOLD, 18));
         arrowBackButton.setBorderPainted(false);

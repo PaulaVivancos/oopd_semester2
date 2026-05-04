@@ -25,7 +25,7 @@ public class ForgotPasswordView extends JPanel {
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
     //IMAGES
-    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+    private final String BACKGROUND_URL = "resources/background.jpg";
 
     public ForgotPasswordView() {
         setLayout(new BorderLayout());
