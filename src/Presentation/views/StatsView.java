@@ -14,7 +14,7 @@ public class StatsView extends BaseView {
     private JComboBox<String> jcbPlayers, jcbGames;
     private String[] playersOptions, gamesOptions;
 
-    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+    private final String BACKGROUND_URL = "resources/background.jpg";
 
     private ActionListener logoutListener;
     public void addLogoutListener(ActionListener l) { this.logoutListener = l; }

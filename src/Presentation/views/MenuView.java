@@ -19,11 +19,16 @@ public class MenuView extends JPanel {
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
+    public static final String GO_GAME = "GO_TO_GAME";
+    public static final String GO_STATS = "GO_TO_STATS";
+    public static final String GO_CONFIG = "GO_TO_CONFIG";
+    public static final String LOGOUT = "LOGOUT";
+
     //IMAGES
-    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
-    private final String TITLE_TOP_URL  = "src/Presentation/Images/welcome_to.png";
-    private final String TITLE_BOT_URL  = "src/Presentation/Images/title.png";
-    private final String COFFEE_CUP     = "src/Presentation/Images/coffee_cup.png";
+    private final String BACKGROUND_URL = "resources/background.jpg";
+    private final String TITLE_TOP_URL = "resources/welcome_to.png";
+    private final String TITLE_BOT_URL = "resources/title.png";
+    private final String COFFEE_CUP = "resources/coffee_cup.png";
 
     public MenuView() {
         setLayout(new BorderLayout());
@@ -45,7 +50,25 @@ public class MenuView extends JPanel {
         jbConfig  = new JButton("CONFIG");
         jbLogOut  = new JButton("LOG OUT");
 
+        jbPlay.setActionCommand(GO_GAME);
+        jbStats.setActionCommand(GO_STATS);
+        jbConfig.setActionCommand(GO_CONFIG);
+        jbLogOut.setActionCommand(LOGOUT);
+
         setJipMain();
+    }
+
+    public void addAuthListeners(ActionListener actionListener) {
+        jbLogOut.addActionListener(actionListener);
+        jbConfig.addActionListener(actionListener);
+    }
+
+    public void addStatsListener(ActionListener actionListener) {
+        jbStats.addActionListener(actionListener);
+    }
+
+    public void addGameListener(ActionListener actionListener) {
+        jbPlay.addActionListener(actionListener);
     }
 
     private void setJipMain() {
@@ -112,43 +135,6 @@ public class MenuView extends JPanel {
         jpBot.add(jbLogOut);
     }
 
-    public void showGamesPopUp(ActionListener onNewGame, ActionListener onLoadGame, ActionListener onViewGame) {
-        JDialog dialog = new JDialog();
-        dialog.setUndecorated(true);
-
-        JPanel dialogContent = new JPanel();
-        dialogContent.setLayout(new BoxLayout(dialogContent, BoxLayout.Y_AXIS));
-        dialogContent.setBackground(BACKGROUND_BUTTON_PRESSED);
-        dialogContent.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2),
-                BorderFactory.createEmptyBorder(20, 30, 20, 30)
-        ));
-
-        JLabel title = new JLabel("WHAT DO YOU WANT TO DO");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font(title.getFont().getFontName(), Font.BOLD, 16));
-
-        JButton newGame = createDialogButton("NEW GAME");
-        JButton loadGame = createDialogButton("LOAD GAME");
-        JButton viewGame = createDialogButton("VIEW GAME");
-
-        newGame.addActionListener(e -> {dialog.dispose(); onNewGame.actionPerformed(e);});
-        loadGame.addActionListener(e -> {dialog.dispose(); onLoadGame.actionPerformed(e);});
-        viewGame.addActionListener(e -> {dialog.dispose(); onViewGame.actionPerformed(e);});
-
-        dialogContent.add(title);
-        dialogContent.add(Box.createVerticalStrut(15));
-        dialogContent.add(newGame);
-        dialogContent.add(Box.createVerticalStrut(10));
-        dialogContent.add(loadGame);
-        dialogContent.add(Box.createVerticalStrut(10));
-        dialogContent.add(viewGame);
-
-        dialog.add(dialogContent);
-        dialog.pack();
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-    }
 
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
@@ -181,6 +167,7 @@ public class MenuView extends JPanel {
     public void addPlayListener(ActionListener actionListener) {
         jbPlay.addActionListener(actionListener);
     }
+
     public JButton getGameButton()   { return jbPlay; }
     public JButton getStatsButton()  { return jbStats; }
     public JButton getConfigButton() { return jbConfig; }
