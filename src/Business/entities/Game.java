@@ -24,14 +24,14 @@ public class Game {
     }
 
     public Game(int gameId, int userId, LocalDateTime startTime, LocalDateTime endTime,
-                double numCoffees, boolean finished, ArrayList<Generator> generators) {
+                double numCoffees, boolean finished) {
         this.gameId = gameId;
         this.userId = userId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        this.generators = generators;
+        //this.generators = generators;
     }
 
     //TEST (so project compiles)

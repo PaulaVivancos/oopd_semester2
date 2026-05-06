@@ -2,6 +2,7 @@ package Business.managers;
 
 import Business.entities.User;
 import Persistence.SQLDaos.UserSQLDao;
+import Persistence.UserDAO;
 
 import java.sql.SQLException;
 
@@ -13,11 +14,11 @@ import java.sql.SQLException;
  * to abstractly access and modify the information.
  */
 public class UserManager {
-    private final UserSQLDao userDao;
+    private final UserDAO userDao;
     private User currentUser;
 
-    public UserManager() {
-        this.userDao = new UserSQLDao();
+    public UserManager(UserDAO userDao) {
+        this.userDao = userDao;
     }
 
     public boolean login(String username_email, String password) {

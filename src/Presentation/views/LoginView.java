@@ -23,8 +23,13 @@ public class LoginView extends JPanel {
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
+    // ACTION COMMANDS CONSTANTS
+    public static final String LOGIN_USER = "LOGIN_USER";
+    public static final String GO_REGISTER = "GO_TO_REGISTER";
+    public static final String FORGOT_PASSWORD = "FORGOT_PASSWORD";
+
     //IMAGES
-    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+    private final String BACKGROUND_URL = "resources/background.jpg";
 
     public LoginView() {
         setLayout(new BorderLayout());
@@ -44,6 +49,11 @@ public class LoginView extends JPanel {
         jbLogIn = new JButton("Log In");
         jbSignUp = new JButton("Don't have an account yet? \nSign up");
         jbForgotPassword = new JButton("Forgot Password?");
+
+        // ATTACH ACTION COMMANDS
+        jbLogIn.setActionCommand(LOGIN_USER);
+        jbSignUp.setActionCommand(GO_REGISTER);
+        jbForgotPassword.setActionCommand(FORGOT_PASSWORD);
 
         //Text fields
         jtfUsername = new JTextField();
@@ -224,6 +234,10 @@ public class LoginView extends JPanel {
 
     public void addLoginListener(ActionListener listener) {
         jbLogIn.addActionListener(listener);
+    }
+
+    public void addSignUpListener(ActionListener listener) {
+        jbSignUp.addActionListener(listener);
     }
 
     public void addForgotPasswordListener(ActionListener listener) {

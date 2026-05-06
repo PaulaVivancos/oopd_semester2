@@ -24,8 +24,11 @@ public class RegisterView extends JPanel {
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
+    public static final String REGISTER_USER = "REGISTER_USER";
+    public static final String GO_LOGIN = "GO_TO_LOGIN";
+
     //IMAGES
-    private final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+    private final String BACKGROUND_URL = "resources/background.jpg";
 
     public RegisterView() {
         setLayout(new BorderLayout());
@@ -55,7 +58,15 @@ public class RegisterView extends JPanel {
         jbLogIn = new JButton("Already have an account. Log in.");
         jbSignUp = new JButton("SIGN UP");
 
+        jbLogIn.setActionCommand(GO_LOGIN);
+        jbSignUp.setActionCommand(REGISTER_USER);
+
         setMainPanel();
+    }
+
+    public void addListeners(ActionListener actionListener) {
+        jbLogIn.addActionListener(actionListener);
+        jbSignUp.addActionListener(actionListener);
     }
 
     private void setMainPanel() {

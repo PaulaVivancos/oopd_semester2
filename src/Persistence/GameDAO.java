@@ -9,4 +9,6 @@ public interface GameDAO {
     Game getByUser(int userId);
     void updateGame(Game game) throws SQLException;
     void deleteGame(int gameId) throws SQLException;
+    int getLastGameIdByUser(int userId);
+    Game getUnfinishedGameByUser(int userId);
 }

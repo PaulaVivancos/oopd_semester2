@@ -69,4 +69,41 @@ public class GameSQLDao implements GameDAO {
         boolean finished = rs.getInt("finished") == 1;
         return new Game(gameId, userId, startTime, endTime, numCoffees, finished);
     }
+
+    @Override
+    public int getLastGameIdByUser(int userId) {
+        String query = "SELECT MAX(game_id) FROM games WHERE user_id = " + userId;
+        ResultSet results = SQLConnector.getInstance().selectQuery(query);
+
+        try {
+            if (results != null && results.next()) {
+                return results.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public Game getUnfinishedGameByUser(int userId) {
+        String query = "SELECT * FROM game WHERE user_id = " + userId + " AND finished = 0 LIMIT 1";
+        ResultSet results = SQLConnector.getInstance().selectQuery(query);
+
+        try {
+            if (results != null && results.next()) {
+                return new Game(
+                        results.getInt("game_id"),
+                        results.getInt("user_id"),
+                        results.getTimestamp("start_time").toLocalDateTime(),
+                        results.getTimestamp("end_time") != null ? results.getTimestamp("end_time").toLocalDateTime() : null,
+                        results.getDouble("num_coffees"),
+                        results.getBoolean("finished")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

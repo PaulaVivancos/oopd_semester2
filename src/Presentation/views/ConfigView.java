@@ -9,11 +9,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ConfigView extends BaseView {
-    private final String PROFILE_PICTURE_URL = "src/Presentation/Images/profile_picture.png";
-    private static final String BACKGROUND_URL = "src/Presentation/Images/background.jpg";
+    private final String PROFILE_PICTURE_URL = "resources/profile_picture.png";
+    private final String BACKGROUND_URL = "resources/background.jpg";
 
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
+
+    public static final String DELETE_ACCOUNT = "DELETE_ACCOUNT";
+    public static final String LOGOUT = "LOGOUT";
 
     private JImagePanel ipProfile;
     private JPanel mainPanel;
@@ -135,6 +138,8 @@ public class ConfigView extends BaseView {
                 jbLogOut.setBackground(BACKGROUND_BUTTON);
             }
         });
+
+        jbLogOut.setActionCommand(LOGOUT);
         jbLogOut.addActionListener(e -> { if (logoutListener != null) logoutListener.actionPerformed(e); });
     }
 
@@ -155,6 +160,8 @@ public class ConfigView extends BaseView {
                 jbDeleteAccount.setBackground(BACKGROUND_BUTTON);
             }
         });
+
+        jbDeleteAccount.setActionCommand(DELETE_ACCOUNT);
         jbDeleteAccount.addActionListener(e -> { if (deleteListener != null) deleteListener.actionPerformed(e); });
     }
 
