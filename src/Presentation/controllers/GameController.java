@@ -50,18 +50,24 @@ public class GameController implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(GO_GAME)) {
-            appController.switchCard(GAME);
+        switch (e.getActionCommand()) {
+            case GO_GAME:
+                appController.switchCard(GAME);
 
-            SwingUtilities.invokeLater(() -> {
-                gameView.showGamesPopUp(this);
-            });
+                SwingUtilities.invokeLater(() -> {
+                    gameView.showGamesPopUp(this);
+                });
+                break;
+
+            case NEW_GAME:
+                gameView.showNewGameDialog();
+                break;
+
+            case BUY_COFFEE:
+                handleBuyCoffee();
+                break;
 
 
-        } else if (e.getActionCommand().equals(NEW_GAME)) {
-            gameView.showNewGameDialog();
-        } else if (e.getActionCommand().equals(BUY_COFFEE)) {
-            handleBuyCoffee();
         }
     }
 
