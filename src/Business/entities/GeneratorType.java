@@ -7,4 +7,21 @@ public class GeneratorType {
     private double baseProduction;
     private String imagePath;
     private double costIncrement;
+
+    public GeneratorType(String name, double baseCost, double baseProduction,
+                         double costIncrement, String imagePath) {
+        this.name = name;
+        this.baseCost = baseCost;
+        this.baseProduction = baseProduction;
+        this.costIncrement = costIncrement;
+        this.imagePath = imagePath;
+    }
+
+    public double getBaseProduction() {
+        return baseProduction;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

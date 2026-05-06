@@ -1,6 +1,7 @@
 package Presentation.controllers;
 
 import Business.entities.Game;
+import Business.entities.GameListener;
 import Business.managers.GameManager;
 import Business.managers.UserManager;
 import Presentation.views.GameView;
@@ -15,7 +16,7 @@ import static Presentation.views.GameView.BUY_COFFEE;
 import static Presentation.views.GameView.NEW_GAME;
 import static Presentation.views.MenuView.GO_GAME;
 
-public class GameController implements ActionListener {
+public class GameController implements ActionListener, GameListener {
     private final AppController appController;
 
     private final UserManager userManager;
@@ -79,10 +80,15 @@ public class GameController implements ActionListener {
 
     private void handleNewGame () {
         int userId = userManager.getCurrentUser().getId();
-        appController.showErrorPopUp("ERROR", "No unfinished game found, creating a new one...");
         gameManager.createNewGame(userId);
+
+        Game newGame = gameManager.getCurrentGame();
+        newGame.addListener(this);
         setInitialConditions();
+
+        newGame.startGame();
     }
+
 
     private void setInitialConditions() {
         gameView.getJlCounter().setText("0");
@@ -94,11 +100,19 @@ public class GameController implements ActionListener {
 
     private void setGameInView(Game loadGame) {
        // gameView.getJlCounter().setText(String.valueOf(loadGame.getNumCoffees()));
+
+        loadGame.addListener(this);
         gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());
+        loadGame.startGame();
     }
 
     private void handleBuyCoffee() {
         gameManager.addCoffee();
-        gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());
+        SwingUtilities.invokeLater(() ->{gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());});
+    }
+
+    @Override
+    public void onCoffeeChange(double newAmount) {
+        SwingUtilities.invokeLater(() ->{gameView.updateCounter(newAmount);});
     }
 }
