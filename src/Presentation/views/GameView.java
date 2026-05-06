@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static java.lang.Math.round;
+
 public class GameView extends BaseView {
     private JPanel mainPanel;
     private JPanel jpTop, jpBot, jpCentre, jpEast, jpWest;
@@ -379,7 +381,7 @@ public class GameView extends BaseView {
     }
 
     public void updateCounter(double numCoffees) {
-        jlCounter.setText(String.valueOf(numCoffees));
+        jlCounter.setText(String.format("%.2f", numCoffees));
         jlCounter.revalidate();
         jlCounter.repaint();
     }
