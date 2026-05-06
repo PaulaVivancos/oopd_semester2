@@ -34,6 +34,17 @@ public class Game {
         //this.generators = generators;
     }
 
+    //TEST (so project compiles)
+    public Game(int gameId, int userId, LocalDateTime startTime, LocalDateTime endTime,
+                double numCoffees, boolean finished) {
+        this.gameId = gameId;
+        this.userId = userId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.numCoffees = numCoffees;
+        this.finished = finished;
+    }
+
     public int getGameId() { return gameId; }
     public int getUserId() { return userId; }
     public LocalDateTime getStartTime() { return startTime; }
