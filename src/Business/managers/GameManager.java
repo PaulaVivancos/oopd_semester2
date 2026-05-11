@@ -1,6 +1,7 @@
 package Business.managers;
 
 import Business.entities.Game;
+import Business.entities.Upgrade;
 import Persistence.GameDAO;
 import java.sql.SQLException;
 
@@ -69,5 +70,14 @@ public class GameManager {
     public void addCoffee() {
         if (currentGame == null) return;
         currentGame.setNumCoffees(currentGame.getNumCoffees() + 1);
+    }
+
+    public boolean buyUpgrade(Upgrade upgrade) {
+        if (currentGame == null) return false;
+        if (currentGame.isUpgradePurchased(upgrade.getName())) return false;
+        if (!currentGame.spendCoffees(upgrade.getCost())) return false;
+        currentGame.applyUpgrade(upgrade.getTargetGeneratorName(), upgrade.getMultiplier());
+        currentGame.markUpgradePurchased(upgrade.getName());
+        return true;
     }
 }
