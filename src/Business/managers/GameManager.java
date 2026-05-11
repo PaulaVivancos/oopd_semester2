@@ -70,4 +70,9 @@ public class GameManager {
         if (currentGame == null) return;
         currentGame.setNumCoffees(currentGame.getNumCoffees() + 1);
     }
+
+    public void addGenerator() {
+        if (currentGame == null) return;
+        currentGame.addGenerator();
+    }
 }

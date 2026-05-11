@@ -35,6 +35,7 @@ public class GameView extends BaseView {
     public static final String LOAD_GAME = "LOAD_GAME";
     public static final String VIEW_GAME = "VIEW_GAME";
     public static final String BUY_COFFEE = "BUY_COFFEE";
+    public static final String GO_SHOP = "GO_TO_SHOP";
 
 
     public GameView() {
@@ -86,6 +87,7 @@ public class GameView extends BaseView {
         jbBuy = new JButton("BUY COFFEE");
         jbBuy.setActionCommand(BUY_COFFEE);
         jbGen = new JButton("GENERATORS");
+        jbGen.setActionCommand(GO_SHOP);
         jbUpg = new JButton("UPGRADES");
 
         // Sets everything
@@ -344,6 +346,10 @@ public class GameView extends BaseView {
 
     public void addBuyListener(ActionListener actionListener) {
         jbBuy.addActionListener(actionListener);
+    }
+
+    public void addShopListener(ActionListener actionListener) {
+        jbGen.addActionListener(actionListener);
     }
 
     public void addNewGameListener(ActionListener actionListener) {

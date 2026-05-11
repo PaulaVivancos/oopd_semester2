@@ -26,6 +26,8 @@ public class ShopView extends BaseView {
     private List<JButton> jbBuyButtons;
     private List<JImagePanel> jipImages;
 
+    public static final String BUY_GEN = "BUY_GEN";
+
     //decides how many generators there are in other parts as well
     private static final String[] GENERATOR_NAMES = {
             "Gas station clerk",
@@ -248,6 +250,11 @@ public class ShopView extends BaseView {
 
     public List<JButton> getAllBuyButtons() {
         return jbBuyButtons;
+    }
+
+    //listeners
+    public void addGenBuyListener(ActionListener actionListener) {
+        jbBuyButtons.get(0).addActionListener(actionListener);
     }
 
     //TODO: move to logic?

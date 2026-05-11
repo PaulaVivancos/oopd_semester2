@@ -6,15 +6,16 @@ import Business.managers.GameManager;
 import Business.managers.UserManager;
 import Presentation.views.GameView;
 import Presentation.views.MenuView;
+import Presentation.views.ShopView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static Presentation.views.GameView.BUY_COFFEE;
-import static Presentation.views.GameView.NEW_GAME;
+import static Presentation.views.GameView.*;
 import static Presentation.views.MenuView.GO_GAME;
+import static Presentation.views.ShopView.BUY_GEN;
 
 public class GameController implements ActionListener, GameListener {
     private final AppController appController;
@@ -23,8 +24,10 @@ public class GameController implements ActionListener, GameListener {
 
     // views
     private final GameView gameView;
+    private final ShopView shopView;
 
     protected static final String GAME = "game";
+    protected static final String SHOP = "shop";
 
     private final GameManager gameManager;
 
@@ -33,18 +36,26 @@ public class GameController implements ActionListener, GameListener {
 
         this.userManager = userManager;
 
+
+        shopView = new ShopView();
+        appController.addCardToMainFrame(shopView, SHOP);
         gameView = new GameView();
         appController.addCardToMainFrame(gameView, GAME);
 
 
         // add listeners from game view
         gameView.addBuyListener(this);
+        gameView.addShopListener(this);
 
         gameView.addNewGameListener(e -> handleNewGame());
         gameView.addLoadGameListener(e -> handleLoadGame());
         //gameView.addViewGameListener();
 
         gameView.addBackListener(e -> appController.goBack());
+
+        //add listeners from shop view
+        shopView.addGenBuyListener(this);
+        shopView.addBackListener(e -> appController.goBack());
 
         this.gameManager = gameManager;
     }
@@ -68,6 +79,11 @@ public class GameController implements ActionListener, GameListener {
                 handleBuyCoffee();
                 break;
 
+            case GO_SHOP:
+                appController.switchCard(SHOP);
+
+            case BUY_GEN:
+                handleBuyGenerator();
 
         }
     }
@@ -115,6 +131,10 @@ public class GameController implements ActionListener, GameListener {
     private void handleBuyCoffee() {
         gameManager.addCoffee();
         SwingUtilities.invokeLater(() ->{gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());});
+    }
+
+    private void handleBuyGenerator() {
+        gameManager.addGenerator();
     }
 
     @Override
