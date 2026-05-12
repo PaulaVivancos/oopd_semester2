@@ -74,7 +74,8 @@ public class GameController implements ActionListener, GameListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
+        String cmd = e.getActionCommand();
+        switch (cmd) {
             case GO_GAME:
                 appController.switchCard(GAME);
 
@@ -104,21 +105,15 @@ public class GameController implements ActionListener, GameListener {
             case BUY_GEN3:
                 handleBuyGenerator(3);
                 break;
-
-        } else if (cmd.equals(NEW_GAME)) {
-            gameView.showNewGameDialog();
-
-        } else if (cmd.equals(BUY_COFFEE)) {
-            handleBuyCoffee();
-
-        } else {
-            try {
-                int i = Integer.parseInt(cmd);
-                if (i >= 0 && i < UpgradeView.UPGRADES.length && gameManager.buyUpgrade(UpgradeView.UPGRADES[i])) {
-                    double coffees = gameManager.getCurrentGame().getCoffees();
-                    SwingUtilities.invokeLater(() -> { gameView.updateCounter(coffees); refreshUpgradeView(coffees); });
-                }
-            } catch (NumberFormatException ignored) { }
+            case UPGRADE:
+                try {
+                    int i = Integer.parseInt(cmd);
+                    if (i >= 0 && i < UpgradeView.UPGRADES.length && gameManager.buyUpgrade(UpgradeView.UPGRADES[i])) {
+                        double coffees = gameManager.getCurrentGame().getCoffees();
+                        SwingUtilities.invokeLater(() -> { gameView.updateCounter(coffees); refreshUpgradeView(coffees); });
+                    }
+                } catch (NumberFormatException ignored) { }
+                break;
         }
     }
 

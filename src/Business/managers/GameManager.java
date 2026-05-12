@@ -1,6 +1,7 @@
 package Business.managers;
 
 import Business.entities.Game;
+import Business.entities.Upgrade;
 import Persistence.GameDAO;
 import java.sql.SQLException;
 
@@ -84,4 +85,6 @@ public class GameManager {
         currentGame.markUpgradePurchased(upgrade.getName());
         return true;
     }
+
+
 }
