@@ -26,7 +26,9 @@ public class ShopView extends BaseView {
     private List<JButton> jbBuyButtons;
     private List<JImagePanel> jipImages;
 
-    public static final String BUY_GEN = "BUY_GEN";
+    public static final String BUY_GEN1 = "BUY_GEN1";
+    public static final String BUY_GEN2 = "BUY_GEN2";
+    public static final String BUY_GEN3 = "BUY_GEN3";
 
     //decides how many generators there are in other parts as well
     private static final String[] GENERATOR_NAMES = {
@@ -192,7 +194,7 @@ public class ShopView extends BaseView {
 
         JButton buyBtn = new JButton("BUY");
         styleButton(buyBtn, DIM_BUY_BUTTON);
-        buyBtn.setEnabled(false);
+        buyBtn.setEnabled(true);
         jbBuyButtons.add(buyBtn);
 
         JPanel eastPanel = new JPanel(new GridBagLayout());
@@ -254,7 +256,9 @@ public class ShopView extends BaseView {
 
     //listeners
     public void addGenBuyListener(ActionListener actionListener) {
-        jbBuyButtons.get(0).addActionListener(actionListener);
+        for (JButton jbBuyButton : jbBuyButtons) {
+            jbBuyButton.addActionListener(actionListener);
+        }
     }
 
     //TODO: move to logic?

@@ -71,8 +71,8 @@ public class GameManager {
         currentGame.setNumCoffees(currentGame.getNumCoffees() + 1);
     }
 
-    public void addGenerator() {
+    public void addGenerator(int id) {
         if (currentGame == null) return;
-        currentGame.addGenerator();
+        currentGame.addGenerator(id);
     }
 }

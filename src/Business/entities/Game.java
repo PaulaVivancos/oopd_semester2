@@ -13,7 +13,7 @@ public class Game {
     private LocalDateTime endTime;
     private double numCoffees;
     private boolean finished;
-    private ArrayList<Generator> generators;
+    private final ArrayList<Generator> generators = new ArrayList<>();
     private final List<Thread> generatorThreads = new ArrayList<>();
 
     private ArrayList<GameListener> listeners = new ArrayList<>();
@@ -24,8 +24,7 @@ public class Game {
         this.endTime = null;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        this.generators = new ArrayList<>();
-        //this.generators.add(new Generator(new GeneratorType("Espresso Machine", 10,   0.2,  1.07, null), this));
+        this.generators.add(new Generator(new GeneratorType("Espresso Machine", 10,   0.2,  1.07, null), this));
         //this.generators = generators;
     }
 
@@ -42,8 +41,8 @@ public class Game {
     }
 
 
-    public void addGenerator() {
-        generators.add(new Generator(new GeneratorType("Espresso Machine", 10, 0.2, 1.07, null), this));
+    public void addGenerator(int id) {
+        generators.get(id-1).increaseQuantity();
     }
 
     public void addCoffees(double amount) {

@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 
 import static Presentation.views.GameView.*;
 import static Presentation.views.MenuView.GO_GAME;
-import static Presentation.views.ShopView.BUY_GEN;
+import static Presentation.views.ShopView.*;
 
 public class GameController implements ActionListener, GameListener {
     private final AppController appController;
@@ -81,9 +81,17 @@ public class GameController implements ActionListener, GameListener {
 
             case GO_SHOP:
                 appController.switchCard(SHOP);
+                break;
 
-            case BUY_GEN:
-                handleBuyGenerator();
+            case BUY_GEN1:
+                handleBuyGenerator(1);
+                break;
+            case BUY_GEN2:
+                handleBuyGenerator(2);
+                break;
+            case BUY_GEN3:
+                handleBuyGenerator(3);
+                break;
 
         }
     }
@@ -133,8 +141,8 @@ public class GameController implements ActionListener, GameListener {
         SwingUtilities.invokeLater(() ->{gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());});
     }
 
-    private void handleBuyGenerator() {
-        gameManager.addGenerator();
+    private void handleBuyGenerator(int id) {
+        gameManager.addGenerator(id);
     }
 
     @Override
