@@ -18,14 +18,15 @@ public class Game {
     private ArrayList<GameListener> listeners = new ArrayList<>();
     private final ArrayList<String> purchasedUpgradeNames = new ArrayList<>();
 
-    public Game(int userId, LocalDateTime startTime, double numCoffees, boolean finished, ArrayList<Generator> generators) {
+    public Game(int userId, LocalDateTime startTime, double numCoffees, boolean finished, GeneratorFactory factory) {
         this.userId = userId;
         this.startTime = startTime;
         this.endTime = null;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        this.generators.add(new Generator(new GeneratorType("Gas station clerk", 10, 0.2, 1.07, null), this));
-        //this.generators = generators;
+        for (GeneratorType type : factory.createGeneratorTypes()) {
+            this.generators.add(new Generator(type, this));
+        }        //this.generators = generators;
     }
 
     public Game(int gameId, int userId, LocalDateTime startTime, LocalDateTime endTime,
@@ -42,7 +43,11 @@ public class Game {
 
 
     public void addGenerator(int id) {
-        generators.get(id-1).increaseQuantity();
+        generators.get(id).increaseQuantity();
+    }
+
+    public ArrayList<Generator> getGenerators() {
+        return generators;
     }
 
     public void addCoffees(double amount) {

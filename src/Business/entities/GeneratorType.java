@@ -21,6 +21,14 @@ public class GeneratorType {
         return baseProduction;
     }
 
+    public double getBaseCost() {return baseCost;}
+
+    public double getCostIncrement() {
+        return costIncrement;
+    }
+
+    public String getImagePath() {return imagePath;}
+
     public String getName() {
         return name;
     }

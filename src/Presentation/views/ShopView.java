@@ -1,5 +1,6 @@
 package Presentation.views;
 
+import Business.entities.GeneratorType;
 import Presentation.JImagePanel;
 
 import javax.swing.*;
@@ -9,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
+import static Presentation.controllers.GameController.NUM_GENERATORS;
 
 public class ShopView extends BaseView {
     //Main parts
@@ -25,10 +28,6 @@ public class ShopView extends BaseView {
     private List<JLabel> jlOwned;
     private List<JButton> jbBuyButtons;
     private List<JImagePanel> jipImages;
-
-    public static final String BUY_GEN1 = "BUY_GEN1";
-    public static final String BUY_GEN2 = "BUY_GEN2";
-    public static final String BUY_GEN3 = "BUY_GEN3";
 
     //decides how many generators there are in other parts as well
     private static final String[] GENERATOR_NAMES = {
@@ -134,13 +133,14 @@ public class ShopView extends BaseView {
         jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.Y_AXIS));
         jpCenter.setOpaque(false);
 
-        for (int i = 0; i < GENERATOR_NAMES.length; i++) {
-            JPanel row = buildGeneratorRow(i);
-            jpCenter.add(row);
-            if (i < GENERATOR_NAMES.length - 1) {
+        // build empty rows at startup
+        for (int i = 0; i < NUM_GENERATORS; i++) {
+            jpCenter.add(buildGeneratorRow(i));
+            if (i < NUM_GENERATORS - 1) {
                 jpCenter.add(Box.createVerticalStrut(12));
             }
         }
+
     }
 
     private JPanel buildGeneratorRow(int index) {
@@ -153,30 +153,28 @@ public class ShopView extends BaseView {
         ));
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
 
-        //Image for gen (optional)
-        JImagePanel img = new JImagePanel(GENERATOR_IMAGES[index]);
+        JImagePanel img = new JImagePanel(null);
         img.setPreferredSize(new Dimension(60, 60));
         img.setMaximumSize(new Dimension(60, 60));
         img.setOpaque(false);
         jipImages.add(img);
 
-
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setOpaque(false);
 
-        JLabel nameLabel = new JLabel(GENERATOR_NAMES[index]);
+        JLabel nameLabel = new JLabel("...");
+        JLabel costLabel = new JLabel("Cost: -");
+        JLabel prodLabel = new JLabel("Production: -");
+
         nameLabel.setFont(new Font("Times New Roman", Font.BOLD, 15));
         nameLabel.setForeground(TEXT_DARK);
         jlNames.add(nameLabel);
 
-        double nextCost = BASE_COSTS[index];
-        JLabel costLabel = new JLabel(String.format("Cost: %.0f", nextCost));
         costLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         costLabel.setForeground(TEXT_DARK);
         jlCosts.add(costLabel);
 
-        JLabel prodLabel = new JLabel(String.format("Production: %.1f /s", BASE_PRODUCTIONS[index]));
         prodLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         prodLabel.setForeground(TEXT_DARK);
         jlProductions.add(prodLabel);
@@ -254,18 +252,28 @@ public class ShopView extends BaseView {
         return jbBuyButtons;
     }
 
-    //listeners
-    public void addGenBuyListener(ActionListener actionListener) {
-        for (JButton jbBuyButton : jbBuyButtons) {
-            jbBuyButton.addActionListener(actionListener);
+    public void initGenerators(List<GeneratorType> types) {
+        for (int i = 0; i < types.size(); i++) {
+            GeneratorType t = types.get(i);
+            jlNames.get(i).setText(t.getName());
+            jlCosts.get(i).setText(String.format("Cost: %.0f", t.getBaseCost()));
+            jlProductions.get(i).setText(String.format("Production: %.1f /s", t.getBaseProduction()));
+            jipImages.get(i).setImage(t.getImagePath());
         }
+
+        jpCenter.revalidate();
+        jpCenter.repaint();
+
+    }
+
+    //listeners
+    // GameView
+    public void addGenBuyListener(int index, ActionListener listener) {
+        jbBuyButtons.get(index).addActionListener(listener);
     }
 
     //TODO: move to logic?
-    public double[] getBaseCosts() { return BASE_COSTS; }
-    public double[] getBaseProductions() { return BASE_PRODUCTIONS; }
-    public double[] getIncrementCosts() { return INCREMENT_COSTS; }
-    public int[] getOwnedCounts() { return ownedCounts; }
+
 }
 
 
