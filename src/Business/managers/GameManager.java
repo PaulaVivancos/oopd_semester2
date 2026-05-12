@@ -75,4 +75,13 @@ public class GameManager {
         if (currentGame == null) return;
         currentGame.addGenerator(id);
     }
+
+    public boolean buyUpgrade(Upgrade upgrade) {
+        if (currentGame == null) return false;
+        if (currentGame.isUpgradePurchased(upgrade.getName())) return false;
+        if (!currentGame.spendCoffees(upgrade.getCost())) return false;
+        currentGame.applyUpgrade(upgrade.getTargetGeneratorName(), upgrade.getMultiplier());
+        currentGame.markUpgradePurchased(upgrade.getName());
+        return true;
+    }
 }

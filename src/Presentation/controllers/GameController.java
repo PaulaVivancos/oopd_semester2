@@ -2,10 +2,12 @@ package Presentation.controllers;
 
 import Business.entities.Game;
 import Business.entities.GameListener;
+import Business.entities.Upgrade;
 import Business.managers.GameManager;
 import Business.managers.UserManager;
 import Presentation.views.GameView;
 import Presentation.views.MenuView;
+import Presentation.views.UpgradeView;
 import Presentation.views.ShopView;
 
 import javax.swing.*;
@@ -24,9 +26,11 @@ public class GameController implements ActionListener, GameListener {
 
     // views
     private final GameView gameView;
+    private final UpgradeView upgradeView;
     private final ShopView shopView;
 
     protected static final String GAME = "game";
+    protected static final String UPGRADE = "upgrade";
     protected static final String SHOP = "shop";
 
     private final GameManager gameManager;
@@ -42,16 +46,24 @@ public class GameController implements ActionListener, GameListener {
         gameView = new GameView();
         appController.addCardToMainFrame(gameView, GAME);
 
-
         // add listeners from game view
         gameView.addBuyListener(this);
         gameView.addShopListener(this);
 
         gameView.addNewGameListener(e -> handleNewGame());
         gameView.addLoadGameListener(e -> handleLoadGame());
-        //gameView.addViewGameListener();
-
         gameView.addBackListener(e -> appController.goBack());
+        gameView.getJbUpg().addActionListener(e -> {
+            appController.switchCard(UPGRADE);
+            if (gameManager.getCurrentGame() != null)
+                refreshUpgradeView(gameManager.getCurrentGame().getCoffees());
+        });
+
+        // upgrade view
+        upgradeView = new UpgradeView();
+        appController.addCardToMainFrame(upgradeView, UPGRADE);
+        upgradeView.addBackListener(e -> appController.goBack());
+        upgradeView.addBuyUpgradeListener(this);
 
         //add listeners from shop view
         shopView.addGenBuyListener(this);
@@ -93,6 +105,20 @@ public class GameController implements ActionListener, GameListener {
                 handleBuyGenerator(3);
                 break;
 
+        } else if (cmd.equals(NEW_GAME)) {
+            gameView.showNewGameDialog();
+
+        } else if (cmd.equals(BUY_COFFEE)) {
+            handleBuyCoffee();
+
+        } else {
+            try {
+                int i = Integer.parseInt(cmd);
+                if (i >= 0 && i < UpgradeView.UPGRADES.length && gameManager.buyUpgrade(UpgradeView.UPGRADES[i])) {
+                    double coffees = gameManager.getCurrentGame().getCoffees();
+                    SwingUtilities.invokeLater(() -> { gameView.updateCounter(coffees); refreshUpgradeView(coffees); });
+                }
+            } catch (NumberFormatException ignored) { }
         }
     }
 
@@ -147,6 +173,19 @@ public class GameController implements ActionListener, GameListener {
 
     @Override
     public void onCoffeeChange(double newAmount) {
-        SwingUtilities.invokeLater(() ->{gameView.updateCounter(newAmount);});
+        SwingUtilities.invokeLater(() -> {
+            gameView.updateCounter(newAmount);
+            refreshUpgradeView(newAmount);
+        });
+    }
+
+    private void refreshUpgradeView(double currentCoffees) {
+        Game game = gameManager.getCurrentGame();
+        for (int i = 0; i < UpgradeView.UPGRADES.length; i++) {
+            Upgrade upg = UpgradeView.UPGRADES[i];
+            boolean purchased = game != null && game.isUpgradePurchased(upg.getName());
+            boolean canAfford = currentCoffees >= upg.getCost();
+            upgradeView.updateUpgradeRow(i, canAfford, purchased);
+        }
     }
 }

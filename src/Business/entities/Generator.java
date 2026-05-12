@@ -44,7 +44,6 @@ public class Generator implements Runnable{
     public void pause() { paused = true; }
     public void resume() { paused = false; }
 
-    public GeneratorType getType() {
-        return type;
-    }
+    public void applyMultiplier(double m) { upgradeMultiplier *= m; }
+    public GeneratorType getType() { return type; }
 }

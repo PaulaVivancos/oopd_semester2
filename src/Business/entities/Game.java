@@ -1,6 +1,5 @@
 package Business.entities;
 
-import java.lang.reflect.GenericArrayType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ public class Game {
     private final List<Thread> generatorThreads = new ArrayList<>();
 
     private ArrayList<GameListener> listeners = new ArrayList<>();
+    private final ArrayList<String> purchasedUpgradeNames = new ArrayList<>();
 
     public Game(int userId, LocalDateTime startTime, double numCoffees, boolean finished, ArrayList<Generator> generators) {
         this.userId = userId;
@@ -24,7 +24,7 @@ public class Game {
         this.endTime = null;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        this.generators.add(new Generator(new GeneratorType("Espresso Machine", 10,   0.2,  1.07, null), this));
+        this.generators.add(new Generator(new GeneratorType("Gas station clerk", 10, 0.2, 1.07, null), this));
         //this.generators = generators;
     }
 
@@ -36,7 +36,7 @@ public class Game {
         this.endTime = endTime;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        this.generators.add(new Generator(new GeneratorType("Espresso Machine", 10,   0.2,  1.07, null), this));
+        this.generators.add(new Generator(new GeneratorType("Gas station clerk", 10, 0.2, 1.07, null), this));
         //this.generators = generators;
     }
 
@@ -111,4 +111,20 @@ public class Game {
     public void setNumCoffees(double numCoffees) { this.numCoffees = numCoffees; }
     public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
     public void setFinished(boolean finished) { this.finished = finished; }
+
+    public void applyUpgrade(String generatorName, double multiplier) {
+        for (Generator g : generators) {
+            if (g.getType().getName().equals(generatorName)) {
+                g.applyMultiplier(multiplier);
+            }
+        }
+    }
+
+    public boolean isUpgradePurchased(String upgradeName) {
+        return purchasedUpgradeNames.contains(upgradeName);
+    }
+
+    public void markUpgradePurchased(String upgradeName) {
+        purchasedUpgradeNames.add(upgradeName);
+    }
 }
