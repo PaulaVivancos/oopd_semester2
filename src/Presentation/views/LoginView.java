@@ -26,7 +26,7 @@ public class LoginView extends JPanel {
     // ACTION COMMANDS CONSTANTS
     public static final String LOGIN_USER = "LOGIN_USER";
     public static final String GO_REGISTER = "GO_TO_REGISTER";
-    public static final String FORGOT_PASSWORD = "FORGOT_PASSWORD";
+    public static final String GO_FORGOT_PASSWORD = "GO_TO_FORGOT_PASSWORD";
 
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
@@ -53,7 +53,7 @@ public class LoginView extends JPanel {
         // ATTACH ACTION COMMANDS
         jbLogIn.setActionCommand(LOGIN_USER);
         jbSignUp.setActionCommand(GO_REGISTER);
-        jbForgotPassword.setActionCommand(FORGOT_PASSWORD);
+        jbForgotPassword.setActionCommand(GO_FORGOT_PASSWORD);
 
         //Text fields
         jtfUsername = new JTextField();

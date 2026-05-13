@@ -9,10 +9,11 @@ import java.awt.event.*;
 public class ForgotPasswordView extends JPanel {
 
     private JImagePanel jpiMain;
-    private JPanel jpCentral, jpCode, jpPassword, jpButtons, jpValidateCode;
+    private JPanel jpCentral, jpCode, jpButtons, jpValidateCode;
     private JLabel jlTitle;
-    private JButton jbValidateCode, jbBackLogIn, jbSendCode, jbChangePassword;
-    private JTextField jtfCode, jtfEmail, jtfNewPassword, jtfPasswordConfirmation;
+    private JButton jbValidateCode, jbBackLogIn;
+    private JTextField jtfCode, jtfEmail;
+    private JPasswordField jtfNewPassword, jtfPasswordConfirmation;
     private String email, newPassword, confirmationPassword, code;
 
     //DIMENSION CONSTANTS
@@ -24,6 +25,11 @@ public class ForgotPasswordView extends JPanel {
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
+    //ACTION COMMANDS
+    public static final String GO_BACK_LOGIN = "GO_BACK_LOGIN";
+    public static final String VALIDATE_CODE = "VALIDATE_CODE";
+    public static final String CHANGE_PASSWORD = "CHANGE_PASSWORD";
+
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
 
@@ -34,7 +40,6 @@ public class ForgotPasswordView extends JPanel {
         jpiMain = new JImagePanel(BACKGROUND_URL);
         jpCentral = new JPanel();
         jpCode = new JPanel();
-        jpPassword = new JPanel();
         jpButtons = new JPanel();
         jpValidateCode = new JPanel();
 
@@ -44,14 +49,16 @@ public class ForgotPasswordView extends JPanel {
         //Buttons
         jbValidateCode = new JButton("Validate code");
         jbBackLogIn = new JButton("GO BACK TO LOG IN");
-        jbSendCode = createDialogButton("SEND CODE");
-        jbChangePassword = createDialogButton("CHANGE PASSWORD");
 
         //Text fields
         jtfCode = new JTextField();
         jtfEmail = new JTextField();
-        jtfNewPassword = new JTextField();
-        jtfPasswordConfirmation = new JTextField();
+        jtfNewPassword = new JPasswordField();
+        jtfPasswordConfirmation = new JPasswordField();
+
+        //Set action commands
+        jbBackLogIn.setActionCommand(GO_BACK_LOGIN);
+        jbValidateCode.setActionCommand(VALIDATE_CODE);
 
         setMainPanel();
     }
@@ -179,7 +186,10 @@ public class ForgotPasswordView extends JPanel {
     }
 
     public void showEnterEmailPopUp() {
+        JButton jbSendCode = createDialogButton("SEND CODE");
+
         JDialog dialog = new JDialog();
+        dialog.setModal(true); //Blocked until is disposed
         dialog.setUndecorated(true);
 
         JPanel content = new JPanel();
@@ -247,13 +257,12 @@ public class ForgotPasswordView extends JPanel {
         jbValidateCode.addActionListener(listener);
     }
 
-    public void addSendCodeListener(ActionListener listener) {
-        jbSendCode.addActionListener(listener);
-    }
-
-    public void showChangePassword() {
+    public void showChangePassword(Runnable onChangePassword) {
         JDialog dialog = new JDialog();
         dialog.setUndecorated(true);
+        dialog.setModal(true);
+
+        JButton jbChangePassword = createDialogButton("CHANGE PASSWORD");
 
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
@@ -298,10 +307,30 @@ public class ForgotPasswordView extends JPanel {
         content.add(Box.createVerticalStrut(20));
         content.add(jbChangePassword);
 
+        jbChangePassword.addActionListener(e -> {
+            newPassword = jtfNewPassword.getText();
+            confirmationPassword = jtfPasswordConfirmation.getText();
+
+            if (!newPassword.equals(confirmationPassword)) {
+                JOptionPane.showMessageDialog(dialog, "The passwords do not match. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                dialog.dispose();
+                onChangePassword.run();
+            }
+        });
+
         dialog.add(content);
         dialog.pack();
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+    }
+
+    public String getNewPassword() {
+        return jtfNewPassword.getText();
+    }
+
+    public String getPasswordConfirmation() {
+        return jtfPasswordConfirmation.getText();
     }
 
     public void clearTextFields() {

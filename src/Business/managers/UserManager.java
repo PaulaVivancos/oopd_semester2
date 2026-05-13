@@ -61,7 +61,6 @@ public class UserManager {
     }
 
 
-
     public void handleSendCode(String email) {
         try {
             sendedCode =  emailService.sendVerificationCode(email);
@@ -97,7 +96,7 @@ public class UserManager {
         return sendedCode;
     }
 
-    public void resetSendCode() {
-        sendedCode = null;
+    public void changePassword(String oldPassword, String newPassword) {
+        //userDao.changePassword();
     }
 }
