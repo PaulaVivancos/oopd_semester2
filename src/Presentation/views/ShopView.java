@@ -30,11 +30,6 @@ public class ShopView extends BaseView {
     private List<JImagePanel> jipImages;
 
     //decides how many generators there are in other parts as well
-    private static final String[] GENERATOR_NAMES = {
-            "Gas station clerk",
-            "Starsbuck barista",
-            "365 Veteran"
-    };
 
     private static final String[] GENERATOR_IMAGES = {
             "src/Presentation/Images/coffee_cup.png",
@@ -42,10 +37,6 @@ public class ShopView extends BaseView {
             "src/Presentation/Images/coffee_cup.png"
     };
 
-    //Values
-    private static final double[] BASE_COSTS = {10, 150, 2000};
-    private static final double[] BASE_PRODUCTIONS = {0.2, 1.0, 15.0};
-    private static final double[] INCREMENT_COSTS  = {1.07, 1.15, 1.12};
 
     //TODO: link this to actual mechanism
     private final int[] ownedCounts = {0, 0, 0};
@@ -232,7 +223,7 @@ public class ShopView extends BaseView {
 
     public void updateGeneratorRow(int index, double nextCost, int owned, boolean canAfford) {
         ownedCounts[index] = owned;
-        jlCosts.get(index).setText(String.format("Cost: %.0f", nextCost));
+        jlCosts.get(index).setText(String.format("Cost: %.2f", nextCost));
         jlOwned.get(index).setText("Owned: " + owned);
 
         JButton btn = jbBuyButtons.get(index);
