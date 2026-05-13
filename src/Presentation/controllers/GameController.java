@@ -170,6 +170,7 @@ public class GameController implements ActionListener, GameListener {
         SwingUtilities.invokeLater(() -> {
             gameView.updateCounter(newAmount);
             refreshUpgradeView(newAmount);
+            refreshShopView(newAmount);
         });
     }
 
@@ -180,6 +181,15 @@ public class GameController implements ActionListener, GameListener {
             boolean purchased = game != null && game.isUpgradePurchased(upg.getName());
             boolean canAfford = currentCoffees >= upg.getCost();
             upgradeView.updateUpgradeRow(i, canAfford, purchased);
+        }
+    }
+
+    private void refreshShopView(double currentCoffees) {
+        Game game = gameManager.getCurrentGame();
+        for (int i = 0; i < NUM_GENERATORS; i++) {
+            Generator gen = game.getGenerators().get(i);
+            boolean canAfford = currentCoffees >= gen.getCurrentPrice();
+            shopView.updateGeneratorRow(i,gen.getCurrentPrice(),gen.getQuantity(),canAfford);
         }
     }
 }

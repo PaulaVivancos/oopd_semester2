@@ -43,7 +43,9 @@ public class Game {
 
 
     public void addGenerator(int id) {
-        generators.get(id).increaseQuantity();
+        if (spendCoffees(generators.get(id).getCurrentPrice())) {
+            generators.get(id).increaseQuantity();
+        }
     }
 
     public ArrayList<Generator> getGenerators() {
