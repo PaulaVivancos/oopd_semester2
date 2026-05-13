@@ -17,8 +17,12 @@ public class Generator implements Runnable{
 
     public Generator(GeneratorType type, Game game) {
         this.type = type;
-        this.quantity = 1;// TODO remove this when buying gens implemented
+        this.quantity = 0;// TODO remove this when buying gens implemented
         this.game = game;
+    }
+
+    public void increaseQuantity(){
+        this.quantity++;
     }
 
     @Override

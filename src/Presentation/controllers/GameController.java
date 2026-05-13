@@ -1,34 +1,38 @@
 package Presentation.controllers;
 
-import Business.entities.Game;
-import Business.entities.GameListener;
-import Business.entities.Upgrade;
+import Business.entities.*;
 import Business.managers.GameManager;
 import Business.managers.UserManager;
 import Presentation.views.GameView;
 import Presentation.views.MenuView;
 import Presentation.views.UpgradeView;
+import Presentation.views.ShopView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import static Presentation.views.GameView.BUY_COFFEE;
-import static Presentation.views.GameView.NEW_GAME;
+import static Presentation.views.GameView.*;
 import static Presentation.views.MenuView.GO_GAME;
+import static Presentation.views.ShopView.*;
 
 public class GameController implements ActionListener, GameListener {
     private final AppController appController;
 
     private final UserManager userManager;
 
+    public static int NUM_GENERATORS = 3;
+
     // views
     private final GameView gameView;
     private final UpgradeView upgradeView;
+    private final ShopView shopView;
 
     protected static final String GAME = "game";
     protected static final String UPGRADE = "upgrade";
+    protected static final String SHOP = "shop";
 
     private final GameManager gameManager;
 
@@ -37,11 +41,16 @@ public class GameController implements ActionListener, GameListener {
 
         this.userManager = userManager;
 
+
+        shopView = new ShopView();
+        appController.addCardToMainFrame(shopView, SHOP);
         gameView = new GameView();
         appController.addCardToMainFrame(gameView, GAME);
 
         // add listeners from game view
         gameView.addBuyListener(this);
+        gameView.addShopListener(this);
+
         gameView.addNewGameListener(e -> handleNewGame());
         gameView.addLoadGameListener(e -> handleLoadGame());
         gameView.addBackListener(e -> appController.goBack());
@@ -56,6 +65,10 @@ public class GameController implements ActionListener, GameListener {
         appController.addCardToMainFrame(upgradeView, UPGRADE);
         upgradeView.addBackListener(e -> appController.goBack());
         upgradeView.addBuyUpgradeListener(this);
+
+
+        shopView.addBackListener(e -> appController.goBack());
+
 
         this.gameManager = gameManager;
     }
@@ -74,6 +87,9 @@ public class GameController implements ActionListener, GameListener {
         } else if (cmd.equals(BUY_COFFEE)) {
             handleBuyCoffee();
 
+        } else if (cmd.equals(GO_SHOP)) {
+            appController.switchCard(SHOP);
+
         } else {
             try {
                 int i = Integer.parseInt(cmd);
@@ -84,6 +100,7 @@ public class GameController implements ActionListener, GameListener {
             } catch (NumberFormatException ignored) { }
         }
     }
+
 
     private void handleLoadGame () {
         int userId = userManager.getCurrentUser().getId();
@@ -97,15 +114,20 @@ public class GameController implements ActionListener, GameListener {
         }
     }
 
-    private void handleNewGame () {
+    private void handleNewGame() {
         int userId = userManager.getCurrentUser().getId();
         gameManager.createNewGame(userId);
 
         Game newGame = gameManager.getCurrentGame();
         newGame.addListener(this);
         setInitialConditions();
-
         newGame.startGame();
+
+        // now game exists, safe to populate and wire
+        SwingUtilities.invokeLater(() -> {
+            shopView.initGenerators(gameManager.getGeneratorTypes());
+            attachGenListeners();
+        });
     }
 
 
@@ -128,6 +150,19 @@ public class GameController implements ActionListener, GameListener {
     private void handleBuyCoffee() {
         gameManager.addCoffee();
         SwingUtilities.invokeLater(() ->{gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());});
+    }
+
+    private void handleBuyGenerator(int id) {
+        gameManager.addGenerator(id);
+    }
+
+    private void attachGenListeners() {
+        for (int i = 0; i < gameManager.getGeneratorTypes().size(); i++) {
+            final int index = i;
+            shopView.addGenBuyListener(index, e -> {
+                handleBuyGenerator(index);
+            });
+        }
     }
 
     @Override

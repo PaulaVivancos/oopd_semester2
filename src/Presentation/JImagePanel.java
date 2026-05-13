@@ -16,11 +16,13 @@ public class JImagePanel extends JPanel {
 
     // Constructor with parameters
     public JImagePanel(String path) {
-        try {
-            image = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            // Not properly managed, sorry!
-            e.printStackTrace();
+        if (path != null) {
+            try {
+                image = ImageIO.read(new File(path));
+            } catch (IOException e) {
+                image = null;
+                e.printStackTrace();
+            }
         }
     }
 
@@ -49,6 +51,7 @@ public class JImagePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+
         if (image != null) {
             Graphics2D g2d = (Graphics2D) g.create();
 
@@ -56,6 +59,17 @@ public class JImagePanel extends JPanel {
             g2d.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
             g2d.dispose();
+        }
+    }
+
+    public void setImage(String imagePath) {
+        if (imagePath != null) {
+            try {
+                image = ImageIO.read(new File(imagePath));
+            } catch (IOException e) {
+                image = null;
+                e.printStackTrace();
+            }
         }
     }
 }

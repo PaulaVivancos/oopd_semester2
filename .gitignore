@@ -29,6 +29,7 @@ bin/
 .DS_Store
 
 .idea/workspace.xml
-target/classes/
+target/
+.idea/shelf
 
 oopd_semester2.iml
