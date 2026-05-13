@@ -76,36 +76,28 @@ public class GameController implements ActionListener, GameListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
-        switch (cmd) {
-            case GO_GAME:
-                appController.switchCard(GAME);
 
-                SwingUtilities.invokeLater(() -> {
-                    gameView.showGamesPopUp(this);
-                });
-                break;
+        if (cmd.equals(GO_GAME)) {
+            appController.switchCard(GAME);
+            SwingUtilities.invokeLater(() -> gameView.showGamesPopUp(this));
 
-            case NEW_GAME:
-                gameView.showNewGameDialog();
-                break;
+        } else if (cmd.equals(NEW_GAME)) {
+            gameView.showNewGameDialog();
 
-            case BUY_COFFEE:
-                handleBuyCoffee();
-                break;
+        } else if (cmd.equals(BUY_COFFEE)) {
+            handleBuyCoffee();
 
-            case GO_SHOP:
-                appController.switchCard(SHOP);
-                break;
+        } else if (cmd.equals(GO_SHOP)) {
+            appController.switchCard(SHOP);
 
-            case UPGRADE:
-                try {
-                    int i = Integer.parseInt(cmd);
-                    if (i >= 0 && i < UpgradeView.UPGRADES.length && gameManager.buyUpgrade(UpgradeView.UPGRADES[i])) {
-                        double coffees = gameManager.getCurrentGame().getCoffees();
-                        SwingUtilities.invokeLater(() -> { gameView.updateCounter(coffees); refreshUpgradeView(coffees); });
-                    }
-                } catch (NumberFormatException ignored) { }
-                break;
+        } else {
+            try {
+                int i = Integer.parseInt(cmd);
+                if (i >= 0 && i < UpgradeView.UPGRADES.length && gameManager.buyUpgrade(UpgradeView.UPGRADES[i])) {
+                    double coffees = gameManager.getCurrentGame().getCoffees();
+                    SwingUtilities.invokeLater(() -> { gameView.updateCounter(coffees); refreshUpgradeView(coffees); });
+                }
+            } catch (NumberFormatException ignored) { }
         }
     }
 
