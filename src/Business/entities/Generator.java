@@ -10,6 +10,7 @@ public class Generator implements Runnable{
     private int quantity;
     private GeneratorType type;
     private double upgradeMultiplier = 1.0;
+    private double currentPrice;
 
     private Game game;
     private volatile boolean running = true;
@@ -17,12 +18,14 @@ public class Generator implements Runnable{
 
     public Generator(GeneratorType type, Game game) {
         this.type = type;
-        this.quantity = 0;// TODO remove this when buying gens implemented
+        this.quantity = 0;
         this.game = game;
+        this.currentPrice = type.getBaseCost();
     }
 
     public void increaseQuantity(){
         this.quantity++;
+        this.currentPrice *= type.getCostIncrement();
     }
 
     @Override
@@ -46,4 +49,7 @@ public class Generator implements Runnable{
 
     public void applyMultiplier(double m) { upgradeMultiplier *= m; }
     public GeneratorType getType() { return type; }
+
+    public int getQuantity() {return quantity;}
+    public double getCurrentPrice() {return currentPrice;}
 }

@@ -14,8 +14,8 @@ import static java.lang.Math.round;
 public class GameView extends BaseView {
     private JPanel mainPanel;
     private JPanel jpTop, jpBot, jpCentre, jpEast, jpWest;
-    private JImagePanel jipTitle, jipCoffeeCup, jipCoffeeCupSmall;
-    private JButton jbBuy, jbGen, jbUpg;
+    private JImagePanel jipTitle, jipCoffeeCupSmall;
+    private JButton jbBuy, jbGen, jbUpg, jipCoffeeCup;
     private JLabel jlCounter;
     private JTable jtTable;
 
@@ -76,8 +76,17 @@ public class GameView extends BaseView {
 
         // Images
         jipTitle = new JImagePanel(TITLE_URL);
-        jipCoffeeCup = new JImagePanel(COFFEE_CUP);
+        //jipCoffeeCup = new JImagePanel(COFFEE_CUP);
         jipCoffeeCupSmall = new JImagePanel(COFFEE_CUP);
+
+        // COFFEE clickable
+        ImageIcon raw = new ImageIcon(COFFEE_CUP);
+        Image scaled = raw.getImage().getScaledInstance(250, 300, Image.SCALE_SMOOTH);
+        jipCoffeeCup = new JButton(new ImageIcon(scaled)); //assign to field
+        jipCoffeeCup.setContentAreaFilled(false);
+        jipCoffeeCup.setBorderPainted(false);
+        jipCoffeeCup.setFocusPainted(false);
+        jipCoffeeCup.setActionCommand(BUY_COFFEE);
 
         // Other components
         jlCounter = new JLabel();
@@ -193,6 +202,8 @@ public class GameView extends BaseView {
         jpWest.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 20));
 
         jlCounter.setFont(new Font("Arial", Font.PLAIN, 30));
+        jlCounter.setPreferredSize(new Dimension(120, 40)); //wide enough for max
+        jlCounter.setHorizontalAlignment(SwingConstants.LEFT);
 
         jipCoffeeCupSmall.setOpaque(false);
         jipCoffeeCupSmall.setPreferredSize(new Dimension(50, 50));
@@ -347,6 +358,7 @@ public class GameView extends BaseView {
 
     public void addBuyListener(ActionListener actionListener) {
         jbBuy.addActionListener(actionListener);
+        jipCoffeeCup.addActionListener(actionListener);
     }
 
     public void addShopListener(ActionListener actionListener) {

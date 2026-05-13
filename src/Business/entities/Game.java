@@ -14,6 +14,7 @@ public class Game {
     private boolean finished;
     private final ArrayList<Generator> generators = new ArrayList<>();
     private final List<Thread> generatorThreads = new ArrayList<>();
+    private GeneratorFactory factory = new CoffeeGeneratorFactory();
 
     private ArrayList<GameListener> listeners = new ArrayList<>();
     private final ArrayList<String> purchasedUpgradeNames = new ArrayList<>();
@@ -37,13 +38,16 @@ public class Game {
         this.endTime = endTime;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        this.generators.add(new Generator(new GeneratorType("Gas station clerk", 10, 0.2, 1.07, null), this));
-        //this.generators = generators;
+        for (GeneratorType type : factory.createGeneratorTypes()) {
+            this.generators.add(new Generator(type, this));
+        }           //this.generators = generators;
     }
 
 
     public void addGenerator(int id) {
-        generators.get(id).increaseQuantity();
+        if (spendCoffees(generators.get(id).getCurrentPrice())) {
+            generators.get(id).increaseQuantity();
+        }
     }
 
     public ArrayList<Generator> getGenerators() {
