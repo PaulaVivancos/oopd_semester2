@@ -170,7 +170,7 @@ public class GameController implements ActionListener, GameListener {
         SwingUtilities.invokeLater(() -> {
             gameView.updateCounter(newAmount);
             refreshUpgradeView(newAmount);
-            refreshShopView(newAmount);
+            //refreshShopView(newAmount);
         });
     }
 

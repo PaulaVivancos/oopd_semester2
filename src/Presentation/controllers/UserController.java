@@ -27,7 +27,9 @@ public class UserController {
         this.configView = configView;
         this.statsView  = statsView;
         this.menuView   = menuView;
-        this.userManager = new UserManager();
+        //TODO pass parameter that is missing??
+        //this.userManager = new UserManager();
+        this.userManager = null;
 
         loginView.addLoginListener(e -> handleLogin());
         registerView.addRegisterListener(e -> handleSignUp());
@@ -38,11 +40,11 @@ public class UserController {
         configView.addLogoutListener(e -> handleLogout());
         configView.addDeleteListener(e -> handleDelete());
 
-        forgotPasswordView.addSendCodeListener(e -> handleSendingEmail());
+        //forgotPasswordView.addSendCodeListener(e -> handleSendingEmail());  TODO and here
         forgotPasswordView.addValidateCodeListener(e -> handleCodeVerification());
         forgotPasswordView.addBackLoginListener(e -> {
                 forgotPasswordView.clearTextFields();
-                userManager.resetSendCode();
+                //userManager.resetSendCode();  TODO and here
                 appController.switchCard("login");
         });
 
@@ -117,7 +119,7 @@ public class UserController {
 
     public void handleCodeVerification() {
         if(forgotPasswordView.getCode().equals(userManager.getSendCode())) {
-            forgotPasswordView.showChangePassword();
+            //forgotPasswordView.showChangePassword();  TODO missing arg here as well
         }
         else {
             forgotPasswordView.showError("This code is invalid.");
