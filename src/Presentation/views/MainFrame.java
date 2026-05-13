@@ -29,42 +29,6 @@ public class MainFrame extends JFrame {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-//        loginView = new LoginView();
-//        registerView = new RegisterView();
-//        menuView = new MenuView();
-//        gameView = new GameView();
-//        configView = new ConfigView();
-//        statsView = new StatsView();
-//        forgotPasswordView = new ForgotPasswordView();
-        // ...
-
-
-        // TODO: Create a method to add cards.
-//        mainPanel.add(loginView, "login");
-//        mainPanel.add(registerView, "register");
-//        mainPanel.add(menuView, "menu");
-//        mainPanel.add(gameView, "game");
-//        mainPanel.add(statsView, "stats");
-//        mainPanel.add(configView, "config");
-//        mainPanel.add(forgotPasswordView, "forgotPassword");
-
-        // DO THE METHOD IN THE VIEW ITSELF
-//        loginView.getSingUpButton().addActionListener(e -> switchCard("register"));
-//        registerView.getLogInButton().addActionListener(e -> switchCard("login"));
-//        menuView.getConfigButton().addActionListener(e -> switchCard("config"));
-//        menuView.getStatsButton().addActionListener(e -> switchCard("stats"));
-
-
-
-        /*
-        configView.addBackListener(e -> showPrevious());
-        statsView.addBackListener(e -> showPrevious());
-        gameView.addBackListener(e -> showPrevious());
-        loginView.addForgotPasswordListener(e -> {
-            cardLayout.show(mainPanel, "forgotPassword");
-        });
-*/
-
         setTitle("CoffeeClicker");
         setIconImage(new ImageIcon("resources/coffee_cup.png").getImage());
 

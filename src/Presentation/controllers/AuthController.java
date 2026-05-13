@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 
 import static Presentation.views.ConfigView.DELETE_ACCOUNT;
 import static Presentation.views.ConfigView.LOGOUT;
+import static Presentation.views.ForgotPasswordView.GO_BACK_LOGIN;
+import static Presentation.views.ForgotPasswordView.VALIDATE_CODE;
 import static Presentation.views.LoginView.*;
 import static Presentation.views.RegisterView.GO_LOGIN;
 import static Presentation.views.RegisterView.REGISTER_USER;
@@ -20,6 +22,7 @@ public class AuthController implements ActionListener {
     private final LoginView loginView;
     private final RegisterView registerView;
     private final ConfigView configView;
+    private final ForgotPasswordView forgotPasswordView;
 
 
     private final UserManager userManager;
@@ -28,6 +31,7 @@ public class AuthController implements ActionListener {
     protected static final String REGISTER = "register";
     protected static final String MENU = "menu";
     protected static final String CONFIG = "config";
+    protected static final String FORGOT_PASSWORD = "forgotPassword";
 
     public AuthController(AppController appController, UserManager userManager/*, LoginView loginView, RegisterView registerView,
                           GameView gameView, ConfigView configView, StatsView statsView, MenuView menuView*/) {
@@ -39,6 +43,8 @@ public class AuthController implements ActionListener {
         appController.addCardToMainFrame(registerView, REGISTER);
         this.configView = new ConfigView();
         appController.addCardToMainFrame(configView, CONFIG);
+        this.forgotPasswordView = new ForgotPasswordView();
+        appController.addCardToMainFrame(forgotPasswordView, FORGOT_PASSWORD);
 
         this.userManager = userManager;
 
@@ -51,6 +57,10 @@ public class AuthController implements ActionListener {
         configView.addLogoutListener(this);
         configView.addDeleteListener(this);
         configView.addBackListener(e ->  appController.goBack());
+
+        forgotPasswordView.addBackLoginListener(this);
+        forgotPasswordView.addValidateCodeListener(this);
+        //forgotPasswordView.addSendCodeListener(this);
     }
 
     public void handleLogin() {
@@ -97,6 +107,29 @@ public class AuthController implements ActionListener {
         }
     }
 
+    public void handleSendCode() {
+        forgotPasswordView.showEnterEmailPopUp();
+        userManager.handleSendCode(forgotPasswordView.getEmail());
+    }
+
+    public void handleValidateCode() {
+        String sendedCode = userManager.getSendCode();
+        if (sendedCode.equals(forgotPasswordView.getCode())) {
+            forgotPasswordView.showChangePassword(() -> {
+               handleChangePassword();
+            });
+
+        } else {
+            forgotPasswordView.showError("This code is incorrect. Please try again.");
+        }
+    }
+
+    public void handleChangePassword() {
+            userManager.changePassword(forgotPasswordView.getNewPassword(), forgotPasswordView.getPasswordConfirmation());
+            appController.switchCard(LOGIN);
+    }
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -108,12 +141,17 @@ public class AuthController implements ActionListener {
             handleDelete();
         } else if (e.getActionCommand().equals(LOGOUT)) {
             handleLogout();
-        } else if (e.getActionCommand().equals(FORGOT_PASSWORD)) {
-            // handle that
+        } else if (e.getActionCommand().equals(GO_FORGOT_PASSWORD)) {
+            appController.switchCard(FORGOT_PASSWORD);
+            handleSendCode();
         } else if (e.getActionCommand().equals(REGISTER_USER)) {
             handleSignUp();
         } else if (e.getActionCommand().equals(GO_LOGIN)) {
             appController.switchCard(LOGIN);
+        } else if (e.getActionCommand().equals(GO_BACK_LOGIN)) {
+            appController.switchCard(LOGIN);
+        } else if (e.getActionCommand().equals(VALIDATE_CODE)) {
+            handleValidateCode();
         }
 
     }

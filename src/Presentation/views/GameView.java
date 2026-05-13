@@ -289,18 +289,20 @@ public class GameView extends BaseView {
 
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBackground(new Color(245, 240, 230));
+        content.setBackground(BACKGROUND_BUTTON);
         content.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(103, 51, 25), 2),
+                BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2),
                 BorderFactory.createEmptyBorder(20, 30, 20, 30)
         ));
 
         JLabel title = new JLabel("CREATING NEW GAME");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font("Times New Roman", Font.BOLD, 14));
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Times New Roman", Font.BOLD, 20));
 
         JTextField nameField = new JTextField();
-        nameField.setMaximumSize(new Dimension(200, 35));
+        nameField.setMaximumSize(new Dimension(300, 40));
+        nameField.setPreferredSize(new Dimension(300, 40));
         nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JButton startGame = createDialogButton("START GAME");
@@ -326,12 +328,11 @@ public class GameView extends BaseView {
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(new Dimension(200, 45));
-        button.setBackground(BACKGROUND_BUTTON);
-        button.setForeground(Color.WHITE);
+        button.setMaximumSize(new Dimension(200, 55));
+        button.setBackground(Color.WHITE);
+        button.setForeground(BACKGROUND_BUTTON);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
-        button.setBorderPainted(false);
         button.setFont(new Font("Times New Roman", Font.BOLD, 16));
         button.setOpaque(false);
 
