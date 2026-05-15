@@ -1,7 +1,5 @@
 package Business.managers;
 
-import Business.Exceptions.SendEmailException;
-import Business.entities.EmailService;
 import Business.entities.User;
 import Persistence.SQLDaos.UserSQLDao;
 import Persistence.UserDAO;
@@ -18,12 +16,9 @@ import java.sql.SQLException;
 public class UserManager {
     private final UserDAO userDao;
     private User currentUser;
-    private EmailService emailService;
-    private String sendedCode;
 
     public UserManager(UserDAO userDao) {
         this.userDao = userDao;
-        emailService = new EmailService();
     }
 
     public boolean login(String username_email, String password) {
@@ -60,17 +55,6 @@ public class UserManager {
         return null;
     }
 
-
-    public void handleSendCode(String email) {
-        try {
-            sendedCode =  emailService.sendVerificationCode(email);
-
-        } catch (SendEmailException e) {
-            sendedCode = null;
-        }
-
-    }
-
     private void addStudent(User user) {
         try {
             userDao.insertUser(user);
@@ -92,11 +76,8 @@ public class UserManager {
         }
     }
 
-    public String getSendCode() {
-        return sendedCode;
+    public void changePassword(String oldPassword, String newPassword) {
+
     }
 
-    public void changePassword(String oldPassword, String newPassword) {
-        //userDao.changePassword();
-    }
 }
