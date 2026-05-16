@@ -116,7 +116,7 @@ public class AuthController implements ActionListener {
         String sendedCode = userManager.getSendCode();
         if (sendedCode.equals(forgotPasswordView.getCode())) {
             forgotPasswordView.showChangePassword(() -> {
-               handleChangePassword();
+                handleChangePassword();
             });
 
         } else {
@@ -125,8 +125,8 @@ public class AuthController implements ActionListener {
     }
 
     public void handleChangePassword() {
-            userManager.changePassword(forgotPasswordView.getNewPassword(), forgotPasswordView.getPasswordConfirmation());
-            appController.switchCard(LOGIN);
+        userManager.changePassword(forgotPasswordView.getNewPassword(), forgotPasswordView.getPasswordConfirmation());
+        appController.switchCard(LOGIN);
     }
 
 
