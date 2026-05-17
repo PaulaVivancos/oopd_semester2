@@ -11,6 +11,9 @@ import java.awt.event.MouseEvent;
 
 import static java.lang.Math.round;
 
+/**
+ * View for the main gameplay screen, showing the coffee cup, counter, shop buttons, and a data table.
+ */
 public class GameView extends BaseView {
     private JPanel mainPanel;
     private JPanel jpTop, jpBot, jpCentre, jpEast, jpWest;
@@ -48,6 +51,9 @@ public class GameView extends BaseView {
     private ActionListener loadGameListener;
     private ActionListener viewGameListener;
 
+    /**
+     * Populates the top bar menu with save/load game options and account actions.
+     */
     @Override
     protected void buildMenu(JPopupMenu menu) {
         addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
@@ -64,6 +70,9 @@ public class GameView extends BaseView {
         });
     }
 
+    /**
+     * Initializes all game UI components including panels, buttons, the counter label, and the coffee cup.
+     */
     @Override
     protected void initComponents() {
         // Panels
@@ -103,6 +112,9 @@ public class GameView extends BaseView {
         setJipMain();
     }
 
+    /**
+     * Assembles the main BorderLayout panel from all sub-panels and adds it to the view.
+     */
     private void setJipMain() {
         setJpTop();
         setJpCentre();
@@ -122,6 +134,9 @@ public class GameView extends BaseView {
         addToCenter(mainPanel);
     }
 
+    /**
+     * Builds the top panel containing the game title image.
+     */
     private void setJpTop() {
         jpTop.setLayout(new BoxLayout(jpTop, BoxLayout.Y_AXIS));
         jpTop.setOpaque(false);
@@ -136,6 +151,9 @@ public class GameView extends BaseView {
         jpTop.add(jipTitle);
     }
 
+    /**
+     * Builds the bottom panel containing the generators table.
+     */
     private void setJpBot() {
         jpBot.setPreferredSize(new Dimension(600, 200));
         jpBot.setMaximumSize(new Dimension(600, 200));
@@ -168,6 +186,9 @@ public class GameView extends BaseView {
         jpBot.add(scrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Builds the center panel containing the clickable coffee cup image.
+     */
     private void setJpCentre() {
         jpCentre.setLayout(new BoxLayout(jpCentre, BoxLayout.Y_AXIS));
         jpCentre.setOpaque(false);
@@ -180,6 +201,9 @@ public class GameView extends BaseView {
         jpCentre.add(jipCoffeeCup);
     }
 
+    /**
+     * Builds the east panel with the buy, generators, and upgrades buttons.
+     */
     private void setJpEast() {
         jpEast.setLayout(new BoxLayout(jpEast, BoxLayout.Y_AXIS));
         jpEast.setOpaque(false);
@@ -196,6 +220,9 @@ public class GameView extends BaseView {
         jpEast.add(jbUpg);
     }
 
+    /**
+     * Builds the west panel with the small coffee cup icon and the coffee counter label.
+     */
     private void setJpWest() {
         jpWest.setLayout(new FlowLayout());
         jpWest.setOpaque(false);
@@ -213,6 +240,9 @@ public class GameView extends BaseView {
         jpWest.add(jlCounter);
     }
 
+    /**
+     * Applies consistent size, color, and press effect styling to a button.
+     */
     private void setButton(JButton button, Dimension dimension) {
         button.setPreferredSize(dimension);
         button.setMinimumSize(dimension);
@@ -237,6 +267,10 @@ public class GameView extends BaseView {
         });
     }
 
+    /**
+     * Opens a modal dialog offering new game, load game, and view game options.
+     * @param actionListener forwarded to internal buttons for external handling
+     */
     public void showGamesPopUp(ActionListener actionListener) {
         JDialog dialog = new JDialog();
         dialog.setUndecorated(true);
@@ -296,6 +330,9 @@ public class GameView extends BaseView {
         dialog.setVisible(true);
     }
 
+    /**
+     * Opens a modal dialog prompting the user to enter a name for a new game.
+     */
     public void showNewGameDialog() {
         JDialog dialog = new JDialog();
         dialog.setUndecorated(true);
@@ -338,6 +375,9 @@ public class GameView extends BaseView {
         dialog.setModal(true);
     }
 
+    /**
+     * Creates a styled dialog button with the given label.
+     */
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -354,7 +394,6 @@ public class GameView extends BaseView {
 
     public void addLogoutListener(ActionListener l)  { this.logoutListener = l; }
     public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
-
 
     public void addBuyListener(ActionListener actionListener) {
         jbBuy.addActionListener(actionListener);
@@ -376,6 +415,7 @@ public class GameView extends BaseView {
     public void addViewGameListener(ActionListener actionListener) {
         this.viewGameListener = actionListener;
     }
+
 
     // Getters
 
@@ -399,6 +439,10 @@ public class GameView extends BaseView {
         return jtTable;
     }
 
+    /**
+     * Updates the counter label to display the given coffee count.
+     * @param numCoffees the current coffee count to display
+     */
     public void updateCounter(double numCoffees) {
         jlCounter.setText(String.format("%.2f", numCoffees));
         jlCounter.revalidate();

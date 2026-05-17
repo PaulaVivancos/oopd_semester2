@@ -10,6 +10,10 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * View for the upgrade shop.
+ * Displays a list of purchasable upgrades with costs and purchase state.
+ */
 public class UpgradeView extends BaseView {
 
     //Main parts
@@ -48,6 +52,9 @@ public class UpgradeView extends BaseView {
     public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
     public void addDeleteListener(ActionListener l) { this.deleteListener = l; }
 
+    /**
+     * Populates the top bar menu with save/load options and account actions.
+     */
     @Override
     protected void buildMenu(JPopupMenu menu) {
         addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
@@ -61,6 +68,9 @@ public class UpgradeView extends BaseView {
         });
     }
 
+    /**
+     * Initializes the title, upgrade rows, and main layout panel.
+     * */
     @Override
     protected void initComponents() {
         jbBuyButtons = new ArrayList<>();
@@ -95,6 +105,10 @@ public class UpgradeView extends BaseView {
         addToCenter(mainPanel);
     }
 
+    /**
+     * Builds a single upgrade row with name, cost, and a buy button.
+     * @param index the position of the upgrade in the UPGRADES array
+     */
     private JPanel buildUpgradeRow(int index) {
         Upgrade upg = UPGRADES[index];
 
@@ -138,6 +152,9 @@ public class UpgradeView extends BaseView {
         return row;
     }
 
+    /**
+     * Applies consistent size, color, and press effect styling to a button.
+     */
     private void styleButton(JButton button, Dimension dimension) {
         button.setPreferredSize(dimension);
         button.setMinimumSize(dimension);
@@ -162,6 +179,12 @@ public class UpgradeView extends BaseView {
         });
     }
 
+    /**
+     * Updates the affordability and purchase state of an upgrade row.
+     * @param index the upgrade row to update
+     * @param canAfford whether the player can currently afford this upgrade
+     * @param purchased whether this upgrade has already been bought
+     */
     public void updateUpgradeRow(int index, boolean canAfford, boolean purchased) {
         JButton btn = jbBuyButtons.get(index);
         Container row = btn.getParent().getParent();
@@ -174,6 +197,9 @@ public class UpgradeView extends BaseView {
         }
     }
 
+    /**
+     * Attaches the given listener to all upgrade buy buttons.
+     */
     public void addBuyUpgradeListener(ActionListener l) {
         for (JButton btn : jbBuyButtons) {
             btn.addActionListener(l);

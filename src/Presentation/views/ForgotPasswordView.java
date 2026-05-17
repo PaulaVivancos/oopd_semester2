@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/** View for the password recovery flow, allowing users to enter a reset code and set a new password. */
 public class ForgotPasswordView extends JPanel {
 
     private JImagePanel jpiMain;
@@ -32,6 +33,7 @@ public class ForgotPasswordView extends JPanel {
 
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
+
 
     public ForgotPasswordView() {
         setLayout(new BorderLayout());
@@ -63,6 +65,9 @@ public class ForgotPasswordView extends JPanel {
         setMainPanel();
     }
 
+    /**
+     * Assembles the background panel with title, central fields, and bottom buttons.
+     */
     private void setMainPanel() {
         setTitle();
         setCenterPanel();
@@ -76,12 +81,18 @@ public class ForgotPasswordView extends JPanel {
         add(jpiMain, BorderLayout.CENTER);
     }
 
+    /**
+     * Styles and centers the title label. *
+     */
     private void setTitle() {
         jlTitle.setFont(new Font("Times New Roman", Font.BOLD, 50));
         jlTitle.setBorder(BorderFactory.createEmptyBorder(50, 50, 10, 50));
         jlTitle.setHorizontalAlignment(JLabel.CENTER);
     }
 
+    /**
+     * Lays out the code input field and validate button vertically in the center area.
+     */
     private void setCenterPanel() {
         setCodePanel();
         setValidateCodePanel();
@@ -98,6 +109,9 @@ public class ForgotPasswordView extends JPanel {
         jpCentral.add(jpButtons);
     }
 
+    /**
+     * Builds the code entry field panel with its label.
+     */
     private void setCodePanel() {
         jpCode.setLayout(new BoxLayout(jpCode, BoxLayout.Y_AXIS));
         jpCode.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -112,6 +126,9 @@ public class ForgotPasswordView extends JPanel {
         jpCode.add(jtfCode);
     }
 
+    /**
+     * Configures the appearance and focus color effects of the code text field.
+     */
     private void setCodeTextField() {
         jtfCode.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfCode.setPreferredSize(DIMENSION_TEXTFIELD);
@@ -134,6 +151,9 @@ public class ForgotPasswordView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
     }
 
+    /**
+     * Builds and styles the validate code button panel.
+     */
     private void setValidateCodePanel() {
         jpValidateCode = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -160,6 +180,9 @@ public class ForgotPasswordView extends JPanel {
         });
     }
 
+    /**
+     * Arranges the bottom navigation buttons with spacing.
+     */
     private void setButtons() {
         jpButtons.setLayout(new BoxLayout(jpButtons, BoxLayout.Y_AXIS));
         jpButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
@@ -171,6 +194,9 @@ public class ForgotPasswordView extends JPanel {
         jpButtons.add(Box.createVerticalStrut(10));
     }
 
+    /**
+     * Configures the size and alignment of the go-back-to-login button.
+     */
     private void setGoBackLoginButton() {
         jbBackLogIn.setPreferredSize(DIMENSION_BUTTON_SIGNIN);
         jbBackLogIn.setMaximumSize(DIMENSION_BUTTON_SIGNIN);
@@ -181,10 +207,17 @@ public class ForgotPasswordView extends JPanel {
         jbBackLogIn.setContentAreaFilled(true);
     }
 
+    /**
+     * Shows an error dialog with the given message.
+     */
     public void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Opens a modal dialog prompting the user to enter their email,
+     * storing it on confirmation for later retrieval.
+     */
     public void showEnterEmailPopUp() {
         JButton jbSendCode = createDialogButton("SEND CODE");
 
@@ -227,6 +260,9 @@ public class ForgotPasswordView extends JPanel {
         dialog.setVisible(true);
     }
 
+    /**
+     * Creates a styled dialog button with the given label.
+     */
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -240,6 +276,7 @@ public class ForgotPasswordView extends JPanel {
 
         return button;
     }
+
 
     public String getCode() {
         return jtfCode.getText();
@@ -257,6 +294,11 @@ public class ForgotPasswordView extends JPanel {
         jbValidateCode.addActionListener(listener);
     }
 
+    /**
+     * Opens a modal dialog for entering and confirming a new password.
+     * Runs the provided callback once the passwords match and the user confirms.
+     * @param onChangePassword called after a successful password confirmation
+     */
     public void showChangePassword(Runnable onChangePassword) {
         JDialog dialog = new JDialog();
         dialog.setUndecorated(true);

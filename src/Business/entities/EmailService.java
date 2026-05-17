@@ -7,7 +7,9 @@ import java.util.Random;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-
+/**
+ * Handles sending verification emails via Gmail SMTP.
+ */
 public class EmailService {
 
     private final String FROM = "gamecoffeeclicker@gmail.com";
@@ -15,6 +17,12 @@ public class EmailService {
     private final int STARTING_POINT = 100000;
     private final int BIG_NUMBER_TO_CHOOSE_RANDOM = 900000;
 
+    /**
+     * Generates a 6-digit verification code and sends it to the given email address.
+     * @param toEmail the recipient's email address
+     * @return the verification code that was sent
+     * @throws SendEmailException if the email address is invalid or could not be reached
+     */
     public String sendVerificationCode(String toEmail) throws SendEmailException {
 
         String codeToSend = String.valueOf(STARTING_POINT + new Random().nextInt(BIG_NUMBER_TO_CHOOSE_RANDOM));

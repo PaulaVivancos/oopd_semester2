@@ -15,6 +15,11 @@ import static Presentation.views.LoginView.*;
 import static Presentation.views.RegisterView.GO_LOGIN;
 import static Presentation.views.RegisterView.REGISTER_USER;
 
+/**
+ * Handles all authentication-related actions including login, registration,
+ * logout, account deletion, and password recovery. Acts as the ActionListener
+ * for all auth views.
+ */
 public class AuthController implements ActionListener {
     private final AppController appController;
 
@@ -33,6 +38,12 @@ public class AuthController implements ActionListener {
     protected static final String CONFIG = "config";
     protected static final String FORGOT_PASSWORD = "forgotPassword";
 
+    /**
+     * Initializes all auth-related views, registers them with the main frame,
+     * and attaches this controller as their event listener.
+     * @param appController the central app controller used for navigation and dialogs
+     * @param userManager the business layer manager handling user operations
+     */
     public AuthController(AppController appController, UserManager userManager/*, LoginView loginView, RegisterView registerView,
                           GameView gameView, ConfigView configView, StatsView statsView, MenuView menuView*/) {
         this.appController = appController;
@@ -60,9 +71,12 @@ public class AuthController implements ActionListener {
 
         forgotPasswordView.addBackLoginListener(this);
         forgotPasswordView.addValidateCodeListener(this);
-        //forgotPasswordView.addSendCodeListener(this);
     }
 
+    /**
+     * Validates the login form credentials and navigates to the menu on success,
+     * or displays an error message on failure.
+     */
     public void handleLogin() {
         String username_email = loginView.getUsernameEmail();
         String password = loginView.getPassword();
@@ -74,6 +88,9 @@ public class AuthController implements ActionListener {
         }
     }
 
+    /**
+     * Logs out the current user and redirects to the login view.
+     */
     public void handleLogout(){
         System.out.println("handleLogout called");
 
@@ -81,6 +98,10 @@ public class AuthController implements ActionListener {
         appController.switchCard(LOGIN);
     }
 
+    /**
+     * Prompts the user for confirmation before deleting their account.
+     * Navigates to login on success or shows an error dialog on failure.
+     */
     public void handleDelete(){
         int choice = appController.showConfirmationPopUp("Delete Account", "Are you sure you want to delete the account?");
 
@@ -93,6 +114,10 @@ public class AuthController implements ActionListener {
         }
     }
 
+    /**
+     * Collects registration form data and attempts to create a new user account.
+     * Navigates to the menu on success or displays a validation error on failure.
+     */
     public void handleSignUp() {
         String username = registerView.getUsername();
         String email = registerView.getEmail();
@@ -107,11 +132,18 @@ public class AuthController implements ActionListener {
         }
     }
 
+    /**
+     * Prompts the user to enter their email and sends a password reset code to it.
+     */
     public void handleSendCode() {
         forgotPasswordView.showEnterEmailPopUp();
         userManager.handleSendCode(forgotPasswordView.getEmail());
     }
 
+    /**
+     * Verifies the reset code entered by the user. On success, opens the change
+     * password dialog; on failure, displays an error in the forgot password view.
+     */
     public void handleValidateCode() {
         String sendedCode = userManager.getSendCode();
         if (sendedCode.equals(forgotPasswordView.getCode())) {
@@ -124,13 +156,18 @@ public class AuthController implements ActionListener {
         }
     }
 
+    /**
+     * Submits the new password from the forgot password view and redirects to login.
+     */
     public void handleChangePassword() {
         userManager.changePassword(forgotPasswordView.getNewPassword(), forgotPasswordView.getPasswordConfirmation());
         appController.switchCard(LOGIN);
     }
 
-
-
+    /**
+     * Routes action events from all auth views to their corresponding handler methods.
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(LOGIN_USER)) {

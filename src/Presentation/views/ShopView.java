@@ -13,6 +13,10 @@ import java.util.List;
 
 import static Presentation.controllers.GameController.NUM_GENERATORS;
 
+/**
+ * View for the generator shop.
+ * Displays a scrollable list of purchasable generators with costs and ownership info.
+ */
 public class ShopView extends BaseView {
     //Main parts
     private JPanel mainPanel;
@@ -66,6 +70,9 @@ public class ShopView extends BaseView {
     public void addDeleteListener(ActionListener l) { this.deleteListener = l; }
 
     //From Game View TODO: maybe remove redundancy
+    /**
+     * Populates the top bar menu with save/load options and account actions.
+     */
     @Override
     protected void buildMenu(JPopupMenu menu) {
         addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
@@ -82,6 +89,9 @@ public class ShopView extends BaseView {
         });
     }
 
+    /**
+     * Initializes the list components and builds the north title and center generator rows.
+     */
     @Override
     protected void initComponents() {
         jlNames = new ArrayList<>();
@@ -104,6 +114,9 @@ public class ShopView extends BaseView {
         addToCenter(mainPanel);
     }
 
+    /**
+     * Builds the title label panel at the top of the shop.
+     */
     private void buildNorth() {
         jpNorth = new JPanel();
         jpNorth.setOpaque(false);
@@ -119,6 +132,9 @@ public class ShopView extends BaseView {
         jpNorth.add(jlTitle);
     }
 
+    /**
+     * Builds the scrollable list of generator rows.
+     */
     private void buildCenter() {
         jpCenter = new JPanel();
         jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.Y_AXIS));
@@ -134,6 +150,10 @@ public class ShopView extends BaseView {
 
     }
 
+    /**
+     * Builds a single generator row with image, name, cost, production, owned count, and a buy button.
+     * @param index the position of the generator in the list
+     */
     private JPanel buildGeneratorRow(int index) {
         JPanel row = new JPanel(new BorderLayout(10, 0));
         row.setBackground(BACKGROUND_ROW);
@@ -197,6 +217,11 @@ public class ShopView extends BaseView {
         return row;
     }
 
+    /**
+     *
+     * @param button
+     * @param dimension
+     */
     private void styleButton(JButton button, Dimension dimension) {
         button.setPreferredSize(dimension);
         button.setMinimumSize(dimension);
@@ -221,6 +246,13 @@ public class ShopView extends BaseView {
         });
     }
 
+    /**
+     * Updates the cost, owned count, and affordability state of a generator row.
+     * @param index the generator row to update
+     * @param nextCost the updated purchase cost
+     * @param owned the number currently owned
+     * @param canAfford whether the player can currently afford this generator
+     */
     public void updateGeneratorRow(int index, double nextCost, int owned, boolean canAfford) {
         ownedCounts[index] = owned;
         jlCosts.get(index).setText(String.format("Cost: %.2f", nextCost));
@@ -243,6 +275,10 @@ public class ShopView extends BaseView {
         return jbBuyButtons;
     }
 
+    /**
+     * Populates all generator rows with data from the given type list.
+     * @param types the list of generator types to display
+     */
     public void initGenerators(List<GeneratorType> types) {
         for (int i = 0; i < types.size(); i++) {
             GeneratorType t = types.get(i);

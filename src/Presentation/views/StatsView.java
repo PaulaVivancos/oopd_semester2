@@ -1,13 +1,14 @@
 package Presentation.views;
 
-import Presentation.JImagePanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * View for the statistics screen.
+ * Shows player and game selectors alongside overall game count info.
+ */
 public class StatsView extends BaseView {
-    //private JImagePanel mainPanel;
     private JPanel mainPanel;
     private JPanel topPanel, playersPanel, userGamePanel, numGamesPanel;
     private JLabel jlPlayers, jlGames, jlNumGames;
@@ -23,6 +24,9 @@ public class StatsView extends BaseView {
         super();
     }
 
+    /**
+     * Initializes all panels, labels, and combo boxes for the stats screen.
+     */
     @Override
     protected void initComponents() {
         //mainPanel = new JImagePanel(BACKGROUND_URL);
@@ -44,6 +48,9 @@ public class StatsView extends BaseView {
         setMainPanel();
     }
 
+    /**
+     * Populates the top bar menu with a save option and logout action.
+     */
     @Override
     protected void buildMenu(JPopupMenu menu) {
         addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
@@ -51,6 +58,9 @@ public class StatsView extends BaseView {
         addMenuItem(menu, "Log out", e -> { if (logoutListener != null) logoutListener.actionPerformed(e); });
     }
 
+    /**
+     * Assembles the main panel with the top stats bar and adds it to the view.
+     */
     private void setMainPanel() {
         setTopPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -59,6 +69,9 @@ public class StatsView extends BaseView {
         addToCenter(mainPanel);
     }
 
+    /**
+     * Lays out the players, games, and number-of-games panels horizontally with spacing.
+     */
     private void setTopPanel() {
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 
@@ -75,6 +88,9 @@ public class StatsView extends BaseView {
         topPanel.add(numGamesPanel);
     }
 
+    /**
+     * Builds the player selector panel with its label and combo box.
+     */
     private void setPlayersPanel() {
         playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.Y_AXIS));
         playersPanel.setPreferredSize(new Dimension(200, 100));
@@ -89,6 +105,9 @@ public class StatsView extends BaseView {
         playersPanel.add(jcbPlayers);
     }
 
+    /**
+     * Builds the game selector panel with its label and combo box.
+     */
     private void setGamesPanel() {
         userGamePanel.setLayout(new BoxLayout(userGamePanel, BoxLayout.Y_AXIS));
         userGamePanel.setPreferredSize(new Dimension(200, 100));
@@ -103,12 +122,16 @@ public class StatsView extends BaseView {
         userGamePanel.add(jcbGames);
     }
 
+    /**
+     * Builds the panel displaying the total number of games played.
+     * @param numGames the number to display
+     */
     private void setNumGamesPanel(int numGames) {
         numGamesPanel.setPreferredSize(new Dimension(200, 70));
         numGamesPanel.setMaximumSize(new Dimension(200, 70));
         numGamesPanel.setLayout(new GridBagLayout());
 
-        jlNumGames.setFont(new Font("Times New Roman", Font.BOLD, 20));
+         jlNumGames.setFont(new Font("Times New Roman", Font.BOLD, 20));
         jlNumGames.setText("Number of games: " + numGames);
 
         jlNumGames.setForeground(Color.WHITE);
