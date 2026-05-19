@@ -57,8 +57,8 @@ public class UpgradeView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
-        addMenuItem(menu, "Cargar partida", e -> System.out.println("load"));
+        addMenuItem(menu, "Save game", e -> System.out.println("save"));
+        addMenuItem(menu, "Load game", e -> System.out.println("load"));
         menu.addSeparator();
         addMenuItem(menu, "Log out", e -> {
             if (logoutListener != null) logoutListener.actionPerformed(e);

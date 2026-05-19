@@ -5,6 +5,8 @@ import Presentation.JImagePanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * View for the main menu screen, displaying the title, coffee cup, and navigation buttons.
@@ -191,9 +193,27 @@ public class MenuView extends JPanel {
         button.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         button.setOpaque(true);
-        button.setBackground(BACKGROUND_BUTTON);
         button.setForeground(Color.WHITE);
+        button.setBackground(BACKGROUND_BUTTON);
+        button.setOpaque(true);
         button.setContentAreaFilled(true);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                button.setBackground(BACKGROUND_BUTTON_PRESSED);
+                button.setForeground(Color.BLACK);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                button.setBackground(BACKGROUND_BUTTON);
+                button.setForeground(Color.WHITE);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+            }
+        });
 
     }
 

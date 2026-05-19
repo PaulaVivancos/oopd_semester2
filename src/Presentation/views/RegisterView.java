@@ -11,7 +11,6 @@ import java.awt.event.*;
 public class RegisterView extends JPanel {
     private JImagePanel jpiMain;
     private JPanel jpCentral, jpUsername, jpPassword, jpButtons, jpEmail, jpPasswordConfirmation;
-    private JPanel jpLogin;
     private JLabel jlTitle;
     private JTextField jtfUsername, jtfEmail;
     private JPasswordField jtfPassword, jtfPasswordConfirmation;
@@ -44,10 +43,8 @@ public class RegisterView extends JPanel {
         jpEmail = new JPanel();
         jpPasswordConfirmation = new JPanel();
 
-        jpLogin = new JPanel();
-
         //Labels
-        jlTitle = new JLabel("SIGN UP");
+        jlTitle = new JLabel("Sign up");
 
         //Text fields
         jtfUsername = new JTextField();
@@ -302,17 +299,25 @@ public class RegisterView extends JPanel {
         jbSignUp.setMaximumSize(DIMENSION_BUTTON_LOGIN);
         jbSignUp.setAlignmentX(Component.CENTER_ALIGNMENT);
         jbSignUp.setAlignmentY(Component.CENTER_ALIGNMENT);
+        jbSignUp.setForeground(Color.WHITE);
         jbSignUp.setBackground(BACKGROUND_BUTTON);
         jbSignUp.setOpaque(true);
         jbSignUp.setContentAreaFilled(true);
+        jbSignUp.setFocusPainted(false);
+        jbSignUp.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
         jbSignUp.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 jbSignUp.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbSignUp.setForeground(Color.BLACK);
+                jbSignUp.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
             }
             @Override
             public void mouseReleased(MouseEvent e) {
                 jbSignUp.setBackground(BACKGROUND_BUTTON);
+                jbSignUp.setForeground(Color.WHITE);
+                jbSignUp.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
             }
         });
     }
@@ -340,9 +345,28 @@ public class RegisterView extends JPanel {
         jbLogIn.setMaximumSize(DIMENSION_BUTTON_SIGNIN);
         jbLogIn.setAlignmentX(Component.CENTER_ALIGNMENT);
         jbLogIn.setAlignmentY(Component.CENTER_ALIGNMENT);
+        jbLogIn.setForeground(Color.WHITE);
         jbLogIn.setBackground(BACKGROUND_BUTTON);
         jbLogIn.setOpaque(true);
         jbLogIn.setContentAreaFilled(true);
+        jbLogIn.setFocusPainted(false);
+        jbLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
+
+        jbLogIn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                jbLogIn.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbLogIn.setForeground(Color.BLACK);
+                jbLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                jbLogIn.setBackground(BACKGROUND_BUTTON);
+                jbLogIn.setForeground(Color.WHITE);
+                jbLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+            }
+        });
     }
 
     public void addRegisterListener(ActionListener listener) {
