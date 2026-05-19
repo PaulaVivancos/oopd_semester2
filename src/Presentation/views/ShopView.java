@@ -39,7 +39,7 @@ public class ShopView extends BaseView {
 
 
     //TODO: link this to actual mechanism
-    private final int[] ownedCounts = {0, 0, 0};
+    private final int[] ownedCounts = {0, 0, 0,0};
 
     // COLOR CONSTANTS
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);

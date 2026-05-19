@@ -23,7 +23,7 @@ public class GameController implements ActionListener, GameListener {
 
     private final UserManager userManager;
 
-    public static int NUM_GENERATORS = 3;
+    public static int NUM_GENERATORS = 4;
 
     // views
     private final GameView gameView;
