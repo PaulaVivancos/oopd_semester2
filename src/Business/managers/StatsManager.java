@@ -24,7 +24,7 @@ public class StatsManager {
         return statsDAO.loadStatsByUserAndGame(playerId, gameId);
     }
 
-    public void saveStat(int gameId, double minute, int coffees) {
+    public void saveStat(int gameId, double minute, double coffees) {
         statsDAO.insertStats(gameId, minute, coffees);
     }
 

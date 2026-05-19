@@ -2,7 +2,9 @@ package Persistence.SQLDaos;
 
 import Business.entities.User;
 import Persistence.UserDAO;
+import org.mindrot.jbcrypt.BCrypt;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -39,6 +41,36 @@ public class UserSQLDao implements UserDAO {
         }
 
         return null;
+    }
+
+    @Override
+    public User findByNameEmailAndPassword(String usernameOrEmail, String plainPassword) {
+        String query = "SELECT user_id, username, email, password FROM user WHERE username = '"
+                + usernameOrEmail + "' OR email = '" + usernameOrEmail + "' LIMIT 1;";
+
+        ResultSet result = SQLConnector.getInstance().selectQuery(query);
+
+        try {
+            if (result != null && result.next()) {
+                String hashedPassword = result.getString("password");
+
+                if (BCrypt.checkpw(plainPassword, hashedPassword)) {
+                    int id = result.getInt("user_id");
+                    String username = result.getString("username");
+                    String email = result.getString("email");
+
+                    result.getStatement().close();
+
+                    return new User(id, username, email, hashedPassword);
+                }
+
+                result.getStatement().close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Returns null if user wasn't found or password verification failed
     }
 
     @Override

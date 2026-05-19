@@ -9,7 +9,7 @@ public class StatsTracker implements Runnable {
     private final int gameId;
 
     private boolean running = true;
-    private int lastSavedCoffees = 0;
+    private double lastSavedCoffees = 0;
 
     private final static int SLEEP_MILIS = 60000;
 
@@ -36,14 +36,14 @@ public class StatsTracker implements Runnable {
     }
 
     public void onSignificantEvent() {
-        int current = game.getNumCoffees();
+        double current = game.getNumCoffees();
         if (Math.abs(current - lastSavedCoffees) >= 50) {
             saveStat();
         }
     }
 
     private void saveStat() {
-        int coffees = game.getNumCoffees();
+        double coffees = game.getNumCoffees();
         double minute = computeMinutes();
 
         lastSavedCoffees = coffees;

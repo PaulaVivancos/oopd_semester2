@@ -95,12 +95,6 @@ public class GameController implements ActionListener, GameListener {
             SwingUtilities.invokeLater(() -> {
                 gameView.showGamesPopUp(this);
             });
-        } else if (e.getActionCommand().equals(BUY_COFFEE)) {
-            SwingUtilities.invokeLater(() -> gameView.showGamesPopUp(this));
-
-        } else if (cmd.equals(NEW_GAME)) {
-            gameView.showNewGameDialog();
-
         } else if (cmd.equals(BUY_COFFEE)) {
             handleBuyCoffee();
 
@@ -139,8 +133,6 @@ public class GameController implements ActionListener, GameListener {
         gameManager.createNewGame(userId);
         Game newGame = gameManager.getCurrentGame();
 
-
-        Game newGame = gameManager.getCurrentGame();
         newGame.addListener(this);
         setInitialConditions();
         startStatsTracker(newGame);
@@ -154,7 +146,7 @@ public class GameController implements ActionListener, GameListener {
         statsTracker = new StatsTracker(statsController, game);
         statsThread = new Thread(statsTracker);
         statsThread.start();
-        newGame.startGame();
+        //newGame.startGame();
 
         // now game exists, safe to populate and wire
         SwingUtilities.invokeLater(() -> {

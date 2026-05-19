@@ -3,11 +3,8 @@ package Business.managers;
 import Business.Exceptions.SendEmailException;
 import Business.entities.EmailService;
 import Business.entities.User;
-import Persistence.SQLDaos.UserSQLDao;
 import Persistence.UserDAO;
 import org.mindrot.jbcrypt.BCrypt;
-
-import java.sql.SQLException;
 
 /**
  * Manages user authentication and account operations, acting as the business
@@ -22,17 +19,19 @@ public class UserManager {
 
     /**
      * Constructor method to create a new User Manager
+     *
      * @param userDao the DAO used to access and modify user records
      */
     public UserManager(UserDAO userDao) {
         this.userDao = userDao;
-        emailService = new EmailService();
+        this.emailService = new EmailService();
     }
 
     /**
      * Attempts to log in with the given credentials. Sets the current user on success.
+     *
      * @param username_email the user's username or email
-     * @param password the user's password
+     * @param password       the user's password
      * @return true if credentials are valid, false otherwise
      */
     public boolean login(String username_email, String password) {
@@ -55,7 +54,7 @@ public class UserManager {
     /**
      * Logs out the current user by clearing the active session.
      */
-    public void logout(){
+    public void logout() {
         currentUser = null;
     }
 
@@ -68,9 +67,10 @@ public class UserManager {
 
     /**
      * Validates the provided registration fields and creates a new user account if valid.
-     * @param username the desired username
-     * @param email the user's email address
-     * @param password the desired password
+     *
+     * @param username              the desired username
+     * @param email                 the user's email address
+     * @param password              the desired password
      * @param password_confirmation must match password
      * @return null on success, or an error message string describing the validation failure
      */
@@ -86,31 +86,34 @@ public class UserManager {
         if (userDao.existsByEmail(email))
             return "Email is already registered.";
 
-        // Hash
+        // Hash password
         String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
-
         User user = new User(username, email, hashed);
+
+        // Call helper method to persist the user and return its result
+        return addStudent(user, username);
+    }
 
     /**
      * Sends a verification code to the given email and stores it for later validation.
      * Stores null if the email could not be reached.
-     * @param email the recipient's email address
+     * * @param email the recipient's email address
      */
     public void handleSendCode(String email) {
         try {
-            sendedCode =  emailService.sendVerificationCode(email);
-
+            sendedCode = emailService.sendVerificationCode(email);
         } catch (SendEmailException e) {
             sendedCode = null;
         }
-
     }
 
     /**
      * Persists a new user to the database.
-     * @param user the user to insert
+     * * @param user     the user to insert
+     * @param username the username to re-query the session user
+     * @return null on success, or an error string on failure
      */
-    private void addStudent(User user) {
+    private String addStudent(User user, String username) {
         try {
             userDao.insertUser(user);
         } catch (Exception e) {
@@ -119,15 +122,13 @@ public class UserManager {
         }
 
         currentUser = userDao.findByUsernameOrEmail(username);
-
         return null;
     }
 
     /**
      * Deletes the current user's account and clears the active session.
-     * @return true if the account was deleted successfully, false otherwise
+     * * @return true if the account was deleted successfully, false otherwise
      */
-
     public boolean deleteUser() {
         if (currentUser == null)
             return false;
@@ -141,7 +142,6 @@ public class UserManager {
             return false;
         }
     }
-}
 
     /**
      * @return the verification code most recently sent via email, or null if sending failed
@@ -152,10 +152,10 @@ public class UserManager {
 
     /**
      * Updates the current user's password in the database.
-     * @param oldPassword the user's current password
+     * * @param oldPassword the user's current password
      * @param newPassword the new password to set
      */
     public void changePassword(String oldPassword, String newPassword) {
-        //userDao.changePassword();
+        // userDao.changePassword();
     }
 }

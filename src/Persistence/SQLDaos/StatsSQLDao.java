@@ -10,7 +10,7 @@ import java.util.List;
 
 public class StatsSQLDao implements StatsDAO {
     @Override
-    public void insertStats(int gameId, double time, int num_coffees) {
+    public void insertStats(int gameId, double time, double num_coffees) {
         String query = "INSERT INTO statistics(game_id, minute, num_coffees) VALUES (" +
                 gameId + ", " +
                 time + ", " +

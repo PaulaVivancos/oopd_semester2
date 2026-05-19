@@ -45,7 +45,7 @@ public class StatsController implements ActionListener {
         statsView.removeComboBoxListeners(playerChangedListener, gameChangedListener);
     }
 
-    public void saveStat(int gameId, double minute, int coffees) {
+    public void saveStat(int gameId, double minute, double coffees) {
         statsManager.saveStat(gameId, minute, coffees);
     }
 
