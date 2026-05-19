@@ -93,9 +93,6 @@ public class PaintChart extends JPanel {
             worldMaxY += 1;
         }
 
-        System.out.println("Bounds:");
-        System.out.println(worldMinX + " " + worldMaxX);
-        System.out.println(worldMinY + " " + worldMaxY);
     }
 
     private void setupMouseControls() {
@@ -200,9 +197,6 @@ public class PaintChart extends JPanel {
             int y = toScreenY(s.getNumCoffees());
             g2.fillOval(x - 6, y - 6, 12, 12);
 
-            System.out.println(
-                    s.getTime() + "  " + s.getNumCoffees()
-            );
         }
 
 

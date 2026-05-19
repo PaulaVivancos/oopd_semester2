@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Presentation.views.ShopView.SAVE_GAME;
+
 /**
  * View for the upgrade shop.
  * Displays a list of purchasable upgrades with costs and purchase state.
@@ -57,8 +59,7 @@ public class UpgradeView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
-        addMenuItem(menu, "Cargar partida", e -> System.out.println("load"));
+        addMenuItem(menu, "Save game", e -> System.out.println(SAVE_GAME));
         menu.addSeparator();
         addMenuItem(menu, "Log out", e -> {
             if (logoutListener != null) logoutListener.actionPerformed(e);

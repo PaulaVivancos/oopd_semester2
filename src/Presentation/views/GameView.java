@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import static Presentation.views.ShopView.SAVE_GAME;
 import static java.lang.Math.round;
 
 /**
@@ -56,7 +57,7 @@ public class GameView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e -> System.out.println("save"));
+        addMenuItem(menu, "Save game", e-> System.out.println(SAVE_GAME));
         menu.addSeparator();
         addMenuItem(menu, "Log out", e -> {
             if(logoutListener != null)

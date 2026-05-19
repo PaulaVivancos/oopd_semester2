@@ -92,8 +92,6 @@ public class AuthController implements ActionListener {
      * Logs out the current user and redirects to the login view.
      */
     public void handleLogout(){
-        System.out.println("handleLogout called");
-
         userManager.logout();
         appController.switchCard(LOGIN);
     }

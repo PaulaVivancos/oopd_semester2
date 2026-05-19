@@ -41,7 +41,7 @@ public class ConfigView extends BaseView {
     /** Populates the top bar dropdown menu with configuration-related options. */
     @Override
     protected void buildMenu(JPopupMenu menu){
-        addMenuItem(menu, "i don't know yet", e -> System.out.println("don't know yet"));
+        //addMenuItem(menu, "i don't know yet", e -> System.out.println("don't know yet"));
     }
 
     /** Initializes all UI components for the config screen. */

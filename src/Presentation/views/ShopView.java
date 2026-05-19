@@ -33,6 +33,8 @@ public class ShopView extends BaseView {
     private List<JButton> jbBuyButtons;
     private List<JImagePanel> jipImages;
 
+    protected final static String SAVE_GAME = "SAVE_GAME";
+
     //decides how many generators there are in other parts as well
 
     private static final String[] GENERATOR_IMAGES = {
@@ -75,8 +77,7 @@ public class ShopView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
-        addMenuItem(menu, "Cargar partida", e -> System.out.println("load"));
+        addMenuItem(menu, "Save game", e -> SAVE_GAME);
         menu.addSeparator();
         addMenuItem(menu, "Log out", e -> {
             if(logoutListener != null)
