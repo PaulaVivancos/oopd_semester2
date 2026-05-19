@@ -79,9 +79,7 @@ public class GameController implements ActionListener, GameListener {
         upgradeView.addBackListener(e -> appController.goBack());
         upgradeView.addBuyUpgradeListener(this);
 
-
         shopView.addBackListener(e -> appController.goBack());
-
 
     }
 
@@ -100,13 +98,16 @@ public class GameController implements ActionListener, GameListener {
 
         } else if (cmd.equals(GO_SHOP)) {
             appController.switchCard(SHOP);
+            if (gameManager.getCurrentGame() != null) {
+                refreshShopView(gameManager.getCurrentGame().getNumCoffees());
+            }
 
         } else {
             try {
                 int i = Integer.parseInt(cmd);
                 if (i >= 0 && i < UpgradeView.UPGRADES.length && gameManager.buyUpgrade(UpgradeView.UPGRADES[i])) {
                     double coffees = gameManager.getCurrentGame().getCoffees();
-                    SwingUtilities.invokeLater(() -> { gameView.updateCounter(coffees); refreshUpgradeView(coffees); });
+                    SwingUtilities.invokeLater(() -> { gameView.updateCounter(coffees);refreshUpgradeView(coffees); });
                 }
             } catch (NumberFormatException ignored) { }
         }
@@ -130,6 +131,7 @@ public class GameController implements ActionListener, GameListener {
         int userId = userManager.getCurrentUser().getId();
         appController.showInfoPopUp(NEW_GAME, CREATING_NEW_GAME);
 
+
         gameManager.createNewGame(userId);
         Game newGame = gameManager.getCurrentGame();
 
@@ -146,7 +148,7 @@ public class GameController implements ActionListener, GameListener {
         statsTracker = new StatsTracker(statsController, game);
         statsThread = new Thread(statsTracker);
         statsThread.start();
-        //newGame.startGame();
+        game.startGame();
 
         // now game exists, safe to populate and wire
         SwingUtilities.invokeLater(() -> {

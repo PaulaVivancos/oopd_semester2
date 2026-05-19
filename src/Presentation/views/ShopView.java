@@ -45,7 +45,7 @@ public class ShopView extends BaseView {
 
 
     //TODO: link this to actual mechanism
-    private final int[] ownedCounts = {0, 0, 0,0};
+    private final int[] ownedCounts = {0, 0, 0, 0};
 
     // COLOR CONSTANTS
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
@@ -62,6 +62,27 @@ public class ShopView extends BaseView {
 
     public ShopView() {
         super();
+
+        for (int i = 0; i < jbBuyButtons.size(); i++) {
+            JButton buyBtn = jbBuyButtons.get(i);
+
+            // 1. Aplicamos el estilo correcto al botón
+            styleButton(buyBtn, DIM_BUY_BUTTON);
+
+            // 2. Buscamos el panel de la fila
+            Container row = buyBtn.getParent().getParent();
+            if (row instanceof JPanel) {
+                JPanel panelRow = (JPanel) row;
+
+                // Si el botón está desactivado al inicio, ponemos el fondo deshabilitado
+                panelRow.setBackground(buyBtn.isEnabled() ? BACKGROUND_ROW : BACKGROUND_ROW_DISABLED);
+
+                panelRow.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(0, 0, 2, 0, BACKGROUND_BUTTON),
+                        BorderFactory.createEmptyBorder(10, 14, 10, 14)
+                ));
+            }
+        }
     }
 
     //Menu stuff
@@ -77,7 +98,7 @@ public class ShopView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e -> SAVE_GAME);
+        addMenuItem(menu, "Save game", e -> System.out.println(SAVE_GAME));
         menu.addSeparator();
         addMenuItem(menu, "Log out", e -> {
             if(logoutListener != null)
@@ -157,12 +178,13 @@ public class ShopView extends BaseView {
      */
     private JPanel buildGeneratorRow(int index) {
         JPanel row = new JPanel(new BorderLayout(10, 0));
-        row.setBackground(BACKGROUND_ROW);
         row.setOpaque(true);
         row.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 2, 0, BACKGROUND_BUTTON),
                 BorderFactory.createEmptyBorder(10, 14, 10, 14)
         ));
+
+
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
 
         JImagePanel img = new JImagePanel(null);
@@ -203,8 +225,7 @@ public class ShopView extends BaseView {
         infoPanel.add(ownedLabel);
 
         JButton buyBtn = new JButton("BUY");
-        styleButton(buyBtn, DIM_BUY_BUTTON);
-        buyBtn.setEnabled(true);
+        buyBtn.setEnabled(false);
         jbBuyButtons.add(buyBtn);
 
         JPanel eastPanel = new JPanel(new GridBagLayout());
@@ -233,16 +254,23 @@ public class ShopView extends BaseView {
         button.setOpaque(true);
         button.setContentAreaFilled(true);
         button.setBorderPainted(false);
+        button.setFocusPainted(false);
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (button.isEnabled()) button.setBackground(BACKGROUND_BUTTON_PRESSED);
+                if (button.isEnabled()) {
+                    button.setBackground(BACKGROUND_BUTTON_PRESSED);
+                    button.setForeground(Color.BLACK);
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (button.isEnabled()) button.setBackground(BACKGROUND_BUTTON);
+                if (button.isEnabled()) {
+                    button.setBackground(BACKGROUND_BUTTON);
+                    button.setForeground(Color.WHITE);
+                }
             }
         });
     }
@@ -303,5 +331,3 @@ public class ShopView extends BaseView {
     //TODO: move to logic?
 
 }
-
-

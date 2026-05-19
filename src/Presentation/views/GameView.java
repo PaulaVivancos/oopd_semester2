@@ -44,6 +44,10 @@ public class GameView extends BaseView {
 
     public GameView() {
         super(); // initMenu() + initComponents()
+
+        setButton(jbBuy, DIMENSION_BUTTON);
+        setButton(jbGen, DIMENSION_BUTTON);
+        setButton(jbUpg, DIMENSION_BUTTON);
     }
 
     private ActionListener logoutListener;
@@ -107,10 +111,6 @@ public class GameView extends BaseView {
         jbGen = new JButton("GENERATORS");
         jbGen.setActionCommand(GO_SHOP);
         jbUpg = new JButton("UPGRADES");
-
-        setButton(jbBuy, DIMENSION_BUTTON);
-        setButton(jbGen, DIMENSION_BUTTON);
-        setButton(jbUpg, DIMENSION_BUTTON);
 
         // Sets everything
         setJipMain();
@@ -336,13 +336,13 @@ public class GameView extends BaseView {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setMaximumSize(new Dimension(200, 45));
+
+        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
         button.setBackground(BACKGROUND_BUTTON);
         button.setForeground(Color.WHITE);
+        button.setContentAreaFilled(true);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
-        button.setBorderPainted(false);
-        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        button.setOpaque(false);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
 

@@ -14,7 +14,6 @@ import java.awt.event.MouseEvent;
  */
 public class ConfigView extends BaseView {
     private final String PROFILE_PICTURE_URL = "resources/profile_picture.png";
-    private final String BACKGROUND_URL = "resources/background.jpg";
 
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
@@ -25,17 +24,19 @@ public class ConfigView extends BaseView {
     private JImagePanel ipProfile;
     private JPanel mainPanel;
     private JPanel buttonsPanel, centralPanel;
-    private JButton jbLanguage, jbLogOut, jbDeleteAccount;
+    private JButton jbLogOut, jbDeleteAccount;
 
     private ActionListener logoutListener;
     private ActionListener deleteListener;
-    private ActionListener backListener;
 
     public void addLogoutListener(ActionListener l)  { this.logoutListener = l; }
     public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
 
     public ConfigView() {
         super();
+
+        setLogOutButton();
+        setDeleteAccountButton();
     }
 
     /** Populates the top bar dropdown menu with configuration-related options. */
@@ -54,7 +55,6 @@ public class ConfigView extends BaseView {
         ipProfile = new JImagePanel(PROFILE_PICTURE_URL);
         buttonsPanel = new JPanel();
 
-        jbLanguage = new JButton("LANGUAGE");
         jbLogOut = new JButton("LOG OUT");
         jbDeleteAccount = new JButton("DELETE ACCOUNT");
 
@@ -97,12 +97,6 @@ public class ConfigView extends BaseView {
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setOpaque(false);
 
-        setLanguageButton();
-        setLogOutButton();
-        setDeleteAccountButton();
-
-        buttonsPanel.add(jbLanguage);
-        buttonsPanel.add(Box.createVerticalStrut(30));
         buttonsPanel.add(jbLogOut);
         buttonsPanel.add(Box.createVerticalStrut(30));
         buttonsPanel.add(jbDeleteAccount);
@@ -111,42 +105,33 @@ public class ConfigView extends BaseView {
         buttonsPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
     }
 
-    /** Configures the appearance and press effect of the language button. */
-    private void setLanguageButton() {
-        jbLanguage.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-        jbLanguage.setAlignmentX(Component.CENTER_ALIGNMENT);
-        jbLanguage.setBackground(BACKGROUND_BUTTON);
-        jbLanguage.setOpaque(true);
-        jbLanguage.setContentAreaFilled(true);
-
-        jbLanguage.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                jbLanguage.setBackground(BACKGROUND_BUTTON_PRESSED);
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                jbLanguage.setBackground(BACKGROUND_BUTTON);
-            }
-        });
-    }
-
     /** Configures the appearance, press effect, and logout action of the log out button. */
     private void setLogOutButton() {
+        jbLogOut.setPreferredSize(new Dimension(200, 50));
+        jbLogOut.setMaximumSize(new Dimension(200, 50));
+        jbLogOut.setMinimumSize(new Dimension(200, 50));
+
         jbLogOut.setFont(new Font("Times New Roman", Font.PLAIN, 25));
         jbLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+        jbLogOut.setForeground(Color.WHITE);
         jbLogOut.setBackground(BACKGROUND_BUTTON);
         jbLogOut.setOpaque(true);
         jbLogOut.setContentAreaFilled(true);
+        jbLogOut.setFocusPainted(false);
+        jbLogOut.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
 
         jbLogOut.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 jbLogOut.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbLogOut.setForeground(Color.BLACK);
+                jbLogOut.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
             }
             @Override
             public void mouseReleased(MouseEvent e) {
                 jbLogOut.setBackground(BACKGROUND_BUTTON);
+                jbLogOut.setForeground(Color.WHITE);
+                jbLogOut.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
             }
         });
 
@@ -156,20 +141,31 @@ public class ConfigView extends BaseView {
 
     /** Configures the appearance, press effect, and delete action of the delete account button. */
     private void setDeleteAccountButton() {
+        jbDeleteAccount.setPreferredSize(new Dimension(300, 50));
+        jbDeleteAccount.setMaximumSize(new Dimension(300, 50));
+        jbDeleteAccount.setMinimumSize(new Dimension(300, 50));
+
         jbDeleteAccount.setFont(new Font("Times New Roman", Font.PLAIN, 25));
         jbDeleteAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
+        jbDeleteAccount.setForeground(Color.WHITE);
         jbDeleteAccount.setBackground(BACKGROUND_BUTTON);
         jbDeleteAccount.setOpaque(true);
         jbDeleteAccount.setContentAreaFilled(true);
+        jbDeleteAccount.setFocusPainted(false);
+        jbDeleteAccount.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
 
         jbDeleteAccount.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 jbDeleteAccount.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbDeleteAccount.setForeground(Color.BLACK);
+                jbDeleteAccount.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
             }
             @Override
             public void mouseReleased(MouseEvent e) {
                 jbDeleteAccount.setBackground(BACKGROUND_BUTTON);
+                jbDeleteAccount.setForeground(Color.WHITE);
+                jbDeleteAccount.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
             }
         });
 

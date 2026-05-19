@@ -49,6 +49,23 @@ public class UpgradeView extends BaseView {
 
     public UpgradeView() {
         super();
+
+        for (int i = 0; i < jbBuyButtons.size(); i++) {
+            JButton buyBtn = jbBuyButtons.get(i);
+
+            styleButton(buyBtn, DIM_BUY_BUTTON);
+
+            // 2. Estilo de la fila contenedora (buyBtn -> eastPanel -> row)
+            Container row = buyBtn.getParent().getParent();
+            if (row instanceof JPanel) {
+                JPanel panelRow = (JPanel) row;
+                panelRow.setBackground(BACKGROUND_ROW);
+                panelRow.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createMatteBorder(0, 0, 2, 0, BACKGROUND_BUTTON),
+                        BorderFactory.createEmptyBorder(10, 14, 10, 14)
+                ));
+            }
+        }
     }
 
     public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
@@ -114,12 +131,7 @@ public class UpgradeView extends BaseView {
         Upgrade upg = UPGRADES[index];
 
         JPanel row = new JPanel(new BorderLayout(10, 0));
-        row.setBackground(BACKGROUND_ROW);
         row.setOpaque(true);
-        row.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0, 0, 2, 0, BACKGROUND_BUTTON),
-                BorderFactory.createEmptyBorder(10, 14, 10, 14)
-        ));
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
 
         JLabel nameLabel = new JLabel(upg.getName());
@@ -166,16 +178,23 @@ public class UpgradeView extends BaseView {
         button.setOpaque(true);
         button.setContentAreaFilled(true);
         button.setBorderPainted(false);
+        button.setFocusPainted(false);
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (button.isEnabled()) button.setBackground(BACKGROUND_BUTTON_PRESSED);
+                if (button.isEnabled()) {
+                    button.setBackground(BACKGROUND_BUTTON_PRESSED);
+                    button.setForeground(Color.BLACK); // El texto cambia a negro para contrastar
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (button.isEnabled()) button.setBackground(BACKGROUND_BUTTON);
+                if (button.isEnabled()) {
+                    button.setBackground(BACKGROUND_BUTTON);
+                    button.setForeground(Color.WHITE); // Vuelve a blanco
+                }
             }
         });
     }
