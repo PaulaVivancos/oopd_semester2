@@ -156,6 +156,7 @@ public class ForgotPasswordView extends JPanel {
      */
     private void setValidateCodePanel() {
         jpValidateCode = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        jpValidateCode.setOpaque(false);
 
         jbValidateCode.setPreferredSize(DIMENSION_BUTTON_LOGIN);
         jbValidateCode.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -164,20 +165,26 @@ public class ForgotPasswordView extends JPanel {
         jbValidateCode.setBackground(BACKGROUND_BUTTON);
         jbValidateCode.setOpaque(true);
         jbValidateCode.setContentAreaFilled(true);
+        jbValidateCode.setFocusPainted(false);
+        jbValidateCode.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
 
-        jpValidateCode.setOpaque(false);
         jpValidateCode.add(jbValidateCode);
 
         jbValidateCode.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 jbValidateCode.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbValidateCode.setForeground(Color.BLACK);
+                jbValidateCode.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
             }
             @Override
             public void mouseReleased(MouseEvent e) {
                 jbValidateCode.setBackground(BACKGROUND_BUTTON);
+                jbValidateCode.setForeground(Color.WHITE);
+                jbValidateCode.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
             }
         });
+
     }
 
     /**
@@ -202,9 +209,28 @@ public class ForgotPasswordView extends JPanel {
         jbBackLogIn.setMaximumSize(DIMENSION_BUTTON_SIGNIN);
         jbBackLogIn.setAlignmentX(Component.CENTER_ALIGNMENT);
         jbBackLogIn.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+        jbBackLogIn.setForeground(Color.WHITE);
         jbBackLogIn.setBackground(BACKGROUND_BUTTON);
         jbBackLogIn.setOpaque(true);
         jbBackLogIn.setContentAreaFilled(true);
+        jbBackLogIn.setFocusPainted(false);
+        jbBackLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
+        jbBackLogIn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                jbBackLogIn.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbBackLogIn.setForeground(Color.BLACK);
+                jbBackLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                jbBackLogIn.setBackground(BACKGROUND_BUTTON);
+                jbBackLogIn.setForeground(Color.WHITE);
+                jbBackLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+            }
+        });
     }
 
     /**
@@ -269,10 +295,7 @@ public class ForgotPasswordView extends JPanel {
         button.setMaximumSize(new Dimension(200, 55));
         button.setBackground(Color.WHITE);
         button.setForeground(BACKGROUND_BUTTON);
-        button.setOpaque(true);
-        button.setContentAreaFilled(true);
         button.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        button.setOpaque(false);
 
         return button;
     }

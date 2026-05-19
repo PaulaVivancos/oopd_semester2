@@ -81,9 +81,6 @@ public class GameController implements ActionListener, GameListener {
             appController.switchCard(GAME);
             SwingUtilities.invokeLater(() -> gameView.showGamesPopUp(this));
 
-        } else if (cmd.equals(NEW_GAME)) {
-            gameView.showNewGameDialog();
-
         } else if (cmd.equals(BUY_COFFEE)) {
             handleBuyCoffee();
 

@@ -36,7 +36,6 @@ public class GameView extends BaseView {
 
     public static final String NEW_GAME = "NEW_GAME";
     public static final String LOAD_GAME = "LOAD_GAME";
-    public static final String VIEW_GAME = "VIEW_GAME";
     public static final String BUY_COFFEE = "BUY_COFFEE";
     public static final String GO_SHOP = "GO_TO_SHOP";
 
@@ -49,15 +48,14 @@ public class GameView extends BaseView {
     private ActionListener deleteListener;
     private ActionListener newGameListener;
     private ActionListener loadGameListener;
-    private ActionListener viewGameListener;
 
     /**
      * Populates the top bar menu with save/load game options and account actions.
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
-        addMenuItem(menu, "Cargar partida", e -> System.out.println("load"));
+        addMenuItem(menu, "Save game", e -> System.out.println("save"));
+        addMenuItem(menu, "Load game", e -> System.out.println("load"));
         menu.addSeparator();
         addMenuItem(menu, "Log out", e -> {
             if(logoutListener != null)
@@ -108,6 +106,10 @@ public class GameView extends BaseView {
         jbGen.setActionCommand(GO_SHOP);
         jbUpg = new JButton("UPGRADES");
 
+        setButton(jbBuy, DIMENSION_BUTTON);
+        setButton(jbGen, DIMENSION_BUTTON);
+        setButton(jbUpg, DIMENSION_BUTTON);
+
         // Sets everything
         setJipMain();
     }
@@ -129,7 +131,6 @@ public class GameView extends BaseView {
         mainPanel.add(jpBot, BorderLayout.SOUTH);
         mainPanel.add(jpEast, BorderLayout.EAST);
         mainPanel.add(jpWest, BorderLayout.WEST);
-
 
         addToCenter(mainPanel);
     }
@@ -209,10 +210,6 @@ public class GameView extends BaseView {
         jpEast.setOpaque(false);
         jpEast.setBorder(BorderFactory.createEmptyBorder(40, 20, 40, 60));
 
-        setButton(jbBuy, DIMENSION_BUTTON);
-        setButton(jbGen, DIMENSION_BUTTON);
-        setButton(jbUpg, DIMENSION_BUTTON);
-
         jpEast.add(jbBuy);
         jpEast.add(Box.createVerticalStrut(20));
         jpEast.add(jbGen);
@@ -244,25 +241,34 @@ public class GameView extends BaseView {
      * Applies consistent size, color, and press effect styling to a button.
      */
     private void setButton(JButton button, Dimension dimension) {
+        button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
+
         button.setPreferredSize(dimension);
         button.setMinimumSize(dimension);
         button.setMaximumSize(dimension);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+        button.setForeground(Color.WHITE);
         button.setBackground(BACKGROUND_BUTTON);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
-        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 button.setBackground(BACKGROUND_BUTTON_PRESSED);
+                button.setForeground(Color.BLACK);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
             }
-
             @Override
             public void mouseReleased(MouseEvent e) {
                 button.setBackground(BACKGROUND_BUTTON);
+                button.setForeground(Color.WHITE);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
             }
         });
     }
@@ -290,7 +296,6 @@ public class GameView extends BaseView {
 
         JButton newGame = createDialogButton("NEW GAME");
         JButton loadGame = createDialogButton("LOAD GAME");
-        JButton viewGame = createDialogButton("VIEW GAME");
 
         newGame.setActionCommand(NEW_GAME);
         newGame.addActionListener(e -> {
@@ -308,71 +313,17 @@ public class GameView extends BaseView {
             }
         });
 
-        viewGame.setActionCommand(VIEW_GAME);
-        viewGame.addActionListener(e -> {
-            dialog.dispose();
-            if (viewGameListener != null) {
-                viewGameListener.actionPerformed(e);
-            }
-        });
-
         dialogContent.add(title);
         dialogContent.add(Box.createVerticalStrut(15));
         dialogContent.add(newGame);
         dialogContent.add(Box.createVerticalStrut(10));
         dialogContent.add(loadGame);
         dialogContent.add(Box.createVerticalStrut(10));
-        dialogContent.add(viewGame);
 
         dialog.add(dialogContent);
         dialog.pack();
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
-    }
-
-    /**
-     * Opens a modal dialog prompting the user to enter a name for a new game.
-     */
-    public void showNewGameDialog() {
-        JDialog dialog = new JDialog();
-        dialog.setUndecorated(true);
-
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBackground(BACKGROUND_BUTTON);
-        content.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2),
-                BorderFactory.createEmptyBorder(20, 30, 20, 30)
-        ));
-
-        JLabel title = new JLabel("CREATING NEW GAME");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font("Times New Roman", Font.BOLD, 20));
-
-        JTextField nameField = new JTextField();
-        nameField.setMaximumSize(new Dimension(300, 40));
-        nameField.setPreferredSize(new Dimension(300, 40));
-        nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JButton startGame = createDialogButton("START GAME");
-        startGame.addActionListener(e -> {
-            String gameName = nameField.getText();
-            dialog.dispose();
-            // usa gameName para lo que necesites
-        });
-
-        content.add(title);
-        content.add(Box.createVerticalStrut(20));
-        content.add(nameField);
-        content.add(Box.createVerticalStrut(20));
-        content.add(startGame);
-
-        dialog.add(content);
-        dialog.pack();
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-        dialog.setModal(true);
     }
 
     /**
@@ -382,12 +333,30 @@ public class GameView extends BaseView {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setMaximumSize(new Dimension(200, 55));
-        button.setBackground(Color.WHITE);
-        button.setForeground(BACKGROUND_BUTTON);
+        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
+
+        button.setForeground(Color.WHITE);
+        button.setBackground(BACKGROUND_BUTTON);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
-        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        button.setOpaque(false);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                button.setBackground(Color.WHITE);
+                button.setForeground(Color.BLACK);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                button.setBackground(BACKGROUND_BUTTON);
+                button.setForeground(Color.WHITE);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+            }
+        });
 
         return button;
     }
@@ -410,10 +379,6 @@ public class GameView extends BaseView {
 
     public void addLoadGameListener(ActionListener actionListener) {
         this.loadGameListener = actionListener;
-    }
-
-    public void addViewGameListener(ActionListener actionListener) {
-        this.viewGameListener = actionListener;
     }
 
 

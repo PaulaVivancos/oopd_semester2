@@ -16,7 +16,6 @@ public class MenuView extends JPanel {
     private JPanel jpTop, jpCentre, jpBot;
     private JImagePanel jipTitleTop, jipTitleBottom, jipCoffeeCup;
     private JButton jbPlay, jbStats, jbConfig, jbLogOut;
-    JButton newGame, loadGame, viewGame;
 
     //DIMENSION CONSTANTS
     private final Dimension DIMENSION_BUTTON = new Dimension(150, 50);
@@ -55,9 +54,6 @@ public class MenuView extends JPanel {
         jbStats   = new JButton("STATS");
         jbConfig  = new JButton("CONFIG");
         jbLogOut  = new JButton("LOG OUT");
-        newGame = createDialogButton("NEW GAME");
-        loadGame = createDialogButton("LOAD GAME");
-        viewGame = createDialogButton("VIEW GAME");
 
         jbPlay.setActionCommand(GO_GAME);
         jbStats.setActionCommand(GO_STATS);
@@ -166,24 +162,6 @@ public class MenuView extends JPanel {
     }
 
     /**
-     * Creates a styled dialog-style button with the given label.
-     */
-    private JButton createDialogButton(String title) {
-        JButton button = new JButton(title);
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setMaximumSize(new Dimension(200, 45));
-        button.setBackground(BACKGROUND_BUTTON);
-        button.setForeground(Color.WHITE);
-        button.setOpaque(true);
-        button.setContentAreaFilled(true);
-        button.setBorderPainted(false);
-        button.setFont(new Font("Times New Roman", Font.BOLD, 16));
-        button.setOpaque(false);
-
-        return button;
-    }
-
-    /**
      * Applies consistent size, color, and alignment styling to a button.
      */
     private void setButton(JButton button, Dimension dimension) {
@@ -192,7 +170,6 @@ public class MenuView extends JPanel {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setAlignmentY(Component.CENTER_ALIGNMENT);
 
-        button.setOpaque(true);
         button.setForeground(Color.WHITE);
         button.setBackground(BACKGROUND_BUTTON);
         button.setOpaque(true);
