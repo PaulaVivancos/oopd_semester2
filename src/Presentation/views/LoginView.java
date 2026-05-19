@@ -21,7 +21,7 @@ public class LoginView extends JPanel {
     //DIMENSION CONSTANTS
     private final Dimension DIMENSION_TEXTFIELD = new Dimension(300, 50);
     private final Dimension DIMENSION_BUTTON_LOGIN = new Dimension(150, 40);
-    private final Dimension DIMENSION_BUTTON_SIGNIN = new Dimension(250, 50);
+    private final Dimension DIMENSION_BUTTON_SIGNIN = new Dimension(280, 50);
 
     //COLOR CONSTANTS
     private final Color BACKGROUND_BUTTON = new Color(103, 51, 25);
@@ -201,24 +201,32 @@ public class LoginView extends JPanel {
      */
     private void setLogInPanel() {
         jpLogin = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        jpLogin.setOpaque(false);
 
         jbLogIn.setPreferredSize(DIMENSION_BUTTON_LOGIN);
         jbLogIn.setAlignmentX(Component.CENTER_ALIGNMENT);
         jbLogIn.setAlignmentY(Component.CENTER_ALIGNMENT);
         jbLogIn.setForeground(Color.WHITE);
         jbLogIn.setBackground(BACKGROUND_BUTTON);
-        jpLogin.setOpaque(false);
         jbLogIn.setOpaque(true);
         jbLogIn.setContentAreaFilled(true);
+        jbLogIn.setFocusPainted(false);
+        jbLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
         jpLogin.add(jbLogIn);
+
         jbLogIn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 jbLogIn.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbLogIn.setForeground(Color.BLACK);
+                jbLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
             }
             @Override
             public void mouseReleased(MouseEvent e) {
                 jbLogIn.setBackground(BACKGROUND_BUTTON);
+                jbLogIn.setForeground(Color.WHITE);
+                jbLogIn.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
             }
         });
     }
@@ -247,9 +255,27 @@ public class LoginView extends JPanel {
         jbSignUp.setMaximumSize(DIMENSION_BUTTON_SIGNIN);
         jbSignUp.setAlignmentX(Component.CENTER_ALIGNMENT);
         jbSignUp.setAlignmentY(Component.CENTER_ALIGNMENT);
+        jbSignUp.setForeground(Color.WHITE);
         jbSignUp.setBackground(BACKGROUND_BUTTON);
         jbSignUp.setOpaque(true);
         jbSignUp.setContentAreaFilled(true);
+        jbSignUp.setFocusPainted(false);
+        jbSignUp.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
+        jbSignUp.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                jbSignUp.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbSignUp.setForeground(Color.BLACK);
+                jbSignUp.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                jbSignUp.setBackground(BACKGROUND_BUTTON);
+                jbSignUp.setForeground(Color.WHITE);
+                jbSignUp.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+            }
+        });
     }
 
     /**
@@ -260,9 +286,27 @@ public class LoginView extends JPanel {
         jbForgotPassword.setMaximumSize(DIMENSION_BUTTON_LOGIN);
         jbForgotPassword.setAlignmentX(Component.CENTER_ALIGNMENT);
         jbForgotPassword.setAlignmentY(Component.CENTER_ALIGNMENT);
+        jbForgotPassword.setForeground(Color.WHITE);
         jbForgotPassword.setBackground(BACKGROUND_BUTTON);
         jbForgotPassword.setOpaque(true);
         jbForgotPassword.setContentAreaFilled(true);
+        jbForgotPassword.setFocusPainted(false);
+        jbForgotPassword.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
+        jbForgotPassword.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                jbForgotPassword.setBackground(BACKGROUND_BUTTON_PRESSED);
+                jbForgotPassword.setForeground(Color.BLACK);
+                jbForgotPassword.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                jbForgotPassword.setBackground(BACKGROUND_BUTTON);
+                jbForgotPassword.setForeground(Color.WHITE);
+                jbForgotPassword.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+            }
+        });
     }
 
     public void showError(String message) {
