@@ -144,11 +144,10 @@ public class AuthController implements ActionListener {
      */
     public void handleValidateCode() {
         String sendedCode = userManager.getSendCode();
-        if (sendedCode.equals(forgotPasswordView.getCode())) {
+        if (forgotPasswordView.getCode() != null && sendedCode != null && forgotPasswordView.getCode().equals(sendedCode)) {
             forgotPasswordView.showChangePassword(() -> {
                 handleChangePassword();
             });
-
         } else {
             forgotPasswordView.showError("This code is incorrect. Please try again.");
         }

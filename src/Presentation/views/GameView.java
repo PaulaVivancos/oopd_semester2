@@ -108,6 +108,10 @@ public class GameView extends BaseView {
         jbGen.setActionCommand(GO_SHOP);
         jbUpg = new JButton("UPGRADES");
 
+        setButton(jbBuy, DIMENSION_BUTTON);
+        setButton(jbGen, DIMENSION_BUTTON);
+        setButton(jbUpg, DIMENSION_BUTTON);
+
         // Sets everything
         setJipMain();
     }
@@ -209,10 +213,6 @@ public class GameView extends BaseView {
         jpEast.setOpaque(false);
         jpEast.setBorder(BorderFactory.createEmptyBorder(40, 20, 40, 60));
 
-        setButton(jbBuy, DIMENSION_BUTTON);
-        setButton(jbGen, DIMENSION_BUTTON);
-        setButton(jbUpg, DIMENSION_BUTTON);
-
         jpEast.add(jbBuy);
         jpEast.add(Box.createVerticalStrut(20));
         jpEast.add(jbGen);
@@ -244,25 +244,35 @@ public class GameView extends BaseView {
      * Applies consistent size, color, and press effect styling to a button.
      */
     private void setButton(JButton button, Dimension dimension) {
+        button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
+
         button.setPreferredSize(dimension);
         button.setMinimumSize(dimension);
         button.setMaximumSize(dimension);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+        button.setForeground(Color.WHITE);
         button.setBackground(BACKGROUND_BUTTON);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
-        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 button.setBackground(BACKGROUND_BUTTON_PRESSED);
+                button.setForeground(Color.BLACK);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 button.setBackground(BACKGROUND_BUTTON);
+                button.setForeground(Color.WHITE);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
             }
         });
     }
@@ -319,6 +329,9 @@ public class GameView extends BaseView {
         dialog.setVisible(true);
     }
 
+    /**
+     * Creates a styled dialog button with the given label.
+     */
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -330,6 +343,24 @@ public class GameView extends BaseView {
         button.setBorderPainted(false);
         button.setFont(new Font("Times New Roman", Font.BOLD, 16));
         button.setOpaque(false);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                button.setBackground(Color.WHITE);
+                button.setForeground(Color.BLACK);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON, 2));
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                button.setBackground(BACKGROUND_BUTTON);
+                button.setForeground(Color.WHITE);
+                button.setBorder(BorderFactory.createLineBorder(BACKGROUND_BUTTON_PRESSED, 2));
+            }
+        });
 
         return button;
     }
@@ -354,9 +385,6 @@ public class GameView extends BaseView {
         this.loadGameListener = actionListener;
     }
 
-    public void addViewGameListener(ActionListener actionListener) {
-        this.viewGameListener = actionListener;
-    }
 
 
     // Getters
