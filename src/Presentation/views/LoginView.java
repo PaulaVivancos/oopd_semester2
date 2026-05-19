@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * View for the login screen.
+ * Provides username/email and password fields with login, sign-up, and forgot-password actions.
+ */
 public class LoginView extends JPanel {
     private JImagePanel jpiMain;
     private JPanel jpCentral, jpUsername, jpPassword, jpButtons, jpLogin;
@@ -26,7 +30,7 @@ public class LoginView extends JPanel {
     // ACTION COMMANDS CONSTANTS
     public static final String LOGIN_USER = "LOGIN_USER";
     public static final String GO_REGISTER = "GO_TO_REGISTER";
-    public static final String FORGOT_PASSWORD = "FORGOT_PASSWORD";
+    public static final String GO_FORGOT_PASSWORD = "GO_TO_FORGOT_PASSWORD";
 
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
@@ -53,7 +57,7 @@ public class LoginView extends JPanel {
         // ATTACH ACTION COMMANDS
         jbLogIn.setActionCommand(LOGIN_USER);
         jbSignUp.setActionCommand(GO_REGISTER);
-        jbForgotPassword.setActionCommand(FORGOT_PASSWORD);
+        jbForgotPassword.setActionCommand(GO_FORGOT_PASSWORD);
 
         //Text fields
         jtfUsername = new JTextField();
@@ -62,6 +66,9 @@ public class LoginView extends JPanel {
         setMainPanel();
     }
 
+    /**
+     * Assembles the background panel with title, input fields, and bottom buttons.
+     */
     private void setMainPanel() {
         setTitle();
         setCenterPanel();
@@ -76,12 +83,18 @@ public class LoginView extends JPanel {
         add(jpiMain, BorderLayout.CENTER);
     }
 
+    /**
+     * Styles and centers the title label.
+     */
     private void setTitle() {
         jlTitle.setFont(new Font("Times New Roman", Font.BOLD, 50));
         jlTitle.setBorder(BorderFactory.createEmptyBorder(50, 50, 10, 50));
         jlTitle.setHorizontalAlignment(JLabel.CENTER);
     }
 
+    /**
+     * Lays out the username, password, and login button panels vertically.
+     */
     private void setCenterPanel() {
         setUsernamePanel();
         setPasswordPanel();
@@ -99,6 +112,9 @@ public class LoginView extends JPanel {
         jpCentral.add(jpLogin);
     }
 
+    /**
+     * Builds the username field panel with its label.
+     */
     private void setUsernamePanel() {
         jpUsername.setLayout(new BoxLayout(jpUsername, BoxLayout.Y_AXIS));
         jpUsername.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -113,6 +129,9 @@ public class LoginView extends JPanel {
         jpUsername.add(jtfUsername);
     }
 
+    /**
+     * Builds the password field panel with its label.
+     */
     private void setPasswordPanel() {
         jpPassword.setLayout(new BoxLayout(jpPassword, BoxLayout.Y_AXIS));
         jpPassword.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -127,6 +146,9 @@ public class LoginView extends JPanel {
         jpPassword.add(jtfPassword);
     }
 
+    /**
+     * Configures the appearance and focus color effects of the username text field.
+     */
     private void setUsernameTextField() {
         jtfUsername.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfUsername.setPreferredSize(DIMENSION_TEXTFIELD);
@@ -149,6 +171,9 @@ public class LoginView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
         }
 
+    /**
+     * Configures the appearance and focus color effects of the password field.
+     */
     private void setPasswordTextField() {
         jtfPassword.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfPassword.setPreferredSize(DIMENSION_TEXTFIELD);
@@ -171,6 +196,9 @@ public class LoginView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
     }
 
+    /**
+     * Builds and styles the log-in button panel.
+     */
     private void setLogInPanel() {
         jpLogin = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
@@ -195,6 +223,9 @@ public class LoginView extends JPanel {
         });
     }
 
+    /**
+     * Arranges the sign-up and forgot-password buttons at the bottom with spacing.
+     */
     private void setButtons() {
         jpButtons.setLayout(new BoxLayout(jpButtons, BoxLayout.Y_AXIS));
         jpButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
@@ -208,6 +239,9 @@ public class LoginView extends JPanel {
         jpButtons.add(jbForgotPassword);
     }
 
+    /**
+     * Configures the size and alignment of the sign-up button.
+     * */
     private void setSignInButton() {
         jbSignUp.setPreferredSize(DIMENSION_BUTTON_SIGNIN);
         jbSignUp.setMaximumSize(DIMENSION_BUTTON_SIGNIN);
@@ -218,6 +252,9 @@ public class LoginView extends JPanel {
         jbSignUp.setContentAreaFilled(true);
     }
 
+    /**
+     * Configures the size and alignment of the forgot-password button.
+     */
     private void setForgotPasswordButton() {
         jbForgotPassword.setPreferredSize(DIMENSION_BUTTON_LOGIN);
         jbForgotPassword.setMaximumSize(DIMENSION_BUTTON_LOGIN);

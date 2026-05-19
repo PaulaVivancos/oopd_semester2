@@ -1,0 +1,85 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"1cf1f343-2117-48eb-b1c2-4bebdd4ca5f1\" name=\"Changes\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/modules.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/modules.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Business/entities/Game.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Business/entities/Game.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Business/entities/Generator.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Business/entities/Generator.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Business/entities/GeneratorType.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Business/entities/GeneratorType.java\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Presentation/controllers/GameController.java\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Presentation/controllers/GameController.java\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"master\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 1\n}</component>\n  <component name=\"ProjectId\" id=\"3CLq7ut32qVIQq3X1DBpzj9gSM7\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"Application.Main.executor\": \"Run\",\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\n    \"RunOnceActivity.git.unshallow\": \"true\",\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\n    \"git-widget-placeholder\": \"StefanGameThread\",\n    \"kotlin-language-version-configured\": \"true\",\n    \"last_opened_file_path\": \"/Users/abr/Documents/2n year/OOPD/projectfinal2pls/oopd_semester2\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"project.structure.last.edited\": \"SDKs\",\n    \"project.structure.proportion\": \"0.15\",\n    \"project.structure.side.proportion\": \"0.2\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RunManager\">\n    <configuration name=\"Main\" type=\"Application\" factoryName=\"Application\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"Main\" />\n      <module name=\"oopd_semester2\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Application.Main\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169\" />\n        <option value=\"bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"1cf1f343-2117-48eb-b1c2-4bebdd4ca5f1\" name=\"Changes\" comment=\"\" />\n      <created>1776175033692</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1776175033692</updated>\n      <workItem from=\"1776175034838\" duration=\"2364000\" />\n      <workItem from=\"1776199126828\" duration=\"208000\" />\n      <workItem from=\"1776200923042\" duration=\"129000\" />\n      <workItem from=\"1776233700096\" duration=\"6249000\" />\n      <workItem from=\"1777283717955\" duration=\"17000\" />\n      <workItem from=\"1777990437872\" duration=\"331000\" />\n      <workItem from=\"1777990856471\" duration=\"331000\" />\n      <workItem from=\"1777991226557\" duration=\"2903000\" />\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n</project>
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 982e2d23bd109a6b6906427a59f32b344f1706e6)
++++ b/.idea/workspace.xml	(date 1778000669161)
+@@ -4,12 +4,8 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="1cf1f343-2117-48eb-b1c2-4bebdd4ca5f1" name="Changes" comment="">
+-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Business/entities/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Business/entities/Game.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Business/entities/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Business/entities/Generator.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Business/entities/GeneratorType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Business/entities/GeneratorType.java" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Presentation/controllers/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Presentation/controllers/GameController.java" afterDir="false" />
++    <list default="true" id="1cf1f343-2117-48eb-b1c2-4bebdd4ca5f1" name="Changes" comment="thereads">
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -24,6 +20,18 @@
+     </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
++  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
++  "lastFilter": {
++    "state": "OPEN",
++    "assignee": "Abr4444"
++  }
++}]]></component>
++  <component name="GithubPullRequestsUISettings"><![CDATA[{
++  "selectedUrlAndAccountId": {
++    "url": "https://github.com/PaulaVivancos/oopd_semester2.git",
++    "accountId": "d0509799-9167-4042-9bec-a7db6b7ceed0"
++  }
++}]]></component>
+   <component name="ProjectColorInfo">{
+   &quot;associatedIndex&quot;: 1
+ }</component>
+@@ -90,11 +98,40 @@
+       <workItem from="1777283717955" duration="17000" />
+       <workItem from="1777990437872" duration="331000" />
+       <workItem from="1777990856471" duration="331000" />
+-      <workItem from="1777991226557" duration="2903000" />
++      <workItem from="1777991226557" duration="3677000" />
++    </task>
++    <task id="LOCAL-00001" summary="thereads">
++      <option name="closed" value="true" />
++      <created>1777994325469</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1777994325469</updated>
++    </task>
++    <task id="LOCAL-00002" summary="thereads">
++      <option name="closed" value="true" />
++      <created>1777994405226</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1777994405226</updated>
+     </task>
++    <task id="LOCAL-00003" summary="thereads">
++      <option name="closed" value="true" />
++      <created>1777994419354</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1777994419354</updated>
++    </task>
++    <option name="localTasksCounter" value="4" />
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="thereads" />
++    <option name="LAST_COMMIT_MESSAGE" value="thereads" />
++  </component>
+ </project>
+\ No newline at end of file

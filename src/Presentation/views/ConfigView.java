@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * View for the user configuration screen, displaying profile picture and
+ * account management options including logout and account deletion.
+ */
 public class ConfigView extends BaseView {
     private final String PROFILE_PICTURE_URL = "resources/profile_picture.png";
     private final String BACKGROUND_URL = "resources/background.jpg";
@@ -34,11 +38,13 @@ public class ConfigView extends BaseView {
         super();
     }
 
+    /** Populates the top bar dropdown menu with configuration-related options. */
     @Override
     protected void buildMenu(JPopupMenu menu){
         addMenuItem(menu, "i don't know yet", e -> System.out.println("don't know yet"));
     }
 
+    /** Initializes all UI components for the config screen. */
     @Override
     protected void initComponents() {
         //mainPanel = new JImagePanel(BACKGROUND_URL);
@@ -55,6 +61,7 @@ public class ConfigView extends BaseView {
         setMainPanel();
     }
 
+    /** Wraps the central panel in a GridBagLayout container and adds it to the view. */
     private void setMainPanel() {
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setOpaque(false);
@@ -69,6 +76,7 @@ public class ConfigView extends BaseView {
         addToCenter(mainPanel);
     }
 
+    /** Lays out the profile image and buttons panel vertically in the center of the view. */
     private void setCentralPanel(){
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
         centralPanel.setOpaque(false);
@@ -84,6 +92,7 @@ public class ConfigView extends BaseView {
 
     }
 
+    /** Arranges the language, logout, and delete account buttons vertically with spacing. */
     private void setButtonsPanel() {
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
         buttonsPanel.setOpaque(false);
@@ -102,6 +111,7 @@ public class ConfigView extends BaseView {
         buttonsPanel.setAlignmentY(Component.CENTER_ALIGNMENT);
     }
 
+    /** Configures the appearance and press effect of the language button. */
     private void setLanguageButton() {
         jbLanguage.setFont(new Font("Times New Roman", Font.PLAIN, 25));
         jbLanguage.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -121,6 +131,7 @@ public class ConfigView extends BaseView {
         });
     }
 
+    /** Configures the appearance, press effect, and logout action of the log out button. */
     private void setLogOutButton() {
         jbLogOut.setFont(new Font("Times New Roman", Font.PLAIN, 25));
         jbLogOut.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -143,6 +154,7 @@ public class ConfigView extends BaseView {
         jbLogOut.addActionListener(e -> { if (logoutListener != null) logoutListener.actionPerformed(e); });
     }
 
+    /** Configures the appearance, press effect, and delete action of the delete account button. */
     private void setDeleteAccountButton() {
         jbDeleteAccount.setFont(new Font("Times New Roman", Font.PLAIN, 25));
         jbDeleteAccount.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -165,6 +177,7 @@ public class ConfigView extends BaseView {
         jbDeleteAccount.addActionListener(e -> { if (deleteListener != null) deleteListener.actionPerformed(e); });
     }
 
+    /** Sets the fixed size and alignment of the profile picture image panel. */
     private void setProfileImage() {
         ipProfile.setPreferredSize(new Dimension(200, 200));
         ipProfile.setMaximumSize(new Dimension(200, 200));

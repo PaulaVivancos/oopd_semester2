@@ -28,4 +28,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+.idea/workspace.xml
+target/
+.idea/shelf
+
 oopd_semester2.iml

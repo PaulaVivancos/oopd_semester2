@@ -6,10 +6,20 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
 
+/**
+ * Class that manages the MySQL database connection and provides
+ * methods for executing common SQL operations. Connection settings
+ * are loaded from src/config.json at initialization.
+ */
 public class SQLConnector {
 
     private static SQLConnector instance = null;
 
+    /**
+     * Returns the single instance of SQLConnector, creating and connecting it
+     * on first call by reading credentials from src/config.json.
+     * @return the shared SQLConnector instance, or null if config could not be read
+     */
     public static SQLConnector getInstance() {
         if (instance == null) {
             try {
@@ -34,19 +44,29 @@ public class SQLConnector {
         return instance;
     }
 
-    // --- Everything below stays exactly the same as your original class ---
-
     private final String username;
     private final String password;
     private final String url;
     private Connection conn;
 
+    /**
+     * Builds the JDBC connection URL from the provided parameters.
+     * @param username the database username
+     * @param password the database password
+     * @param ip the host address of the database server
+     * @param port the port the database server is listening on
+     * @param database the name of the target database
+     */
     private SQLConnector(String username, String password, String ip, int port, String database) {
         this.username = username;
         this.password = password;
         this.url = "jdbc:mysql://" + ip + ":" + port + "/" + database;
     }
 
+
+    /**
+     * Opens a JDBC connection to the database using the configured URL and credentials.
+     */
     public void connect() {
         try {
             conn = DriverManager.getConnection(url, username, password);
@@ -55,6 +75,10 @@ public class SQLConnector {
         }
     }
 
+    /**
+     * Executes an INSERT statement against the database.
+     * @param query the SQL INSERT query to execute
+     */
     public void insertQuery(String query) {
         try {
             Statement s = conn.createStatement();
@@ -65,6 +89,10 @@ public class SQLConnector {
         }
     }
 
+    /**
+     * Executes an UPDATE statement against the database.
+     * @param query the SQL UPDATE query to execute
+     */
     public void updateQuery(String query) {
         try {
             Statement s = conn.createStatement();
@@ -75,6 +103,11 @@ public class SQLConnector {
         }
     }
 
+
+    /**
+     * Executes a DELETE statement against the database.
+     * @param query the SQL DELETE query to execute
+     */
     public void deleteQuery(String query) {
         try {
             Statement s = conn.createStatement();
@@ -85,6 +118,11 @@ public class SQLConnector {
         }
     }
 
+    /**
+     * Executes a SELECT query and returns the resulting rows.
+     * @param query the SQL SELECT query to execute
+     * @return the ResultSet from the query, or null if an error occurred
+     */
     public ResultSet selectQuery(String query) {
         ResultSet rs = null;
         try {
@@ -97,6 +135,9 @@ public class SQLConnector {
         return rs;
     }
 
+    /**
+     * Closes the active database connection.
+     */
     public void disconnect() {
         try {
             conn.close();

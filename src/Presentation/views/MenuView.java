@@ -6,11 +6,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * View for the main menu screen, displaying the title, coffee cup, and navigation buttons.
+ */
 public class MenuView extends JPanel {
     private JImagePanel jipMain;
     private JPanel jpTop, jpCentre, jpBot;
     private JImagePanel jipTitleTop, jipTitleBottom, jipCoffeeCup;
     private JButton jbPlay, jbStats, jbConfig, jbLogOut;
+    JButton newGame, loadGame, viewGame;
 
     //DIMENSION CONSTANTS
     private final Dimension DIMENSION_BUTTON = new Dimension(150, 50);
@@ -49,6 +53,9 @@ public class MenuView extends JPanel {
         jbStats   = new JButton("STATS");
         jbConfig  = new JButton("CONFIG");
         jbLogOut  = new JButton("LOG OUT");
+        newGame = createDialogButton("NEW GAME");
+        loadGame = createDialogButton("LOAD GAME");
+        viewGame = createDialogButton("VIEW GAME");
 
         jbPlay.setActionCommand(GO_GAME);
         jbStats.setActionCommand(GO_STATS);
@@ -58,19 +65,31 @@ public class MenuView extends JPanel {
         setJipMain();
     }
 
+    /**
+     * Attaches the given listener to the logout and config buttons.
+     */
     public void addAuthListeners(ActionListener actionListener) {
         jbLogOut.addActionListener(actionListener);
         jbConfig.addActionListener(actionListener);
     }
 
+    /**
+     * Attaches the given listener to the stats button.
+     */
     public void addStatsListener(ActionListener actionListener) {
         jbStats.addActionListener(actionListener);
     }
 
+    /**
+     * Attaches the given listener to the play button.
+     */
     public void addGameListener(ActionListener actionListener) {
         jbPlay.addActionListener(actionListener);
     }
 
+    /**
+     * Assembles the background panel with north, center, and south sub-panels.
+     */
     private void setJipMain() {
         setJpTop();
         setJpCentre();
@@ -85,6 +104,9 @@ public class MenuView extends JPanel {
         add(jipMain, BorderLayout.CENTER);
     }
 
+    /**
+     * Builds the top panel containing the welcome and title images.
+     */
     private void setJpTop() {
         jpTop.setLayout(new BoxLayout(jpTop, BoxLayout.Y_AXIS));
         jpTop.setOpaque(false);
@@ -105,6 +127,9 @@ public class MenuView extends JPanel {
         jpTop.add(jipTitleBottom);
     }
 
+    /**
+     * Builds the center panel containing the coffee cup image.
+     */
     private void setJpCentre() {
         jpCentre.setLayout(new BoxLayout(jpCentre, BoxLayout.Y_AXIS));
         jpCentre.setOpaque(false);
@@ -117,6 +142,9 @@ public class MenuView extends JPanel {
         jpCentre.add(jipCoffeeCup);
     }
 
+    /**
+     * Builds the bottom panel with play, stats, config, and logout buttons.
+     */
     private void setJpBot() {
         jpBot.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 40));
         jpBot.setOpaque(false);
@@ -135,7 +163,9 @@ public class MenuView extends JPanel {
         jpBot.add(jbLogOut);
     }
 
-
+    /**
+     * Creates a styled dialog-style button with the given label.
+     */
     private JButton createDialogButton(String title) {
         JButton button = new JButton(title);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -151,6 +181,9 @@ public class MenuView extends JPanel {
         return button;
     }
 
+    /**
+     * Applies consistent size, color, and alignment styling to a button.
+     */
     private void setButton(JButton button, Dimension dimension) {
         button.setPreferredSize(dimension);
         button.setMaximumSize(dimension);

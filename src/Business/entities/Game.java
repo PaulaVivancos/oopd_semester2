@@ -1,8 +1,8 @@
 package Business.entities;
 
-import java.lang.reflect.GenericArrayType;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
 
@@ -10,40 +10,130 @@ public class Game {
     private int userId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private int numCoffees;
+    private double numCoffees;
     private boolean finished;
-    private ArrayList<Generator> generators;
+    private final ArrayList<Generator> generators = new ArrayList<>();
+    private final List<Thread> generatorThreads = new ArrayList<>();
+    private GeneratorFactory factory = new CoffeeGeneratorFactory();
 
-    public Game(int userId, LocalDateTime startTime, int numCoffees, boolean finished, ArrayList<Generator> generators) {
+    private ArrayList<GameListener> listeners = new ArrayList<>();
+    private final ArrayList<String> purchasedUpgradeNames = new ArrayList<>();
+
+    public Game(int userId, LocalDateTime startTime, double numCoffees, boolean finished, GeneratorFactory factory) {
         this.userId = userId;
         this.startTime = startTime;
         this.endTime = null;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        this.generators = generators;
+        for (GeneratorType type : factory.createGeneratorTypes()) {
+            this.generators.add(new Generator(type, this));
+        }        //this.generators = generators;
     }
 
     public Game(int gameId, int userId, LocalDateTime startTime, LocalDateTime endTime,
-                int numCoffees, boolean finished) {
+                double numCoffees, boolean finished) {
         this.gameId = gameId;
         this.userId = userId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.numCoffees = numCoffees;
         this.finished = finished;
-        //this.generators = generators;
+        for (GeneratorType type : factory.createGeneratorTypes()) {
+            this.generators.add(new Generator(type, this));
+        }           //this.generators = generators;
+    }
+
+
+    public void addGenerator(int id) {
+        if (spendCoffees(generators.get(id).getCurrentPrice())) {
+            generators.get(id).increaseQuantity();
+        }
+    }
+
+    public ArrayList<Generator> getGenerators() {
+        return generators;
+    }
+
+    public void addCoffees(double amount) {
+        synchronized (Game.class) {
+            numCoffees += amount;
+        }
+        notifyUI(); // tell the view to refresh
+    }
+    public boolean spendCoffees(double amount) {
+        synchronized (Game.class) {
+            if (numCoffees < amount) return false;
+            numCoffees -= amount;
+        }
+        notifyUI();
+        return true;
+    }
+
+    public double getCoffees() {
+        synchronized (Game.class) {
+            return numCoffees;
+        }
+    }
+
+    public void startGame() {
+        for (Generator g : generators) {
+            Thread t = new Thread(g, "Gen-" + g.getType().getName());
+            generatorThreads.add(t);
+            t.start();
+        }
+    }
+
+    public void stopGame() {
+        for (Generator g : generators) g.stop();
+        for (Thread t : generatorThreads) t.interrupt();
+    }
+
+    public synchronized void addListener(GameListener listener){
+        listeners.add(listener);
+    }
+    public synchronized void removeListener(GameListener listener){
+        listeners.remove(listener);
+    }
+
+    public void notifyUI(){
+        double current;
+        synchronized (Game.class){
+            current = numCoffees;
+        }
+        ArrayList<GameListener> snapshot;
+        synchronized (listeners){
+            snapshot = new ArrayList<GameListener>(listeners);
+        }
+        for(GameListener s : snapshot){
+            s.onCoffeeChange(current);
+        }
     }
 
     public int getGameId() { return gameId; }
     public int getUserId() { return userId; }
-
     public LocalDateTime getStartTime() { return startTime; }
     public LocalDateTime getEndTime() { return endTime; }
-    public int getNumCoffees() { return numCoffees; }
+    public double getNumCoffees() { return numCoffees; }
     public boolean isFinished() { return finished; }
 
     public void setGameId(int gameId) { this.gameId = gameId; }
-    public void setNumCoffees(int numCoffees) { this.numCoffees = numCoffees; }
+    public void setNumCoffees(double numCoffees) { this.numCoffees = numCoffees; }
     public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
     public void setFinished(boolean finished) { this.finished = finished; }
+
+    public void applyUpgrade(String generatorName, double multiplier) {
+        for (Generator g : generators) {
+            if (g.getType().getName().equals(generatorName)) {
+                g.applyMultiplier(multiplier);
+            }
+        }
+    }
+
+    public boolean isUpgradePurchased(String upgradeName) {
+        return purchasedUpgradeNames.contains(upgradeName);
+    }
+
+    public void markUpgradePurchased(String upgradeName) {
+        purchasedUpgradeNames.add(upgradeName);
+    }
 }

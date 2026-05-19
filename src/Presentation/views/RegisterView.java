@@ -1,11 +1,13 @@
 package Presentation.views;
 
 import Presentation.JImagePanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * View for the registration screen with fields for username, email, password, and password confirmation.
+ */
 public class RegisterView extends JPanel {
     private JImagePanel jpiMain;
     private JPanel jpCentral, jpUsername, jpPassword, jpButtons, jpEmail, jpPasswordConfirmation;
@@ -64,11 +66,17 @@ public class RegisterView extends JPanel {
         setMainPanel();
     }
 
+    /**
+     * Attaches the given listener to both the sign-up and log-in buttons.
+     */
     public void addListeners(ActionListener actionListener) {
         jbLogIn.addActionListener(actionListener);
         jbSignUp.addActionListener(actionListener);
     }
 
+    /**
+     * Assembles the background panel with title, input fields, and bottom buttons.
+     */
     private void setMainPanel() {
         setTitle();
         setCenterPanel();
@@ -83,12 +91,18 @@ public class RegisterView extends JPanel {
         add(jpiMain, BorderLayout.CENTER);
     }
 
+    /**
+     * Styles and centers the title label.
+     */
     private void setTitle() {
         jlTitle.setFont(new Font("Times New Roman", Font.BOLD, 50));
         jlTitle.setBorder(BorderFactory.createEmptyBorder(50, 50, 10, 50));
         jlTitle.setHorizontalAlignment(JLabel.CENTER);
     }
 
+    /**
+     * Lays out all input field panels and the sign-up button vertically.
+     */
     private void setCenterPanel() {
         setUsernamePanel();
         setPasswordPanel();
@@ -112,6 +126,9 @@ public class RegisterView extends JPanel {
         jpCentral.add(jbSignUp);
     }
 
+    /**
+     * Builds the username field panel with its label.
+     */
     private void setUsernamePanel() {
         jpUsername.setLayout(new BoxLayout(jpUsername, BoxLayout.Y_AXIS));
         jpUsername.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -126,6 +143,9 @@ public class RegisterView extends JPanel {
         jpUsername.add(jtfUsername);
     }
 
+    /**
+     * Builds the password field panel with its label.
+     */
     private void setPasswordPanel() {
         jpPassword.setLayout(new BoxLayout(jpPassword, BoxLayout.Y_AXIS));
         jpPassword.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -140,6 +160,9 @@ public class RegisterView extends JPanel {
         jpPassword.add(jtfPassword);
     }
 
+    /**
+     * Builds the password confirmation field panel with its label.
+     */
     private void setPasswordConfirmationPanel() {
         jpPasswordConfirmation.setLayout(new BoxLayout(jpPasswordConfirmation, BoxLayout.Y_AXIS));
         jpPasswordConfirmation.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -154,6 +177,9 @@ public class RegisterView extends JPanel {
         jpPasswordConfirmation.add(jtfPasswordConfirmation);
     }
 
+    /**
+     * Builds the email field panel with its label.
+     */
     private void setEmailPanel() {
         jpEmail.setLayout(new BoxLayout(jpEmail, BoxLayout.Y_AXIS));
         jpEmail.setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 0));
@@ -168,6 +194,9 @@ public class RegisterView extends JPanel {
         jpEmail.add(jtfEmail);
     }
 
+    /**
+     * Configures appearance and focus color effects for the username text field.
+     */
     private void setUsernameTextField() {
         jtfUsername.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfUsername.setPreferredSize(DIMENSION_TEXTFIELD);
@@ -190,6 +219,9 @@ public class RegisterView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
     }
 
+    /**
+     * Configures appearance and focus color effects for the password field.
+     */
     private void setPasswordTextField() {
         jtfPassword.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfPassword.setPreferredSize(DIMENSION_TEXTFIELD);
@@ -212,6 +244,9 @@ public class RegisterView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
     }
 
+    /**
+     * Configures appearance and focus color effects for the password confirmation field.
+     */
     private void setPasswordConfirmationTextField() {
         jtfPasswordConfirmation.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfPasswordConfirmation.setPreferredSize(DIMENSION_TEXTFIELD);
@@ -234,6 +269,9 @@ public class RegisterView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
     }
 
+    /**
+     * Configures appearance and focus color effects for the email text field.
+     */
     private void setEmailTextField() {
         jtfEmail.setAlignmentX(Component.LEFT_ALIGNMENT);
         jtfEmail.setPreferredSize(DIMENSION_TEXTFIELD);
@@ -256,6 +294,9 @@ public class RegisterView extends JPanel {
                 BorderFactory.createEmptyBorder(0, 10, 0, 0)));
     }
 
+    /**
+     * Configures the size, alignment, and press effect of the sign-up button.
+     */
     private void setSignUpButton() {
         jbSignUp.setPreferredSize(DIMENSION_BUTTON_LOGIN);
         jbSignUp.setMaximumSize(DIMENSION_BUTTON_LOGIN);
@@ -276,6 +317,9 @@ public class RegisterView extends JPanel {
         });
     }
 
+    /**
+     * Arranges the log-in redirect button at the bottom with spacing.
+     */
     private void setButtons() {
         jpButtons.setLayout(new BoxLayout(jpButtons, BoxLayout.Y_AXIS));
         jpButtons.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
@@ -288,6 +332,9 @@ public class RegisterView extends JPanel {
         jpButtons.add(jbLogIn);
     }
 
+    /**
+     * Configures the size and alignment of the log-in redirect button.
+     */
     private void setLogInButton() {
         jbLogIn.setPreferredSize(DIMENSION_BUTTON_SIGNIN);
         jbLogIn.setMaximumSize(DIMENSION_BUTTON_SIGNIN);
