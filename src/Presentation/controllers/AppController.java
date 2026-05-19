@@ -31,6 +31,10 @@ public class AppController {
         JOptionPane.showMessageDialog(this.mainFrame, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
+    public void showInfoPopUp(String title, String message) {
+        JOptionPane.showMessageDialog(this.mainFrame, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public void addCardToMainFrame(JPanel panel, String cardName) {
         mainFrame.addNewCard(panel, cardName);
     }

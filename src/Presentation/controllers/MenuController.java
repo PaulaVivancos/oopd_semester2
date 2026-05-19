@@ -29,7 +29,7 @@ public class MenuController implements ActionListener {
            gameController.onGameViewShown();
        } else if (e.getActionCommand().equals(GO_STATS)) {
            appController.switchCard(STATS);
-           //statsController.onStatsViewShown();
+           statsController.onViewOpened();
        } else if (e.getActionCommand().equals(GO_CONFIG)) {
            appController.switchCard(CONFIG);
        } else if (e.getActionCommand().equals(LOGOUT)) {

@@ -31,8 +31,8 @@ public class Main {
         // 4. Create all the controllers + attach managers and views to controllers.
         AppController appController = new AppController();
         AuthController authController = new AuthController(appController, userManager);
-        GameController gameController = new GameController(appController, gameManager, userManager);
         StatsController statsController = new StatsController(appController, statsManager);
+        GameController gameController = new GameController(appController, gameManager, userManager, statsController);
 
         MenuController menuController = new MenuController(appController, authController, gameController, statsController);
 

@@ -1,10 +1,10 @@
 package Presentation.controllers;
 
+import Business.StatsTracker;
 import Business.entities.Game;
 import Business.managers.GameManager;
 import Business.managers.UserManager;
 import Presentation.views.GameView;
-import Presentation.views.MenuView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,19 +17,29 @@ import static Presentation.views.MenuView.GO_GAME;
 
 public class GameController implements ActionListener {
     private final AppController appController;
+    private final StatsController statsController;
 
+    private final GameManager gameManager;
     private final UserManager userManager;
 
     // views
     private final GameView gameView;
 
+    private StatsTracker statsTracker;
+    private Thread statsThread;
+
+    private static final String UNFINISHED_GAME_WARN = "No unfinished game found, creating a new one...";
+    private static final String CREATING_NEW_GAME = "Starting a new game!";
+    private static final String ERROR = "ERROR";
+    private static final String NEW_GAME = "New game creation";
+
     protected static final String GAME = "game";
 
-    private final GameManager gameManager;
-
-    public GameController(AppController appController, GameManager gameManager, UserManager userManager) {
+    public GameController(AppController appController, GameManager gameManager, UserManager userManager, StatsController statsController) {
         this.appController = appController;
+        this.statsController = statsController;
 
+        this.gameManager = gameManager;
         this.userManager = userManager;
 
         gameView = new GameView();
@@ -38,14 +48,11 @@ public class GameController implements ActionListener {
 
         // add listeners from game view
         gameView.addBuyListener(this);
-
         gameView.addNewGameListener(e -> handleNewGame());
         gameView.addLoadGameListener(e -> handleLoadGame());
         //gameView.addViewGameListener();
-
         gameView.addBackListener(e -> appController.goBack());
 
-        this.gameManager = gameManager;
     }
 
     @Override
@@ -56,10 +63,6 @@ public class GameController implements ActionListener {
             SwingUtilities.invokeLater(() -> {
                 gameView.showGamesPopUp(this);
             });
-
-
-        } else if (e.getActionCommand().equals(NEW_GAME)) {
-            gameView.showNewGameDialog();
         } else if (e.getActionCommand().equals(BUY_COFFEE)) {
             handleBuyCoffee();
         }
@@ -67,6 +70,7 @@ public class GameController implements ActionListener {
 
     private void handleLoadGame () {
         int userId = userManager.getCurrentUser().getId();
+        appController.showErrorPopUp(ERROR, UNFINISHED_GAME_WARN);
 
         if (gameManager.hasUnfinishedGame(userId)) {
             gameManager.loadGame(userId);
@@ -79,9 +83,23 @@ public class GameController implements ActionListener {
 
     private void handleNewGame () {
         int userId = userManager.getCurrentUser().getId();
-        appController.showErrorPopUp("ERROR", "No unfinished game found, creating a new one...");
+        appController.showInfoPopUp(NEW_GAME, CREATING_NEW_GAME);
+
         gameManager.createNewGame(userId);
+        Game newGame = gameManager.getCurrentGame();
+
         setInitialConditions();
+        startStatsTracker(newGame);
+    }
+
+    private void startStatsTracker(Game game) {
+        if (statsTracker != null) {
+            statsTracker.stop();
+        }
+
+        statsTracker = new StatsTracker(statsController, game);
+        statsThread = new Thread(statsTracker);
+        statsThread.start();
     }
 
     private void setInitialConditions() {
@@ -100,5 +118,9 @@ public class GameController implements ActionListener {
     private void handleBuyCoffee() {
         gameManager.addCoffee();
         gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());
+
+        if (statsTracker != null) {
+            statsTracker.onSignificantEvent();
+        }
     }
 }

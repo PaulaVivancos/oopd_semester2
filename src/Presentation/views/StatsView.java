@@ -1,19 +1,22 @@
 package Presentation.views;
 
 import Presentation.JImagePanel;
+import Presentation.PaintChart;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionListener;
 
 public class StatsView extends BaseView {
-    //private JImagePanel mainPanel;
     private JPanel mainPanel;
     private JPanel topPanel, playersPanel, userGamePanel, numGamesPanel;
     private JLabel jlPlayers, jlGames, jlNumGames;
-    private JComboBox<String> jcbPlayers, jcbGames;
-    private String[] playersOptions, gamesOptions;
 
+    // 1. Configurados estrictamente como Integer
+    private JComboBox<Integer> jcbPlayers, jcbGames;
+
+    private PaintChart paintChart;
     private final String BACKGROUND_URL = "resources/background.jpg";
 
     private ActionListener logoutListener;
@@ -25,7 +28,6 @@ public class StatsView extends BaseView {
 
     @Override
     protected void initComponents() {
-        //mainPanel = new JImagePanel(BACKGROUND_URL);
         mainPanel = new JPanel();
         mainPanel.setOpaque(false);
 
@@ -34,8 +36,8 @@ public class StatsView extends BaseView {
         userGamePanel = new JPanel();
         numGamesPanel = new JPanel();
 
-        jcbPlayers = new JComboBox<>(); // setter
-        jcbGames = new JComboBox<>(); // setter
+        jcbPlayers = new JComboBox<>();
+        jcbGames = new JComboBox<>();
 
         jlPlayers = new JLabel("Select a player");
         jlGames = new JLabel("Select a game");
@@ -46,8 +48,6 @@ public class StatsView extends BaseView {
 
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
-        menu.addSeparator();
         addMenuItem(menu, "Log out", e -> { if (logoutListener != null) logoutListener.actionPerformed(e); });
     }
 
@@ -55,8 +55,21 @@ public class StatsView extends BaseView {
         setTopPanel();
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(topPanel, BorderLayout.NORTH);
-       // mainPanel.setOpacityValue(0.5f);
+
+        paintChart = new PaintChart();
+        mainPanel.add(paintChart, BorderLayout.CENTER);
+
         addToCenter(mainPanel);
+    }
+
+    public void setChart(PaintChart chart) {
+        if (paintChart != null) {
+            mainPanel.remove(paintChart);
+        }
+        paintChart = chart;
+        mainPanel.add(paintChart, BorderLayout.CENTER);
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
 
     private void setTopPanel() {
@@ -66,8 +79,11 @@ public class StatsView extends BaseView {
         setGamesPanel();
         setNumGamesPanel(10);
 
-        topPanel.setBorder(BorderFactory.createEmptyBorder(100, 130, 0, 100));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(30, 130, 30, 100));
         topPanel.setOpaque(false);
+        topPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
+        topPanel.setPreferredSize(new Dimension(0, 120));
+
         topPanel.add(playersPanel);
         topPanel.add(Box.createHorizontalStrut(100));
         topPanel.add(userGamePanel);
@@ -110,19 +126,63 @@ public class StatsView extends BaseView {
 
         jlNumGames.setFont(new Font("Times New Roman", Font.BOLD, 20));
         jlNumGames.setText("Number of games: " + numGames);
-
         jlNumGames.setForeground(Color.WHITE);
 
         numGamesPanel.setBackground(BACKGROUND_BUTTON);
         numGamesPanel.add(jlNumGames, new GridBagConstraints());
     }
 
-    public void setPlayersOptions(String[] players) {
-        this.playersOptions = players;
+    public int getSelectedPlayerId() {
+        Integer selected = (Integer) jcbPlayers.getSelectedItem();
+        return selected != null ? selected : -1;
     }
 
-    public void setGamesOptions(String[] games) {
-        this.gamesOptions = games;
+    public int getSelectedGameId() {
+        Integer selected = (Integer) jcbGames.getSelectedItem();
+        return selected != null ? selected : -1;
+    }
+
+    public void setPlayersOptions(List<Integer> players) {
+        DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
+        for (Integer player : players) {
+            model.addElement(player);
+        }
+        jcbPlayers.setModel(model);
+        jcbPlayers.setSelectedIndex(-1);
+    }
+
+    public void setGamesOptions(List<Integer> games) {
+        jcbGames.removeAllItems();
+
+        DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
+        for (Integer game : games) {
+            model.addElement(game);
+        }
+        jcbGames.setModel(model);
+
+        jcbGames.setSelectedIndex(-1);
+    }
+
+    public void addComboBoxListeners(ActionListener playerListener, ActionListener gameListener) {
+        jcbPlayers.addActionListener(playerListener);
+        jcbGames.addActionListener(gameListener);
+    }
+
+    public void removeComboBoxListeners(ActionListener playerListener, ActionListener gameListener) {
+        jcbPlayers.removeActionListener(playerListener);
+        jcbGames.removeActionListener(gameListener);
+    }
+
+    public void setTotalGamesCount(int count) {
+        jlNumGames.setText("Number of games: " + count);
+    }
+
+    public void setGameComboBoxEnabled(boolean enabled) {
+        jcbGames.setEnabled(enabled);
+    }
+
+    public void clearGamesOptions() {
+        jcbGames.removeAllItems();
     }
 
 }

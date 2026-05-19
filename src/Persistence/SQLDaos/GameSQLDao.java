@@ -65,14 +65,14 @@ public class GameSQLDao implements GameDAO {
         LocalDateTime startTime = rs.getTimestamp("start_time").toLocalDateTime();
         LocalDateTime endTime = rs.getTimestamp("end_time") != null
                 ? rs.getTimestamp("end_time").toLocalDateTime() : null;
-        double numCoffees = rs.getDouble("num_coffees");
+        int numCoffees = rs.getInt("num_coffees");
         boolean finished = rs.getInt("finished") == 1;
         return new Game(gameId, userId, startTime, endTime, numCoffees, finished);
     }
 
     @Override
     public int getLastGameIdByUser(int userId) {
-        String query = "SELECT MAX(game_id) FROM games WHERE user_id = " + userId;
+        String query = "SELECT MAX(game_id) FROM game WHERE user_id = " + userId;
         ResultSet results = SQLConnector.getInstance().selectQuery(query);
 
         try {
@@ -97,7 +97,7 @@ public class GameSQLDao implements GameDAO {
                         results.getInt("user_id"),
                         results.getTimestamp("start_time").toLocalDateTime(),
                         results.getTimestamp("end_time") != null ? results.getTimestamp("end_time").toLocalDateTime() : null,
-                        results.getDouble("num_coffees"),
+                        results.getInt("num_coffees"),
                         results.getBoolean("finished")
                 );
             }

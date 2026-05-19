@@ -6,16 +6,11 @@ import Persistence.UserDAO;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Class that implements the methods described in the {@link UserDAO} interface.
- *
- * Specifically, it implements the user persistence in a SQL database.
- */
 public class UserSQLDao implements UserDAO {
 
     @Override
     public void insertUser(User user) throws SQLException {
-        String query = "INSERT INTO User(username, email, password) VALUES ('" +
+        String query = "INSERT INTO user(username, email, password) VALUES ('" +
                 user.getUsername() + "', '" +
                 user.getEmail() + "', '" +
                 user.getPassword() + "');";
@@ -23,44 +18,40 @@ public class UserSQLDao implements UserDAO {
         SQLConnector.getInstance().insertQuery(query);
     }
 
-
-    public User findByNameEmailAndPassword(String username, String password) {
-        String query = "SELECT * FROM user WHERE (username = '" + username + "' OR email = '" + username + "') AND password = '" + password + "';";
+    @Override
+    public User findByUsernameOrEmail(String value) {
+        String query = "SELECT * FROM user WHERE username = '" + value +
+                "' OR email = '" + value + "' LIMIT 1;";
 
         ResultSet result = SQLConnector.getInstance().selectQuery(query);
 
         try {
-            if (result.next()) {
+            if (result != null && result.next()) {
                 int id = result.getInt("user_id");
+                String username = result.getString("username");
                 String email = result.getString("email");
-                return new User(id, username, email, password);
+                String hashedPassword = result.getString("password");
+
+                return new User(id, username, email, hashedPassword);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
-    }
-
-    @Override
-    public void updateUser(User user) {
-
-    }
-
-    @Override
-    public void deleteUser(int id) {
-        String query = "DELETE FROM User WHERE user_id = " + id + ";";
-        SQLConnector.getInstance().insertQuery(query);
     }
 
     @Override
     public boolean existsByUsername(String username) {
         String query = "SELECT user_id FROM user WHERE username = '" + username + "';";
         ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+
         try {
             return rs != null && rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
 
@@ -68,11 +59,29 @@ public class UserSQLDao implements UserDAO {
     public boolean existsByEmail(String email) {
         String query = "SELECT user_id FROM user WHERE email = '" + email + "';";
         ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+
         try {
             return rs != null && rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
+    }
+
+    @Override
+    public void updateUser(User user) {
+        String query = "UPDATE user SET username = '" + user.getUsername() +
+                "', email = '" + user.getEmail() +
+                "', password = '" + user.getPassword() +
+                "' WHERE user_id = " + user.getId() + ";";
+
+        SQLConnector.getInstance().insertQuery(query);
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        String query = "DELETE FROM user WHERE user_id = " + id + ";";
+        SQLConnector.getInstance().insertQuery(query);
     }
 }

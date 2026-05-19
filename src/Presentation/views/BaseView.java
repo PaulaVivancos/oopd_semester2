@@ -26,12 +26,15 @@ public abstract class BaseView extends JPanel {
         panel.setLayout(new BorderLayout());
         panel.setOpaque(false);
 
+
         initMenu();
         panel.add(topBarGrid, BorderLayout.NORTH);
 
+        initComponents();
+
+
         add(panel, BorderLayout.CENTER);
 
-        initComponents();
     }
 
 

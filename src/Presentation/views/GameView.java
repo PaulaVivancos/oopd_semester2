@@ -47,8 +47,7 @@ public class GameView extends BaseView {
 
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Guardar partida", e -> System.out.println("save"));
-        addMenuItem(menu, "Cargar partida", e -> System.out.println("load"));
+        addMenuItem(menu, "Save game", e -> System.out.println("save"));
         menu.addSeparator();
         addMenuItem(menu, "Log out", e -> {
             if(logoutListener != null)
@@ -241,7 +240,6 @@ public class GameView extends BaseView {
 
         JButton newGame = createDialogButton("NEW GAME");
         JButton loadGame = createDialogButton("LOAD GAME");
-        JButton viewGame = createDialogButton("VIEW GAME");
 
         newGame.setActionCommand(NEW_GAME);
         newGame.addActionListener(e -> {
@@ -259,66 +257,16 @@ public class GameView extends BaseView {
             }
         });
 
-        viewGame.setActionCommand(VIEW_GAME);
-        viewGame.addActionListener(e -> {
-            dialog.dispose();
-            if (viewGameListener != null) {
-                viewGameListener.actionPerformed(e);
-            }
-        });
-
         dialogContent.add(title);
         dialogContent.add(Box.createVerticalStrut(15));
         dialogContent.add(newGame);
         dialogContent.add(Box.createVerticalStrut(10));
         dialogContent.add(loadGame);
-        dialogContent.add(Box.createVerticalStrut(10));
-        dialogContent.add(viewGame);
 
         dialog.add(dialogContent);
         dialog.pack();
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
-    }
-
-    public void showNewGameDialog() {
-        JDialog dialog = new JDialog();
-        dialog.setUndecorated(true);
-
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        content.setBackground(new Color(245, 240, 230));
-        content.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(103, 51, 25), 2),
-                BorderFactory.createEmptyBorder(20, 30, 20, 30)
-        ));
-
-        JLabel title = new JLabel("CREATING NEW GAME");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font("Times New Roman", Font.BOLD, 14));
-
-        JTextField nameField = new JTextField();
-        nameField.setMaximumSize(new Dimension(200, 35));
-        nameField.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JButton startGame = createDialogButton("START GAME");
-        startGame.addActionListener(e -> {
-            String gameName = nameField.getText();
-            dialog.dispose();
-            // usa gameName para lo que necesites
-        });
-
-        content.add(title);
-        content.add(Box.createVerticalStrut(20));
-        content.add(nameField);
-        content.add(Box.createVerticalStrut(20));
-        content.add(startGame);
-
-        dialog.add(content);
-        dialog.pack();
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-        dialog.setModal(true);
     }
 
     private JButton createDialogButton(String title) {

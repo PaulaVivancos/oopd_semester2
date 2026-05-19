@@ -10,11 +10,11 @@ public class Game {
     private int userId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private double numCoffees;
+    private int numCoffees;
     private boolean finished;
     private ArrayList<Generator> generators;
 
-    public Game(int userId, LocalDateTime startTime, double numCoffees, boolean finished, ArrayList<Generator> generators) {
+    public Game(int userId, LocalDateTime startTime, int numCoffees, boolean finished, ArrayList<Generator> generators) {
         this.userId = userId;
         this.startTime = startTime;
         this.endTime = null;
@@ -24,7 +24,7 @@ public class Game {
     }
 
     public Game(int gameId, int userId, LocalDateTime startTime, LocalDateTime endTime,
-                double numCoffees, boolean finished) {
+                int numCoffees, boolean finished) {
         this.gameId = gameId;
         this.userId = userId;
         this.startTime = startTime;
@@ -36,13 +36,14 @@ public class Game {
 
     public int getGameId() { return gameId; }
     public int getUserId() { return userId; }
+
     public LocalDateTime getStartTime() { return startTime; }
     public LocalDateTime getEndTime() { return endTime; }
-    public double getNumCoffees() { return numCoffees; }
+    public int getNumCoffees() { return numCoffees; }
     public boolean isFinished() { return finished; }
 
     public void setGameId(int gameId) { this.gameId = gameId; }
-    public void setNumCoffees(double numCoffees) { this.numCoffees = numCoffees; }
+    public void setNumCoffees(int numCoffees) { this.numCoffees = numCoffees; }
     public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
     public void setFinished(boolean finished) { this.finished = finished; }
 }

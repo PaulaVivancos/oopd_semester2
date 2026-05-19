@@ -17,9 +17,7 @@ public interface UserDAO {
      * @param user The new student to save.
      */
     public void insertUser(User user) throws SQLException;
-
-    public User findByNameEmailAndPassword(String username, String password);
-
+    public User findByUsernameOrEmail(String value);
     /**
      * Method that allows to update the user with the information changed.
      *
