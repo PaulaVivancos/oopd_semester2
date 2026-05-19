@@ -25,11 +25,11 @@ public class UpgradeView extends BaseView {
 
     public static final Upgrade[] UPGRADES = {
             new Upgrade("Better Grinder", 100, 2.0, "Gas station clerk"),
-            new Upgrade("Lukewarm Special", 500, 2.0, "Gas station clerk"),
-            new Upgrade("Extra Shot", 2000, 2.0, "Starsbuck barista"),
-            new Upgrade("Oat Milk", 10000, 2.0, "Starsbuck barista"),
-            new Upgrade("Better beans", 25000, 2.0, "365 Veteran"),
-            new Upgrade("Black Belt Brew", 150000, 2.0, "365 Veteran"),
+            new Upgrade("Lukewarm Special", 500, 3.0, "Gas station clerk"),
+            new Upgrade("Extra Shot", 2000, 3.0, "Starsbuck barista"),
+            new Upgrade("Oat Milk", 10000, 3.5, "Starsbuck barista"),
+            new Upgrade("Better beans", 25000, 5.0, "365 Veteran"),
+            new Upgrade("Black Belt Brew", 150000, 5.0, "365 Veteran"),
     };
 
     // COLOR CONSTANTS
