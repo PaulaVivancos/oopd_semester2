@@ -52,6 +52,7 @@ public class Generator implements Runnable{
 
     public int getQuantity() {return quantity;}
     public double getCurrentPrice() {return currentPrice;}
+    public double getUpgradeMultiplier() {return upgradeMultiplier;}
 
     /**
      * Sets the current quantity owned of this generator.

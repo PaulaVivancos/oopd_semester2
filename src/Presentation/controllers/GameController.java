@@ -261,7 +261,18 @@ public class GameController implements ActionListener, GameListener {
             Upgrade upg = UpgradeView.UPGRADES[i];
             boolean purchased = game != null && game.isUpgradePurchased(upg.getName());
             boolean canAfford = currentCoffees >= upg.getCost();
-            upgradeView.updateUpgradeRow(i, canAfford, purchased);
+
+            double currentMultiplier = 1.0;
+            if (game != null) {
+                for (Generator gen : game.getGenerators()) {
+                    if (gen.getType().getName().equalsIgnoreCase(upg.getTargetGeneratorName())) {
+                        currentMultiplier = gen.getUpgradeMultiplier();
+                        break;
+                    }
+                }
+            }
+
+            upgradeView.updateUpgradeRow(i, canAfford, purchased, currentMultiplier);
         }
     }
 
