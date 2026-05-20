@@ -53,5 +53,7 @@ public interface UserDAO {
      * @return true if the email is registered, false otherwise
      */
     boolean existsByEmail(String email);
+
+    void updatePasswordByEmail(String email, String newPassword);
 }
 

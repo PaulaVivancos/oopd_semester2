@@ -99,11 +99,18 @@ public class UserManager {
      * Stores null if the email could not be reached.
      * * @param email the recipient's email address
      */
-    public void handleSendCode(String email) {
+    public boolean handleSendCode(String email) {
+        if (!userDao.existsByEmail(email)) {
+            sendedCode = null;
+            return false;
+        }
+
         try {
             sendedCode = emailService.sendVerificationCode(email);
+            return true;
         } catch (SendEmailException e) {
             sendedCode = null;
+            return false;
         }
     }
 
@@ -150,12 +157,27 @@ public class UserManager {
         return sendedCode;
     }
 
-    /**
-     * Updates the current user's password in the database.
-     * * @param oldPassword the user's current password
-     * @param newPassword the new password to set
-     */
-    public void changePassword(String oldPassword, String newPassword) {
-        // userDao.changePassword();
+
+    public String changePassword(String email, String newPassword, String passwordConfirmation) {
+        if (email == null || email.trim().isEmpty()) {
+            return "Invalid session or email context.";
+        }
+
+        if (newPassword.length() < 8) {
+            return "Password must be at least 8 characters.";
+        }
+
+        if (!newPassword.equals(passwordConfirmation)) {
+            return "Passwords do not match.";
+        }
+
+        try {
+            String hashed = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+            userDao.updatePasswordByEmail(email, hashed);
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error updating the password in our records.";
+        }
     }
 }

@@ -116,4 +116,10 @@ public class UserSQLDao implements UserDAO {
         String query = "DELETE FROM user WHERE user_id = " + id + ";";
         SQLConnector.getInstance().insertQuery(query);
     }
+
+    public void updatePasswordByEmail(String email, String newPassword) {
+        String query = "UPDATE user SET password = '" + newPassword +
+                "' WHERE email = '" + email + "';";
+        SQLConnector.getInstance().updateQuery(query);
+    }
 }

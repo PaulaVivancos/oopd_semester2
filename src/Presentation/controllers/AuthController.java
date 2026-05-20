@@ -135,7 +135,21 @@ public class AuthController implements ActionListener {
      */
     public void handleSendCode() {
         forgotPasswordView.showEnterEmailPopUp();
-        userManager.handleSendCode(forgotPasswordView.getEmail());
+        String enteredEmail = forgotPasswordView.getEmail();
+
+       if (enteredEmail == null || enteredEmail.trim().isEmpty()) {
+           forgotPasswordView.showError("The email you entered is not valid");
+            appController.switchCard(LOGIN);
+            return;
+       }
+
+        boolean emailExists = userManager.handleSendCode(enteredEmail);
+
+        if (!emailExists) {
+            forgotPasswordView.showError("The email address you entered does not match any registered account.");
+            forgotPasswordView.clearTextFields();
+            appController.switchCard(LOGIN);
+        }
     }
 
     /**
@@ -157,8 +171,19 @@ public class AuthController implements ActionListener {
      * Submits the new password from the forgot password view and redirects to login.
      */
     public void handleChangePassword() {
-        userManager.changePassword(forgotPasswordView.getNewPassword(), forgotPasswordView.getPasswordConfirmation());
-        appController.switchCard(LOGIN);
+        String targetEmail = forgotPasswordView.getEmail();
+        String plainPassword = forgotPasswordView.getNewPassword();
+        String passwordConfirmation = forgotPasswordView.getPasswordConfirmation();
+
+        String error = userManager.changePassword(targetEmail, plainPassword, passwordConfirmation);
+
+        if (error == null) {
+            forgotPasswordView.clearTextFields();
+            appController.switchCard(LOGIN);
+        } else {
+            forgotPasswordView.showError(error);
+            forgotPasswordView.showChangePassword(() -> handleChangePassword());
+        }
     }
 
     /**
