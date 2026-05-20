@@ -33,7 +33,7 @@ public class ConfigView extends BaseView {
     public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
 
     public ConfigView() {
-        super();
+        super(false);
 
         setLogOutButton();
         setDeleteAccountButton();
@@ -42,7 +42,6 @@ public class ConfigView extends BaseView {
     /** Populates the top bar dropdown menu with configuration-related options. */
     @Override
     protected void buildMenu(JPopupMenu menu){
-        //addMenuItem(menu, "i don't know yet", e -> System.out.println("don't know yet"));
     }
 
     /** Initializes all UI components for the config screen. */

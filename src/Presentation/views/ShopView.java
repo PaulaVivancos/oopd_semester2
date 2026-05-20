@@ -38,9 +38,10 @@ public class ShopView extends BaseView {
     //decides how many generators there are in other parts as well
 
     private static final String[] GENERATOR_IMAGES = {
-            "src/Presentation/Images/coffee_cup.png",
-            "src/Presentation/Images/coffee_cup.png",
-            "src/Presentation/Images/coffee_cup.png"
+            "resources/gen_vivari.png",
+            "resources/gen_starbucks.png",
+            "resources/gen_365.png",
+            "resources/gen_fornet.png"
     };
 
 
@@ -61,20 +62,17 @@ public class ShopView extends BaseView {
     private static final Dimension DIM_BUY_BUTTON = new Dimension(90, 36);
 
     public ShopView() {
-        super();
+        super(false);
 
         for (int i = 0; i < jbBuyButtons.size(); i++) {
             JButton buyBtn = jbBuyButtons.get(i);
 
-            // 1. Aplicamos el estilo correcto al botón
             styleButton(buyBtn, DIM_BUY_BUTTON);
 
-            // 2. Buscamos el panel de la fila
             Container row = buyBtn.getParent().getParent();
             if (row instanceof JPanel) {
                 JPanel panelRow = (JPanel) row;
 
-                // Si el botón está desactivado al inicio, ponemos el fondo deshabilitado
                 panelRow.setBackground(buyBtn.isEnabled() ? BACKGROUND_ROW : BACKGROUND_ROW_DISABLED);
 
                 panelRow.setBorder(BorderFactory.createCompoundBorder(
@@ -98,17 +96,6 @@ public class ShopView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e -> System.out.println(SAVE_GAME));
-        menu.addSeparator();
-        addMenuItem(menu, "Log out", e -> {
-            if(logoutListener != null)
-                logoutListener.actionPerformed(e);
-        });
-
-        addMenuItem(menu, "Delete account", e -> {
-            if(deleteListener != null)
-                deleteListener.actionPerformed(e);
-        });
     }
 
     /**
@@ -187,7 +174,7 @@ public class ShopView extends BaseView {
 
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 90));
 
-        JImagePanel img = new JImagePanel(null);
+        JImagePanel img = new JImagePanel(GENERATOR_IMAGES[index]);
         img.setPreferredSize(new Dimension(60, 60));
         img.setMaximumSize(new Dimension(60, 60));
         img.setOpaque(false);

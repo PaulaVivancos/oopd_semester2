@@ -48,14 +48,13 @@ public class UpgradeView extends BaseView {
     private ActionListener deleteListener;
 
     public UpgradeView() {
-        super();
+        super(false);
 
         for (int i = 0; i < jbBuyButtons.size(); i++) {
             JButton buyBtn = jbBuyButtons.get(i);
 
             styleButton(buyBtn, DIM_BUY_BUTTON);
 
-            // 2. Estilo de la fila contenedora (buyBtn -> eastPanel -> row)
             Container row = buyBtn.getParent().getParent();
             if (row instanceof JPanel) {
                 JPanel panelRow = (JPanel) row;
@@ -185,7 +184,7 @@ public class UpgradeView extends BaseView {
             public void mousePressed(MouseEvent e) {
                 if (button.isEnabled()) {
                     button.setBackground(BACKGROUND_BUTTON_PRESSED);
-                    button.setForeground(Color.BLACK); // El texto cambia a negro para contrastar
+                    button.setForeground(Color.BLACK);
                 }
             }
 
@@ -193,7 +192,7 @@ public class UpgradeView extends BaseView {
             public void mouseReleased(MouseEvent e) {
                 if (button.isEnabled()) {
                     button.setBackground(BACKGROUND_BUTTON);
-                    button.setForeground(Color.WHITE); // Vuelve a blanco
+                    button.setForeground(Color.WHITE);
                 }
             }
         });

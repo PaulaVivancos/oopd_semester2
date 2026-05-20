@@ -13,10 +13,16 @@ import java.awt.event.*;
  */
 public abstract class BaseView extends JPanel {
     private ActionListener listener;
-    private JButton menuButton, arrowBackButton;
+    private JButton arrowBackButton;
     private JPanel topBarGrid;
     private JPopupMenu popupMenu;
     private JImagePanel panel;
+
+    protected JButton menuButton;
+    protected boolean showMenuButton = true;
+
+    // GLOBAL STATIC LOGOUT LISTENER SHARED BY ALL SUBCLASSES
+    private static ActionListener globalLogoutListener;
 
     private final String BACKGROUND_URL = "resources/background.jpg";
 
@@ -26,7 +32,9 @@ public abstract class BaseView extends JPanel {
     /**
      * Sets up the background panel, top bar, and calls subclass initialization.
      */
-    public BaseView() {
+    public BaseView(boolean showMenuButton) {
+        this.showMenuButton = showMenuButton;
+
         setLayout(new BorderLayout());
 
         panel = new JImagePanel(BACKGROUND_URL);
@@ -34,15 +42,33 @@ public abstract class BaseView extends JPanel {
         panel.setLayout(new BorderLayout());
         panel.setOpaque(false);
 
-
         initMenu();
         panel.add(topBarGrid, BorderLayout.NORTH);
 
         initComponents();
 
-
         add(panel, BorderLayout.CENTER);
+    }
 
+    /**
+     * Sets the static global logout listener for ALL views that extend BaseView.
+     */
+    public static void setGlobalLogoutListener(ActionListener listener) {
+        globalLogoutListener = listener;
+    }
+
+    /**
+     * Convenience method for subclasses to automatically attach the working global logout logic.
+     * @param menu the popup menu to add the logout item to
+     */
+    protected void addGlobalLogoutItem(JPopupMenu menu) {
+        JMenuItem logoutItem = new JMenuItem("Log out");
+        logoutItem.addActionListener(e -> {
+            if (globalLogoutListener != null) {
+                globalLogoutListener.actionPerformed(e);
+            }
+        });
+        menu.add(logoutItem);
     }
 
     /**
@@ -70,24 +96,26 @@ public abstract class BaseView extends JPanel {
         JPanel topBarLeft = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 4));
         topBarLeft.setOpaque(false);
 
-        setMenuButton();
         setArrowBackButton();
-
-        popupMenu = new JPopupMenu();
-        buildMenu(popupMenu);
-
-        menuButton.addActionListener(e ->
-                popupMenu.show(menuButton, 0, menuButton.getHeight())
-        );
-
         arrowBackButton.addActionListener(e -> {
             if (listener != null) {
                 listener.actionPerformed(e);
             }
         });
-
-        topBarRight.add(menuButton);
         topBarLeft.add(arrowBackButton);
+
+        if (showMenuButton) {
+            setMenuButton();
+
+            popupMenu = new JPopupMenu();
+            buildMenu(popupMenu);
+
+            menuButton.addActionListener(e ->
+                    popupMenu.show(menuButton, 0, menuButton.getHeight())
+            );
+
+            topBarRight.add(menuButton);
+        }
 
         topBarGrid.add(topBarLeft);
         topBarGrid.add(topBarRight);
@@ -121,41 +149,19 @@ public abstract class BaseView extends JPanel {
         arrowBackButton.setOpaque(false);
     }
 
-    /**
-     * Subclasses implement this to populate the top bar dropdown menu with items.
-     * @param menu the popup menu to add items to
-     */
     protected abstract void buildMenu(JPopupMenu menu);
-
-    /**
-     * Subclasses implement this to initialize and lay out their specific UI components.
-     */
     protected abstract void initComponents();
 
-    /**
-     * Convenience method for adding a labeled menu item with an action to a popup menu.
-     * @param menu the popup menu to add the item to
-     * @param label the display text of the menu item
-     * @param action the listener to invoke when the item is clicked
-     */
     protected void addMenuItem(JPopupMenu menu, String label, ActionListener action) {
         JMenuItem item = new JMenuItem(label);
         item.addActionListener(action);
         menu.add(item);
     }
 
-    /**
-     * Adds a component to the center region of the background panel.
-     * @param component the component to add
-     */
     protected void addToCenter(JComponent component) {
         panel.add(component, BorderLayout.CENTER);
     }
 
-    /**
-     * Adds a component to the south region of the background panel.
-     * @param component the component to add
-     */
     protected void addToSouth(JComponent component) {
         panel.add(component, BorderLayout.SOUTH);
     }

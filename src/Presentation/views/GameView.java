@@ -1,5 +1,6 @@
 package Presentation.views;
 
+import Business.entities.Generator;
 import Presentation.JImagePanel;
 
 import javax.swing.*;
@@ -37,40 +38,37 @@ public class GameView extends BaseView {
 
     public static final String NEW_GAME = "NEW_GAME";
     public static final String LOAD_GAME = "LOAD_GAME";
-    public static final String VIEW_GAME = "VIEW_GAME";
     public static final String BUY_COFFEE = "BUY_COFFEE";
     public static final String GO_SHOP = "GO_TO_SHOP";
 
 
     public GameView() {
-        super(); // initMenu() + initComponents()
+        super(true); // initMenu() + initComponents()
 
-        setButton(jbBuy, DIMENSION_BUTTON);
         setButton(jbGen, DIMENSION_BUTTON);
         setButton(jbUpg, DIMENSION_BUTTON);
     }
 
     private ActionListener logoutListener;
-    private ActionListener deleteListener;
+    private ActionListener savegameListener;
     private ActionListener newGameListener;
     private ActionListener loadGameListener;
-    private ActionListener viewGameListener;
 
     /**
      * Populates the top bar menu with save/load game options and account actions.
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e-> System.out.println(SAVE_GAME));
-        menu.addSeparator();
-        addMenuItem(menu, "Log out", e -> {
-            if(logoutListener != null)
-                logoutListener.actionPerformed(e);
+        addMenuItem(menu, "Save game", e-> {
+            if (savegameListener != null) {
+                savegameListener.actionPerformed(e);
+            }
         });
 
-        addMenuItem(menu, "Delete account", e -> {
-            if(deleteListener != null)
-                deleteListener.actionPerformed(e);
+        addMenuItem(menu,"Log out", e -> {
+            if (logoutListener != null) {
+                logoutListener.actionPerformed(e);
+            }
         });
     }
 
@@ -106,8 +104,8 @@ public class GameView extends BaseView {
         jtTable = new JTable();
 
         // Buttons
-        jbBuy = new JButton("BUY COFFEE");
-        jbBuy.setActionCommand(BUY_COFFEE);
+        //jbBuy = new JButton("BUY COFFEE");
+        //jbBuy.setActionCommand(BUY_COFFEE);
         jbGen = new JButton("GENERATORS");
         jbGen.setActionCommand(GO_SHOP);
         jbUpg = new JButton("UPGRADES");
@@ -164,30 +162,42 @@ public class GameView extends BaseView {
         jpBot.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         jpBot.setOpaque(false);
 
-        String[] columns = {"ID", "Name", "Price"};
-        Object[][] data = {
-                {1, "Coffee", "$2.99"},
-                {2, "Tea", "$1.99"},
-                {3, "Cake", "$3.99"}
-        };
+        String[] columns = {"ID", "Name", "Quantity", "Price"};
 
-        jtTable = new JTable(data, columns);
-        JScrollPane scrollPane = new JScrollPane(jtTable);
-
-        //instance table model
-        DefaultTableModel tableModel = new DefaultTableModel(data, columns) {
-
+        DefaultTableModel tableModel = new DefaultTableModel(new Object[][]{}, columns) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                //all cells false
                 return false;
             }
         };
-        jtTable.getTableHeader().setReorderingAllowed(false);
-        jtTable.setModel(tableModel);
 
+        jtTable = new JTable(tableModel);
+        jtTable.getTableHeader().setReorderingAllowed(false);
+
+        JScrollPane scrollPane = new JScrollPane(jtTable);
         jpBot.setLayout(new BorderLayout());
         jpBot.add(scrollPane, BorderLayout.CENTER);
+    }
+
+    public void updateOwnedGeneratorsTable(java.util.List<Generator> ownedGenerators) {
+        DefaultTableModel model = (DefaultTableModel) jtTable.getModel();
+        model.setRowCount(0); // Clear old rows
+
+        int displayId = 1; // Visual counter for the table rows
+
+        for (int i = 0; i < ownedGenerators.size(); i++) {
+            Generator gen = ownedGenerators.get(i);
+
+            if (gen.getQuantity() > 0) {
+                model.addRow(new Object[]{
+                        i,
+                        gen.getType().getName(),
+                        gen.getQuantity(),
+                        String.format("$%.2f", gen.getCurrentPrice())
+                        //gen.getType().getBasePrice();
+                });
+            }
+        }
     }
 
     /**
@@ -213,7 +223,7 @@ public class GameView extends BaseView {
         jpEast.setOpaque(false);
         jpEast.setBorder(BorderFactory.createEmptyBorder(40, 20, 40, 60));
 
-        jpEast.add(jbBuy);
+        //jpEast.add(jbBuy);
         jpEast.add(Box.createVerticalStrut(20));
         jpEast.add(jbGen);
         jpEast.add(Box.createVerticalStrut(20));
@@ -229,7 +239,7 @@ public class GameView extends BaseView {
         jpWest.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 20));
 
         jlCounter.setFont(new Font("Arial", Font.PLAIN, 30));
-        jlCounter.setPreferredSize(new Dimension(120, 40)); //wide enough for max
+        jlCounter.setPreferredSize(new Dimension(155, 40)); //wide enough for max
         jlCounter.setHorizontalAlignment(SwingConstants.LEFT);
 
         jipCoffeeCupSmall.setOpaque(false);
@@ -365,11 +375,13 @@ public class GameView extends BaseView {
         return button;
     }
 
-    public void addLogoutListener(ActionListener l)  { this.logoutListener = l; }
-    public void addDeleteListener(ActionListener l)  { this.deleteListener = l; }
+    public void addLogoutListener(ActionListener l)  {
+        this.logoutListener = l;
+    }
+    public void addSaveGameListener(ActionListener l)  { this.savegameListener = l; }
 
     public void addBuyListener(ActionListener actionListener) {
-        jbBuy.addActionListener(actionListener);
+        //jbBuy.addActionListener(actionListener);
         jipCoffeeCup.addActionListener(actionListener);
     }
 

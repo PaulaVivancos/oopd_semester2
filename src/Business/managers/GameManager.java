@@ -21,7 +21,7 @@ public class GameManager {
         this.currentGame = gameDAO.getByUser(userId);
 
         if (this.currentGame == null) {
-            // No saved game for this user — start a fresh one
+            // No saved game for this user -> start a new one
             this.currentGame = new Game(userId, java.time.LocalDateTime.now(), 0, false, factory);
         }
     }
@@ -61,12 +61,34 @@ public class GameManager {
 
     public void createNewGame(int userId) {
         this.currentUserId = userId;
+
+        if (this.currentGame != null && !this.currentGame.isFinished()) {
+            this.currentGame.setFinished(true);
+            this.currentGame.setEndTime(java.time.LocalDateTime.now());
+            this.currentGame.stopGame();
+
+            try {
+                gameDAO.updateGame(this.currentGame);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        this.currentGame = new Game(userId, java.time.LocalDateTime.now(), 0, false, factory);
+        try {
+            saveGame();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        /*this.currentUserId = userId;
         this.currentGame = new Game(userId, java.time.LocalDateTime.now(), 0, false,factory);
         try {
             saveGame();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+
+         */
     }
 
     public void addCoffee() {
@@ -95,7 +117,9 @@ public class GameManager {
         if (currentGame == null) return false;
         if (currentGame.isUpgradePurchased(upgrade.getName())) return false;
         if (!currentGame.spendCoffees(upgrade.getCost())) return false;
+
         currentGame.applyUpgrade(upgrade.getTargetGeneratorName(), upgrade.getMultiplier());
+
         currentGame.markUpgradePurchased(upgrade.getName());
         return true;
     }

@@ -122,11 +122,23 @@ public class Game {
     public void setFinished(boolean finished) { this.finished = finished; }
 
     public void applyUpgrade(String generatorName, double multiplier) {
-        for (Generator g : generators) {
-            if (g.getType().getName().equals(generatorName)) {
-                g.applyMultiplier(multiplier);
+        if (generatorName == null || this.generators == null) return;
+
+        for (Generator gen : this.generators) {
+            if (gen.getType() != null && gen.getType().getName() != null) {
+                if (gen.getType().getName().equalsIgnoreCase(generatorName.trim())) {
+                    gen.applyMultiplier(multiplier);
+                }
             }
         }
+    }
+
+    /**
+     * Returns the list of names of all upgrades purchased in the current game session.
+     * @return an ArrayList containing the names of purchased upgrades.
+     */
+    public ArrayList<String> getPurchasedUpgradeNames() {
+        return this.purchasedUpgradeNames;
     }
 
     public boolean isUpgradePurchased(String upgradeName) {
@@ -135,5 +147,31 @@ public class Game {
 
     public void markUpgradePurchased(String upgradeName) {
         purchasedUpgradeNames.add(upgradeName);
+    }
+
+    /**
+     * Iterates through all previously purchased upgrade names, looks up their definition records,
+     * and reapplies their production modifiers directly to the generator running threads.
+     */
+    public void reapplyPurchasedUpgrades() {
+        if (this.purchasedUpgradeNames == null) return;
+
+        for (String upgradeName : this.purchasedUpgradeNames) {
+            if (upgradeName == null) continue;
+
+            // Clean up whitespace to prevent matching bugs
+            String cleanName = upgradeName.trim().toLowerCase();
+
+            // Map your database upgrade strings directly to your Generator Type names
+            if (cleanName.contains("clerk")) {
+                applyUpgrade("Gas Station Clerk", 2.0);
+            } else if (cleanName.contains("barista") || cleanName.contains("starbucks")) {
+                applyUpgrade("Starsbucks barista", 2.0); // Keep matching your factory spelling!
+            } else if (cleanName.contains("veteran")) {
+                applyUpgrade("365 Veteran", 2.0);
+            } else if (cleanName.contains("pourover") || cleanName.contains("galactic")) {
+                applyUpgrade("Galactic Pourover", 2.0);
+            }
+        }
     }
 }

@@ -23,7 +23,7 @@ public class StatsView extends BaseView {
     public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
 
     public StatsView() {
-        super();
+        super(false);
     }
 
     @Override

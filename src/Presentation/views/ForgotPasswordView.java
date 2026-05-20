@@ -264,7 +264,7 @@ public class ForgotPasswordView extends JPanel {
         title.setFont(new Font("Times New Roman", Font.BOLD, 20));
         title.setForeground(Color.WHITE);
 
-        JLabel instructions = new JLabel("*Please make sure this email actually exists and\nis linked to an existing account*");
+        JLabel instructions = new JLabel("*Please make sure this email actually exists and is linked to an existing account*");
         instructions.setAlignmentX(Component.CENTER_ALIGNMENT);
         instructions.setFont(new Font("Times New Roman", Font.BOLD, 13));
         instructions.setForeground(Color.WHITE);

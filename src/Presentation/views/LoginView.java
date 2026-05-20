@@ -336,4 +336,13 @@ public class LoginView extends JPanel {
     public JButton getSingUpButton() {
         return jbSignUp;
     }
+
+    public void clearFields() {
+        if (jtfUsername != null) {
+            jtfUsername.setText("");
+        }
+        if (jtfPassword != null) {
+            jtfPassword.setText("");
+        }
+    }
 }

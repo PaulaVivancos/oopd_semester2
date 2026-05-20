@@ -82,7 +82,7 @@ public class AuthController implements ActionListener {
         String password = loginView.getPassword();
 
         if (userManager.login(username_email, password)) {
-            appController.switchCard("menu");
+            appController.switchCard(MENU);
         } else {
             loginView.showError("Invalid credentials");
         }
@@ -93,6 +93,7 @@ public class AuthController implements ActionListener {
      */
     public void handleLogout(){
         userManager.logout();
+        loginView.clearFields();
         appController.switchCard(LOGIN);
     }
 
@@ -105,6 +106,7 @@ public class AuthController implements ActionListener {
 
         if(choice == JOptionPane.YES_OPTION){
             if(userManager.deleteUser()){
+                loginView.clearFields();
                 appController.switchCard(LOGIN);
             }else{
                 appController.showErrorPopUp("Error","Could not delete account. Please try again.");

@@ -5,10 +5,7 @@ import Business.entities.Game;
 import Business.entities.*;
 import Business.managers.GameManager;
 import Business.managers.UserManager;
-import Presentation.views.GameView;
-import Presentation.views.MenuView;
-import Presentation.views.UpgradeView;
-import Presentation.views.ShopView;
+import Presentation.views.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import static Presentation.controllers.AuthController.LOGIN;
 import static Presentation.views.GameView.*;
 import static Presentation.views.MenuView.GO_GAME;
 import static Presentation.views.ShopView.*;
@@ -58,15 +56,47 @@ public class GameController implements ActionListener, GameListener {
         appController.addCardToMainFrame(shopView, SHOP);
         gameView = new GameView();
         appController.addCardToMainFrame(gameView, GAME);
+        upgradeView = new UpgradeView();
+        appController.addCardToMainFrame(upgradeView, UPGRADE);
 
+        initListeners();
+    }
+
+    private void initListeners() {
         // add listeners from game view
         gameView.addBuyListener(this);
         gameView.addShopListener(this);
+        gameView.addSaveGameListener(e -> handleSaveGame());
 
         gameView.addNewGameListener(e -> handleNewGame());
         gameView.addLoadGameListener(e -> handleLoadGame());
-        //gameView.addViewGameListener();
-        gameView.addBackListener(e -> appController.goBack());
+        gameView.addBackListener(e -> {
+            int confirm = appController.showConfirmationPopUp("Exit game", "Do you want to save game before exiting?");
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    gameManager.saveGame();
+                    appController.showInfoPopUp("Save game", "Game saved successfully");
+                } catch (java.sql.SQLException ex) {
+                    ex.printStackTrace();
+                    appController.showErrorPopUp("Error saving game", "Game could not be saved automatically.");
+                }
+            }
+            appController.goBack();
+        });
+        gameView.addLogoutListener(e -> {
+            int confirm = appController.showConfirmationPopUp("Exit game", "Do you want to save game before exiting?");
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    gameManager.saveGame();
+                    appController.showInfoPopUp("Save game", "Game saved successfully");
+                } catch (java.sql.SQLException ex) {
+                    ex.printStackTrace();
+                    appController.showErrorPopUp("Error saving game", "Game could not be saved automatically.");
+                }
+            }
+            appController.switchCard(LOGIN);
+        });
+
         gameView.getJbUpg().addActionListener(e -> {
             appController.switchCard(UPGRADE);
             if (gameManager.getCurrentGame() != null)
@@ -74,13 +104,22 @@ public class GameController implements ActionListener, GameListener {
         });
 
         // upgrade view
-        upgradeView = new UpgradeView();
-        appController.addCardToMainFrame(upgradeView, UPGRADE);
+
         upgradeView.addBackListener(e -> appController.goBack());
         upgradeView.addBuyUpgradeListener(this);
 
         shopView.addBackListener(e -> appController.goBack());
 
+        BaseView.setGlobalLogoutListener(e -> {
+            if (gameManager.getCurrentGame() != null) {
+                gameManager.getCurrentGame().stopGame();
+            }
+            if (statsTracker != null) {
+                statsTracker.stop();
+            }
+
+            appController.switchCard(LOGIN);
+        });
     }
 
     @Override
@@ -116,13 +155,13 @@ public class GameController implements ActionListener, GameListener {
 
     private void handleLoadGame () {
         int userId = userManager.getCurrentUser().getId();
-        appController.showErrorPopUp(ERROR, UNFINISHED_GAME_WARN);
 
         if (gameManager.hasUnfinishedGame(userId)) {
             gameManager.loadGame(userId);
             Game loadGame = gameManager.getCurrentGame();
             setGameInView(loadGame);
         } else {
+            appController.showErrorPopUp(ERROR, UNFINISHED_GAME_WARN);
             handleNewGame();
         }
     }
@@ -131,18 +170,22 @@ public class GameController implements ActionListener, GameListener {
         int userId = userManager.getCurrentUser().getId();
         appController.showInfoPopUp(NEW_GAME, CREATING_NEW_GAME);
 
-
         gameManager.createNewGame(userId);
         Game newGame = gameManager.getCurrentGame();
 
         newGame.addListener(this);
         setInitialConditions();
         startStatsTracker(newGame);
+        refreshGameViewTable();
     }
 
     private void startStatsTracker(Game game) {
         if (statsTracker != null) {
             statsTracker.stop();
+
+            if (gameManager.getCurrentGame() != null) {
+                gameManager.getCurrentGame().stopGame();
+            }
         }
 
         statsTracker = new StatsTracker(statsController, game);
@@ -171,7 +214,11 @@ public class GameController implements ActionListener, GameListener {
 
         loadGame.addListener(this);
         gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());
-        loadGame.startGame();
+
+        startStatsTracker(loadGame);
+        refreshGameViewTable();
+
+        //loadGame.startGame();
     }
 
     private void handleBuyCoffee() {
@@ -186,6 +233,7 @@ public class GameController implements ActionListener, GameListener {
 
     private void handleBuyGenerator(int id) {
         gameManager.addGenerator(id);
+        refreshGameViewTable();
     }
 
     private void attachGenListeners() {
@@ -203,6 +251,7 @@ public class GameController implements ActionListener, GameListener {
             gameView.updateCounter(newAmount);
             refreshUpgradeView(newAmount);
             refreshShopView(newAmount);
+            refreshGameViewTable();
         });
     }
 
@@ -222,6 +271,27 @@ public class GameController implements ActionListener, GameListener {
             Generator gen = game.getGenerators().get(i);
             boolean canAfford = currentCoffees >= gen.getCurrentPrice();
             shopView.updateGeneratorRow(i,gen.getCurrentPrice(),gen.getQuantity(),canAfford);
+        }
+    }
+
+    private void refreshGameViewTable() {
+        if (gameManager.getCurrentGame() != null) {
+            ArrayList<Generator> ownedGens = gameManager.getGenerators();
+            SwingUtilities.invokeLater(() -> {
+                gameView.updateOwnedGeneratorsTable(ownedGens);
+            });
+        }
+    }
+
+    private void handleSaveGame() {
+        try {
+            if (gameManager.getCurrentGame() != null) {
+                gameManager.saveGame();
+                appController.showInfoPopUp("Success", "Game progress saved securely!");
+            }
+        } catch (java.sql.SQLException ex) {
+            ex.printStackTrace();
+            appController.showErrorPopUp("Database Error", "Failed to save game information.");
         }
     }
 }

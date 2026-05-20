@@ -52,4 +52,13 @@ public class Generator implements Runnable{
 
     public int getQuantity() {return quantity;}
     public double getCurrentPrice() {return currentPrice;}
+
+    /**
+     * Sets the current quantity owned of this generator.
+     * Used primarily when loading a saved game from the database.
+     * * @param quantity The number of generators loaded from the database state.
+     */
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
