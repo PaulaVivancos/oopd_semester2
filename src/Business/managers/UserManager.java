@@ -77,6 +77,20 @@ public class UserManager {
     public String signUp(String username, String email, String password, String password_confirmation) {
         if (password.length() < 8)
             return "Password must be at least 8 characters.";
+
+        boolean hasLower = false, hasUpper = false, hasDigit = false;
+        for (char c : password.toCharArray()) {
+            if (Character.isLowerCase(c)) hasLower = true;
+            else if (Character.isUpperCase(c)) hasUpper = true;
+            else if (Character.isDigit(c)) hasDigit = true;
+        }
+        if (!hasLower)
+            return "Password must contain at least one lowercase letter.";
+        if (!hasUpper)
+            return "Password must contain at least one uppercase letter.";
+        if (!hasDigit)
+            return "Password must contain at least one number.";
+
         if (!password.equals(password_confirmation))
             return "Passwords do not match.";
         if (!email.contains("@"))
