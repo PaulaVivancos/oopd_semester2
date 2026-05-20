@@ -24,14 +24,12 @@ public class UpgradeView extends BaseView {
     private JLabel jlTitle;
 
     private List<JButton> jbBuyButtons;
-    private List<JLabel> jlCurrentImprovement;
-    private List<JLabel> jlPurchasableImprovement;
 
     public static final Upgrade[] UPGRADES = {
-            new Upgrade("Better Grinder", 100, 2.0, "Vivari Life"),
-            new Upgrade("Lukewarm Special", 500, 3.0, "Vivari Life"),
-            new Upgrade("Extra Shot", 2000, 3.0, "Starsbucks barista"),
-            new Upgrade("Oat Milk", 10000, 3.5, "Starsbucks barista"),
+            new Upgrade("Better Grinder", 100, 2.0, "Gas station clerk"),
+            new Upgrade("Lukewarm Special", 500, 3.0, "Gas station clerk"),
+            new Upgrade("Extra Shot", 2000, 3.0, "Starsbuck barista"),
+            new Upgrade("Oat Milk", 10000, 3.5, "Starsbuck barista"),
             new Upgrade("Better beans", 25000, 5.0, "365 Veteran"),
             new Upgrade("Black Belt Brew", 150000, 5.0, "365 Veteran"),
     };
@@ -93,8 +91,6 @@ public class UpgradeView extends BaseView {
     @Override
     protected void initComponents() {
         jbBuyButtons = new ArrayList<>();
-        jlCurrentImprovement = new ArrayList<>();
-        jlPurchasableImprovement = new ArrayList<>();
 
         jlTitle = new JLabel("Upgrade shop");
         jlTitle.setFont(new Font("Times New Roman", Font.BOLD, 22));
@@ -145,25 +141,12 @@ public class UpgradeView extends BaseView {
         costLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         costLabel.setForeground(TEXT_DARK);
 
-        JLabel currentImprovLabel = new JLabel("Current: 1.0x");
-        currentImprovLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-        currentImprovLabel.setForeground(TEXT_DARK);
-        jlCurrentImprovement.add(currentImprovLabel);
-
-        JLabel purchasableImprovLabel = new JLabel(String.format("Upgrade: %.1fx", upg.getMultiplier()));
-        purchasableImprovLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-        purchasableImprovLabel.setForeground(TEXT_DARK);
-        jlPurchasableImprovement.add(purchasableImprovLabel);
-
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setOpaque(false);
         infoPanel.add(nameLabel);
         infoPanel.add(Box.createVerticalStrut(3));
         infoPanel.add(costLabel);
-        infoPanel.add(Box.createVerticalStrut(2));
-        infoPanel.add(currentImprovLabel);
-        infoPanel.add(purchasableImprovLabel);
 
         JButton buyBtn = new JButton("BUY");
         styleButton(buyBtn, DIM_BUY_BUTTON);
@@ -221,15 +204,12 @@ public class UpgradeView extends BaseView {
      * @param canAfford whether the player can currently afford this upgrade
      * @param purchased whether this upgrade has already been bought
      */
-    public void updateUpgradeRow(int index, boolean canAfford, boolean purchased, double currentMultiplier) {
+    public void updateUpgradeRow(int index, boolean canAfford, boolean purchased) {
         JButton btn = jbBuyButtons.get(index);
         Container row = btn.getParent().getParent();
 
         btn.setEnabled(!purchased && canAfford);
         btn.setText(purchased ? "OWNED" : "BUY");
-
-        jlCurrentImprovement.get(index).setText(String.format("Current: %.1fx", currentMultiplier));
-        jlPurchasableImprovement.get(index).setVisible(!purchased);
 
         if (row instanceof JPanel) {
             row.setBackground(purchased || !canAfford ? BACKGROUND_ROW_DISABLED : BACKGROUND_ROW);
