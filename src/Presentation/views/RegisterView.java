@@ -32,7 +32,7 @@ public class RegisterView extends JPanel {
     private final String BACKGROUND_URL = "resources/background.jpg";
 
     /**
-     *
+     * Constructs the register view and initializes all UI components.
      */
     public RegisterView() {
         setLayout(new BorderLayout());
@@ -67,8 +67,8 @@ public class RegisterView extends JPanel {
     }
 
     /**
-     *
-     * @param actionListener
+     * Registers a listener for the sign up and log in buttons.
+     * @param actionListener the ActionListener to invoke on click
      */
     public void addListeners(ActionListener actionListener) {
         jbLogIn.addActionListener(actionListener);
@@ -374,40 +374,36 @@ public class RegisterView extends JPanel {
     }
 
     /**
-     *
-     * @return
+     * @return the text entered in the username field
      */
     public String getUsername() {
         return jtfUsername.getText();
     }
 
     /**
-     *
-     * @return
+     * @return the text entered in the password field
      */
     public String getPassword() {
         return new String(jtfPassword.getPassword());
     }
 
     /**
-     *
-     * @return
+     * @return the text entered in the email field
      */
     public String getEmail() {
         return jtfEmail.getText();
     }
 
     /**
-     *
-     * @return
+     * @return the text entered in the password confirmation field
      */
     public String getPasswordConfirmation() {
         return new String(jtfPasswordConfirmation.getPassword());
     }
 
     /**
-     *
-     * @param message
+     * Displays an error dialog with the given message.
+     * @param message the error message to display
      */
     public void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);

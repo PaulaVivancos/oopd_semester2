@@ -49,6 +49,9 @@ public class UpgradeView extends BaseView {
     private ActionListener logoutListener;
     private ActionListener deleteListener;
 
+    /**
+     * Constructs the upgrade view and applies styling to all buy buttons.
+     */
     public UpgradeView() {
         super(false);
 
@@ -68,9 +71,6 @@ public class UpgradeView extends BaseView {
             }
         }
     }
-
-    public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
-    public void addDeleteListener(ActionListener l) { this.deleteListener = l; }
 
     /**
      * Populates the top bar menu with save/load options and account actions.
@@ -216,10 +216,11 @@ public class UpgradeView extends BaseView {
     }
 
     /**
-     * Updates the affordability and purchase state of an upgrade row.
-     * @param index the upgrade row to update
-     * @param canAfford whether the player can currently afford this upgrade
-     * @param purchased whether this upgrade has already been bought
+     * Updates the state of an upgrade row based on affordability and purchase status.
+     * @param index             the upgrade row index
+     * @param canAfford         whether the player can currently afford the upgrade
+     * @param purchased         whether the upgrade has already been purchased
+     * @param currentMultiplier the generator's current multiplier to display
      */
     public void updateUpgradeRow(int index, boolean canAfford, boolean purchased, double currentMultiplier) {
         JButton btn = jbBuyButtons.get(index);
@@ -237,7 +238,8 @@ public class UpgradeView extends BaseView {
     }
 
     /**
-     * Attaches the given listener to all upgrade buy buttons.
+     * Registers a listener for all upgrade buy buttons.
+     * @param l the ActionListener to invoke on click
      */
     public void addBuyUpgradeListener(ActionListener l) {
         for (JButton btn : jbBuyButtons) {

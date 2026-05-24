@@ -35,8 +35,6 @@ public class ShopView extends BaseView {
 
     protected final static String SAVE_GAME = "SAVE_GAME";
 
-    //decides how many generators there are in other parts as well
-
     private static final String[] GENERATOR_IMAGES = {
             "resources/gen_vivari.png",
             "resources/gen_starbucks.png",
@@ -44,8 +42,6 @@ public class ShopView extends BaseView {
             "resources/gen_fornet.png"
     };
 
-
-    //TODO: link this to actual mechanism
     private final int[] ownedCounts = {0, 0, 0, 0};
 
     // COLOR CONSTANTS
@@ -61,6 +57,9 @@ public class ShopView extends BaseView {
     // SIZE CONSTANTS
     private static final Dimension DIM_BUY_BUTTON = new Dimension(90, 36);
 
+    /**
+     * Constructs the shop view, initializes generator rows, and applies button styling.
+     */
     public ShopView() {
         super(false);
 
@@ -83,14 +82,7 @@ public class ShopView extends BaseView {
         }
     }
 
-    //Menu stuff
-    private ActionListener logoutListener;
-    private ActionListener deleteListener;
 
-    public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
-    public void addDeleteListener(ActionListener l) { this.deleteListener = l; }
-
-    //From Game View TODO: maybe remove redundancy
     /**
      * Populates the top bar menu with save/load options and account actions.
      */
@@ -227,9 +219,9 @@ public class ShopView extends BaseView {
     }
 
     /**
-     *
-     * @param button
-     * @param dimension
+     * Applies consistent size, color, and press effect styling to a button.
+     * @param button    the button to style
+     * @param dimension the size to apply
      */
     private void styleButton(JButton button, Dimension dimension) {
         button.setPreferredSize(dimension);
@@ -283,13 +275,6 @@ public class ShopView extends BaseView {
         }
     }
 
-    public JButton getBuyButton(int index) {
-        return jbBuyButtons.get(index);
-    }
-
-    public List<JButton> getAllBuyButtons() {
-        return jbBuyButtons;
-    }
 
     /**
      * Populates all generator rows with data from the given type list.
@@ -309,10 +294,20 @@ public class ShopView extends BaseView {
 
     }
 
+    /**
+     * Registers a buy listener for the generator at the given index.
+     * @param index    the generator row index
+     * @param listener the ActionListener to invoke on click
+     */
     public void addGenBuyListener(int index, ActionListener listener) {
         jbBuyButtons.get(index).addActionListener(listener);
     }
 
+    /**
+     * Removes a buy listener from the generator at the given index.
+     * @param index    the generator row index
+     * @param listener the ActionListener to remove
+     */
     public void removeGenBuyListener(int index, ActionListener listener) {
         jbBuyButtons.get(index).removeActionListener(listener);
     }
