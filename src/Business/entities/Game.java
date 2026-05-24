@@ -41,7 +41,7 @@ public class Game {
         this.finished = finished;
         for (GeneratorType type : factory.createGeneratorTypes()) {
             this.generators.add(new Generator(type, this));
-        }        //this.generators = generators;
+        }
     }
 
     /**
@@ -65,7 +65,7 @@ public class Game {
         this.finished = finished;
         for (GeneratorType type : factory.createGeneratorTypes()) {
             this.generators.add(new Generator(type, this));
-        }           //this.generators = generators;
+        }
     }
 
     /**
@@ -98,7 +98,7 @@ public class Game {
         synchronized (Game.class) {
             numCoffees += amount;
         }
-        notifyUI(); // tell the view to refresh
+        notifyUI();
     }
 
     /**
@@ -293,11 +293,10 @@ public class Game {
 
             String cleanName = upgradeName.trim().toLowerCase();
 
-            // Map your database upgrade strings directly to your Generator Type names
             if (cleanName.contains("clerk")) {
                 applyUpgrade("Gas Station Clerk", 2.0);
             } else if (cleanName.contains("barista") || cleanName.contains("starbucks")) {
-                applyUpgrade("Starsbucks barista", 2.0); // Keep matching your factory spelling!
+                applyUpgrade("Starsbucks barista", 2.0);
             } else if (cleanName.contains("veteran")) {
                 applyUpgrade("365 Veteran", 2.0);
             } else if (cleanName.contains("pourover") || cleanName.contains("galactic")) {

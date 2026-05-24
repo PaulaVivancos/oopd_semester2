@@ -15,6 +15,8 @@ public class Generator implements Runnable{
     private volatile boolean running = true;
     private volatile boolean paused = false;
 
+    private static final int SECOND_MILIS = 1000;
+
     /**
      * Creates a new generator of the given type associated with the given game session.
      * Initializes the quantity to zero and the current price to the type's base cost.
@@ -49,7 +51,7 @@ public class Generator implements Runnable{
     public void run() {
         while (running) {
             try {
-                Thread.sleep(1000); // tick every second
+                Thread.sleep(SECOND_MILIS); // tick every second
                 if (!paused && quantity > 0) {
                     double produced = quantity * type.getBaseProduction() * upgradeMultiplier;
                     game.addCoffees(produced);
