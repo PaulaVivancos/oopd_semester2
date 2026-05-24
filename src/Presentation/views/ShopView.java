@@ -315,6 +315,8 @@ public class ShopView extends BaseView {
         jbBuyButtons.get(index).addActionListener(listener);
     }
 
-    //TODO: move to logic?
+    public void removeGenBuyListener(int index, ActionListener listener) {
+        jbBuyButtons.get(index).removeActionListener(listener);
+    }
 
 }

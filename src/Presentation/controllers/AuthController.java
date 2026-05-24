@@ -188,6 +188,10 @@ public class AuthController implements ActionListener {
         }
     }
 
+    /**
+     * Returns the username of the user that is currently logged in.
+     * @return the username of the user.
+     */
     public String getLoggedInUsername() {
         return userManager.getLoggedInUsername();
     }

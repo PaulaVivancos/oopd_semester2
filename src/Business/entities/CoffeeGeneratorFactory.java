@@ -2,7 +2,19 @@ package Business.entities;
 
 import java.util.List;
 
+/**
+ * Concrete implementation of {@link GeneratorFactory} that creates the four
+ * coffee generator types available in the game, each with their own base cost,
+ * production rate, and cost increment multiplier.
+ */
 public class CoffeeGeneratorFactory implements GeneratorFactory {
+
+    /**
+     * Creates and returns the list of coffee generator types available in the game.
+     * The generators are ordered by increasing cost and production power:
+     * Vivari Life, Starsbucks barista, 365 Veteran, and Fornet Supreme.
+     * @return a list of {@link GeneratorType} instances representing all available generators
+     */
     @Override
     public List<GeneratorType> createGeneratorTypes() {
         return List.of(

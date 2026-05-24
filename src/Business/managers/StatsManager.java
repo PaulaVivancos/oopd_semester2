@@ -24,10 +24,12 @@ public class StatsManager {
         return statsDAO.loadStatsByUserAndGame(username, gameId);
     }
 
-    public void saveStat(int gameId, double minute, double coffees) {
-        statsDAO.insertStats(gameId, minute, coffees);
+    public void saveStat(int gameId, int userId, double minute, double coffees) {
+        statsDAO.insertStats(gameId, userId, minute, coffees);
     }
 
-
+    public double getLastMinute(int gameId) {
+        return statsDAO.getLastMinute(gameId);
+    }
 
 }

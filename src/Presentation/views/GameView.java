@@ -11,8 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.util.List;
-import static Presentation.views.ShopView.SAVE_GAME;
-import static java.lang.Math.round;
 
 /**
  * View for the main gameplay screen, showing the coffee cup, counter, shop buttons, and a data table.
@@ -43,6 +41,9 @@ public class GameView extends BaseView {
     public static final String GO_SHOP = "GO_TO_SHOP";
 
 
+    /*
+
+     */
     public GameView() {
         super(true); // initMenu() + initComponents()
 
@@ -105,8 +106,6 @@ public class GameView extends BaseView {
         jtTable = new JTable();
 
         // Buttons
-        //jbBuy = new JButton("BUY COFFEE");
-        //jbBuy.setActionCommand(BUY_COFFEE);
         jbGen = new JButton("GENERATORS");
         jbGen.setActionCommand(GO_SHOP);
         jbUpg = new JButton("UPGRADES");

@@ -6,11 +6,8 @@ import Presentation.PaintChart;
 import Presentation.views.StatsView;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
-import static Presentation.views.MenuView.GO_STATS;
 
 public class StatsController  {
     private final AppController appController;
@@ -45,8 +42,8 @@ public class StatsController  {
         statsView.removeComboBoxListeners(playerChangedListener, gameChangedListener);
     }
 
-    public void saveStat(int gameId, double minute, double coffees) {
-        statsManager.saveStat(gameId, minute, coffees);
+    public void saveStat(int gameId, int userId, double minute, double coffees) {
+        statsManager.saveStat(gameId, userId, minute, coffees);
     }
 
     public void onViewOpened(String loggedUsername) {
@@ -100,6 +97,12 @@ public class StatsController  {
             statsView.setChart(chart);
         }
     }
+
+    public double getLastMinute(int gameId) {
+        return statsManager.getLastMinute(gameId);
+    }
+
+
 
 
 }

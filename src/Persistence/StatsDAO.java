@@ -1,18 +1,14 @@
 package Persistence;
 
 import Business.entities.CoffeeStats;
-import Persistence.SQLDaos.SQLConnector;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface StatsDAO {
-    public void insertStats(int gameId, double time, double num_coffees);
-    public List<CoffeeStats> loadStats();
-    public void deleteAll();
-    public List<String> loadAllPlayers();
-    public List<Integer> loadGamesByPlayer(String username);
-    public List<CoffeeStats> loadStatsByUserAndGame(String username, int gameId);
+    void insertStats(int gameId, int userId, double time, double num_coffees);
+    List<CoffeeStats> loadStats();
+    void deleteAll();
+    List<String> loadAllPlayers();
+    List<Integer> loadGamesByPlayer(String username);
+    List<CoffeeStats> loadStatsByUserAndGame(String username, int gameId);
+    double getLastMinute(int gameId);
 }

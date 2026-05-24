@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatsSQLDao implements StatsDAO {
+
     @Override
-    public void insertStats(int gameId, double time, double num_coffees) {
-        String query = "INSERT INTO statistics(game_id, minute, num_coffees) VALUES (" +
+    public void insertStats(int gameId, int userId, double time, double num_coffees) {
+        String query = "INSERT INTO statistics(game_id, user_id, minute, num_coffees) VALUES (" +
                 gameId + ", " +
+                userId + ", " +
                 time + ", " +
                 num_coffees + ");";
 
@@ -99,6 +101,19 @@ public class StatsSQLDao implements StatsDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public double getLastMinute(int gameId) {
+        String query = "SELECT MAX(minute) FROM statistics WHERE game_id = " + gameId + ";";
+        ResultSet rs = SQLConnector.getInstance().selectQuery(query);
+        try {
+            if (rs != null && rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0;
     }
 
 }

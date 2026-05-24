@@ -26,6 +26,7 @@ public class GameController implements ActionListener, GameListener {
     private final UserManager userManager;
 
     public static int NUM_GENERATORS = 4;
+    private final ActionListener[] genListeners;
 
     // views
     private final GameView gameView;
@@ -58,6 +59,7 @@ public class GameController implements ActionListener, GameListener {
         appController.addCardToMainFrame(gameView, GAME);
         upgradeView = new UpgradeView();
         appController.addCardToMainFrame(upgradeView, UPGRADE);
+        genListeners = new ActionListener[NUM_GENERATORS];
 
         initListeners();
     }
@@ -197,7 +199,9 @@ public class GameController implements ActionListener, GameListener {
             }
         }
 
-        statsTracker = new StatsTracker(statsController, game);
+        double minuteOffset = statsController.getLastMinute(game.getGameId());
+
+        statsTracker = new StatsTracker(statsController, game, minuteOffset);
         statsThread = new Thread(statsTracker);
         statsThread.start();
         game.startGame();
@@ -246,12 +250,17 @@ public class GameController implements ActionListener, GameListener {
         refreshGameViewTable();
     }
 
+
     private void attachGenListeners() {
         for (int i = 0; i < gameManager.getGeneratorTypes().size(); i++) {
             final int index = i;
-            shopView.addGenBuyListener(index, e -> {
-                handleBuyGenerator(index);
-            });
+
+            if (genListeners[index] != null) {
+                shopView.removeGenBuyListener(index, genListeners[index]);
+            }
+
+            genListeners[index] = e -> handleBuyGenerator(index);
+            shopView.addGenBuyListener(index, genListeners[index]);
         }
     }
 

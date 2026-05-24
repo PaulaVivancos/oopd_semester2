@@ -171,7 +171,13 @@ public class UserManager {
         return sendedCode;
     }
 
-
+    /**
+     *
+     * @param email
+     * @param newPassword
+     * @param passwordConfirmation
+     * @return
+     */
     public String changePassword(String email, String newPassword, String passwordConfirmation) {
         if (email == null || email.trim().isEmpty()) {
             return "Invalid session or email context.";
@@ -195,6 +201,10 @@ public class UserManager {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String getLoggedInUsername() {
         return currentUser.getUsername();
     }
