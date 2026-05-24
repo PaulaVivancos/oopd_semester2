@@ -31,7 +31,6 @@ public class GameView extends BaseView {
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
     // IMAGES
-    private final String BACKGROUND_URL = "resources/background.jpg";
     private final String TITLE_URL = "resources/title.png";
     private final String COFFEE_CUP = "resources/coffee_cup.png";
 
@@ -39,6 +38,12 @@ public class GameView extends BaseView {
     public static final String LOAD_GAME = "LOAD_GAME";
     public static final String BUY_COFFEE = "BUY_COFFEE";
     public static final String GO_SHOP = "GO_TO_SHOP";
+
+    private static final String GENERATORS = "GENERATORS";
+    private static final String UPGRADES = "UPGRADES";
+    private static final String SAVE_GAME = "Save game";
+    protected static final String LOG_OUT = "Log out";
+
 
     private ActionListener logoutListener;
     private ActionListener savegameListener;
@@ -61,13 +66,13 @@ public class GameView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e-> {
+        addMenuItem(menu, SAVE_GAME, e-> {
             if (savegameListener != null) {
                 savegameListener.actionPerformed(e);
             }
         });
 
-        addMenuItem(menu,"Log out", e -> {
+        addMenuItem(menu,LOG_OUT, e -> {
             if (logoutListener != null) {
                 logoutListener.actionPerformed(e);
             }
@@ -89,13 +94,12 @@ public class GameView extends BaseView {
 
         // Images
         jipTitle = new JImagePanel(TITLE_URL);
-        //jipCoffeeCup = new JImagePanel(COFFEE_CUP);
         jipCoffeeCupSmall = new JImagePanel(COFFEE_CUP);
 
         // COFFEE clickable
         ImageIcon raw = new ImageIcon(COFFEE_CUP);
         Image scaled = raw.getImage().getScaledInstance(250, 300, Image.SCALE_SMOOTH);
-        jipCoffeeCup = new JButton(new ImageIcon(scaled)); //assign to field
+        jipCoffeeCup = new JButton(new ImageIcon(scaled));
         jipCoffeeCup.setContentAreaFilled(false);
         jipCoffeeCup.setBorderPainted(false);
         jipCoffeeCup.setFocusPainted(false);
@@ -106,9 +110,9 @@ public class GameView extends BaseView {
         jtTable = new JTable();
 
         // Buttons
-        jbGen = new JButton("GENERATORS");
+        jbGen = new JButton(GENERATORS);
         jbGen.setActionCommand(GO_SHOP);
-        jbUpg = new JButton("UPGRADES");
+        jbUpg = new JButton(UPGRADES);
 
         // Sets everything
         setJipMain();

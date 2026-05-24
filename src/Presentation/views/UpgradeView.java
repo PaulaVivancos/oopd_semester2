@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Presentation.views.GameView.LOG_OUT;
 import static Presentation.views.ShopView.SAVE_GAME;
 
 /**
@@ -26,6 +27,12 @@ public class UpgradeView extends BaseView {
     private List<JButton> jbBuyButtons;
     private List<JLabel> jlCurrentImprovement;
     private List<JLabel> jlPurchasableImprovement;
+
+    private final static String DELETE_ACCOUNT = "Delete account";
+    final static String OWNED = "OWNED";
+    protected final static String BUY = "BUY";
+    private final static String UPGRADE_SHOP = "Upgrade shop";
+
 
     public static final Upgrade[] UPGRADES = {
             new Upgrade("Better Grinder", 100, 2.0, "Vivari Life"),
@@ -77,12 +84,12 @@ public class UpgradeView extends BaseView {
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e -> System.out.println(SAVE_GAME));
+        addMenuItem(menu, SAVE_GAME, e -> System.out.println(SAVE_GAME));
         menu.addSeparator();
-        addMenuItem(menu, "Log out", e -> {
+        addMenuItem(menu, LOG_OUT, e -> {
             if (logoutListener != null) logoutListener.actionPerformed(e);
         });
-        addMenuItem(menu, "Delete account", e -> {
+        addMenuItem(menu, DELETE_ACCOUNT, e -> {
             if (deleteListener != null) deleteListener.actionPerformed(e);
         });
     }
@@ -96,7 +103,7 @@ public class UpgradeView extends BaseView {
         jlCurrentImprovement = new ArrayList<>();
         jlPurchasableImprovement = new ArrayList<>();
 
-        jlTitle = new JLabel("Upgrade shop");
+        jlTitle = new JLabel(UPGRADE_SHOP);
         jlTitle.setFont(new Font("Times New Roman", Font.BOLD, 22));
         jlTitle.setForeground(BACKGROUND_BUTTON);
         jlTitle.setBackground(BACKGROUND_BUTTON_PRESSED);
@@ -165,7 +172,7 @@ public class UpgradeView extends BaseView {
         infoPanel.add(currentImprovLabel);
         infoPanel.add(purchasableImprovLabel);
 
-        JButton buyBtn = new JButton("BUY");
+        JButton buyBtn = new JButton(BUY);
         styleButton(buyBtn, DIM_BUY_BUTTON);
         buyBtn.setEnabled(false);
         buyBtn.setActionCommand(String.valueOf(index));
@@ -227,7 +234,7 @@ public class UpgradeView extends BaseView {
         Container row = btn.getParent().getParent();
 
         btn.setEnabled(!purchased && canAfford);
-        btn.setText(purchased ? "OWNED" : "BUY");
+        btn.setText(purchased ? OWNED : BUY);
 
         jlCurrentImprovement.get(index).setText(String.format("Current: %.1fx", currentMultiplier));
         jlPurchasableImprovement.get(index).setVisible(!purchased);

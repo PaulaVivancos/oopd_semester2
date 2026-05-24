@@ -26,13 +26,15 @@ public class PaintChart extends JPanel {
 
     private int lastDragX, lastDragY;
 
+    private static final String NO_STATS = "No statistics have been recorded yet for this game.";
+
     /**
      * Constructs the chart panel and sets up mouse controls for zoom and pan.
      */
     public PaintChart() {
         this.setLayout(new BorderLayout());
 
-        noDataLabel = new JLabel("No statistics have been recorded yet for this game.", SwingConstants.CENTER);
+        noDataLabel = new JLabel(NO_STATS, SwingConstants.CENTER);
         noDataLabel.setFont(new Font("Arial", Font.BOLD, 14));
         noDataLabel.setForeground(Color.GRAY);
 

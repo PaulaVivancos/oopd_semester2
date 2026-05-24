@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static Presentation.controllers.GameController.NUM_GENERATORS;
+import static Presentation.views.UpgradeView.BUY;
+import static Presentation.views.UpgradeView.OWNED;
 
 /**
  * View for the generator shop.
@@ -203,7 +205,7 @@ public class ShopView extends BaseView {
         infoPanel.add(prodLabel);
         infoPanel.add(ownedLabel);
 
-        JButton buyBtn = new JButton("BUY");
+        JButton buyBtn = new JButton(BUY);
         buyBtn.setEnabled(false);
         jbBuyButtons.add(buyBtn);
 
@@ -264,7 +266,7 @@ public class ShopView extends BaseView {
     public void updateGeneratorRow(int index, double nextCost, int owned, boolean canAfford) {
         ownedCounts[index] = owned;
         jlCosts.get(index).setText(String.format("Cost: %.2f", nextCost));
-        jlOwned.get(index).setText("Owned: " + owned);
+        jlOwned.get(index).setText(OWNED + ": " + owned);
 
         JButton btn = jbBuyButtons.get(index);
         btn.setEnabled(canAfford);

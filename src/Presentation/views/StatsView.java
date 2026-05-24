@@ -19,7 +19,6 @@ public class StatsView extends BaseView {
     private JComboBox<Integer> jcbGames;
 
     private PaintChart paintChart;
-    private final String BACKGROUND_URL = "resources/background.jpg";
 
     private ActionListener logoutListener;
 

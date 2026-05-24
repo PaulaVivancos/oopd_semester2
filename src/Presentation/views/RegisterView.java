@@ -27,7 +27,8 @@ public class RegisterView extends JPanel {
 
     public static final String REGISTER_USER = "REGISTER_USER";
     public static final String GO_LOGIN = "GO_TO_LOGIN";
-
+    private static final String SIGN_UP = "Sign up";
+    private static final String EXISTING_ACCOUNT = "Already have an account. Log in.";
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
 
@@ -47,7 +48,7 @@ public class RegisterView extends JPanel {
         jpPasswordConfirmation = new JPanel();
 
         //Labels
-        jlTitle = new JLabel("Sign up");
+        jlTitle = new JLabel(SIGN_UP);
 
         //Text fields
         jtfUsername = new JTextField();
@@ -57,8 +58,8 @@ public class RegisterView extends JPanel {
 
 
         //Buttons
-        jbLogIn = new JButton("Already have an account. Log in.");
-        jbSignUp = new JButton("SIGN UP");
+        jbLogIn = new JButton(EXISTING_ACCOUNT);
+        jbSignUp = new JButton(SIGN_UP);
 
         jbLogIn.setActionCommand(GO_LOGIN);
         jbSignUp.setActionCommand(REGISTER_USER);
