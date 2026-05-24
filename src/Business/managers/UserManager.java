@@ -19,7 +19,6 @@ public class UserManager {
 
     /**
      * Constructor method to create a new User Manager
-     *
      * @param userDao the DAO used to access and modify user records
      */
     public UserManager(UserDAO userDao) {
@@ -109,9 +108,9 @@ public class UserManager {
     }
 
     /**
-     * Sends a verification code to the given email and stores it for later validation.
-     * Stores null if the email could not be reached.
-     * * @param email the recipient's email address
+     * Sends a verification code to the given email if it exists in the system.
+     * @param email the email address to send the code to
+     * @return true if the code was sent successfully, false if the email wasn't found or sending failed
      */
     public boolean handleSendCode(String email) {
         if (!userDao.existsByEmail(email)) {
@@ -147,8 +146,8 @@ public class UserManager {
     }
 
     /**
-     * Deletes the current user's account and clears the active session.
-     * * @return true if the account was deleted successfully, false otherwise
+     * Deletes the currently logged-in user's account and clears the session.
+     * @return true if the user was deleted successfully, false if no user is logged in or an error occurs
      */
     public boolean deleteUser() {
         if (currentUser == null)
@@ -172,11 +171,11 @@ public class UserManager {
     }
 
     /**
-     *
-     * @param email
-     * @param newPassword
-     * @param passwordConfirmation
-     * @return
+     * Validates and updates the password for the account associated with the given email.
+     * @param email                the email of the account to update
+     * @param newPassword          the new password
+     * @param passwordConfirmation must match newPassword
+     * @return null on success, or an error message describing the failure
      */
     public String changePassword(String email, String newPassword, String passwordConfirmation) {
         if (email == null || email.trim().isEmpty()) {
@@ -202,8 +201,7 @@ public class UserManager {
     }
 
     /**
-     *
-     * @return
+     * @return the username of the currently logged-in user
      */
     public String getLoggedInUsername() {
         return currentUser.getUsername();

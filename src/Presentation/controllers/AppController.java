@@ -54,7 +54,11 @@ public class AppController {
         JOptionPane.showMessageDialog(this.mainFrame, message, title, JOptionPane.ERROR_MESSAGE);
     }
 
-
+    /**
+     * Displays an informational message dialog.
+     * @param title   the dialog window title
+     * @param message the message to display
+     */
     public void showInfoPopUp(String title, String message) {
         JOptionPane.showMessageDialog(this.mainFrame, message, title, JOptionPane.INFORMATION_MESSAGE);
     }

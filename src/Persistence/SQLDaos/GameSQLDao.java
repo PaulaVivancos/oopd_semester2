@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/**
+ * SQL-based implementation of {@link GameDAO} for persisting and retrieving game state.
+ */
 public class GameSQLDao implements GameDAO {
 
     @Override
@@ -68,6 +71,13 @@ public class GameSQLDao implements GameDAO {
         SQLConnector.getInstance().deleteQuery("DELETE FROM game WHERE game_id = " + gameId + ";");
     }
 
+    /**
+     * Maps the current row of the given ResultSet to a Game object,
+     * including its generators and upgrades.
+     * @param rs the ResultSet positioned at the row to map
+     * @return the reconstructed Game
+     * @throws SQLException if a database access error occurs
+     */
     private Game mapRow(ResultSet rs) throws SQLException {
         int gameId = rs.getInt("game_id");
         int userId = rs.getInt("user_id");
@@ -131,6 +141,7 @@ public class GameSQLDao implements GameDAO {
         return null;
     }
 
+    @Override
     public void saveGameGenerators(Game game) throws SQLException {
         SQLConnector.getInstance().deleteQuery("DELETE FROM game_generator WHERE game_id = " + game.getGameId() + ";");
 
@@ -148,6 +159,7 @@ public class GameSQLDao implements GameDAO {
         }
     }
 
+    @Override
     public void saveGameUpgrades(Game game) throws SQLException {
         SQLConnector.getInstance().deleteQuery("DELETE FROM game_upgrade WHERE game_id = " + game.getGameId() + ";");
 
@@ -162,7 +174,8 @@ public class GameSQLDao implements GameDAO {
         }
     }
 
-    private void loadGameGenerators(Game game) {
+    @Override
+    public void loadGameGenerators(Game game) {
         String query = "SELECT generator_id, quantity FROM game_generator WHERE game_id = " + game.getGameId() + ";";
         ResultSet rs = SQLConnector.getInstance().selectQuery(query);
         try {
@@ -180,7 +193,8 @@ public class GameSQLDao implements GameDAO {
         }
     }
 
-    private void loadGameUpgrades(Game game) {
+    @Override
+    public void loadGameUpgrades(Game game) {
         String query = "SELECT u.name " +
                 "FROM game_upgrade gu " +
                 "INNER JOIN upgrade u ON gu.upgrade_id = u.upgrade_id " +
