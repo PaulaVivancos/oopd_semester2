@@ -34,7 +34,11 @@ public class ForgotPasswordView extends JPanel {
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
 
-
+    /**
+     * Constructs the ForgotPasswordView, initializing all UI components including
+     * panels, labels, buttons, and text fields. Sets the action commands for the
+     * back and validate code buttons, and builds the main panel layout.
+     */
     public ForgotPasswordView() {
         setLayout(new BorderLayout());
 
@@ -248,8 +252,8 @@ public class ForgotPasswordView extends JPanel {
         JButton jbSendCode = createDialogButton("SEND CODE");
 
         JDialog dialog = new JDialog();
-        dialog.setModal(true); //Blocked until is disposed
-        dialog.setUndecorated(true);
+        dialog.setModal(true);
+        dialog.setUndecorated(false);
 
         JPanel content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
@@ -307,23 +311,6 @@ public class ForgotPasswordView extends JPanel {
         return button;
     }
 
-
-    public String getCode() {
-        return jtfCode.getText();
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void addBackLoginListener(ActionListener listener) {
-        jbBackLogIn.addActionListener(listener);
-    }
-
-    public void addValidateCodeListener(ActionListener listener) {
-        jbValidateCode.addActionListener(listener);
-    }
-
     /**
      * Opens a modal dialog for entering and confirming a new password.
      * Runs the provided callback once the passwords match and the user confirms.
@@ -331,7 +318,7 @@ public class ForgotPasswordView extends JPanel {
      */
     public void showChangePassword(Runnable onChangePassword) {
         JDialog dialog = new JDialog();
-        dialog.setUndecorated(true);
+        dialog.setUndecorated(false);
         dialog.setModal(true);
 
         JButton jbChangePassword = createDialogButton("CHANGE PASSWORD");
@@ -397,19 +384,66 @@ public class ForgotPasswordView extends JPanel {
         dialog.setVisible(true);
     }
 
+    /**
+     * Returns the new password entered by the user in the new password field.
+     * @return the text currently entered in the new password field
+     */
     public String getNewPassword() {
         return jtfNewPassword.getText();
     }
 
+
+    /**
+     * Returns the password confirmation entered by the user in the confirmation field.
+     * @return the text currently entered in the password confirmation field
+     */
     public String getPasswordConfirmation() {
         return jtfPasswordConfirmation.getText();
     }
 
+    /**
+     * Clears all text fields in the view, resetting the code, email,
+     * new password, and password confirmation fields to empty strings.
+     */
     public void clearTextFields() {
         jtfCode.setText("");
         jtfEmail.setText("");
         jtfNewPassword.setText("");
         jtfPasswordConfirmation.setText("");
+    }
+
+    /**
+     * Returns the verification code entered by the user in the code field.
+     * @return the text currently entered in the code field
+     */
+    public String getCode() {
+        return jtfCode.getText();
+    }
+
+    /**
+     * Returns the email address entered by the user in the email pop-up.
+     * @return the email address submitted through the email dialog
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Registers an ActionListener on the "Go back to log in" button,
+     * allowing external controllers to handle the navigation back to the Login screen.
+     * @param listener the ActionListener to be added to the back button
+     */
+    public void addBackLoginListener(ActionListener listener) {
+        jbBackLogIn.addActionListener(listener);
+    }
+
+    /**
+     * Registers an ActionListener on the "Validate code" button,
+     * allowing external controllers to handle the code validation action.
+     * @param listener the ActionListener to be added to the validate code button
+     */
+    public void addValidateCodeListener(ActionListener listener) {
+        jbValidateCode.addActionListener(listener);
     }
 
 

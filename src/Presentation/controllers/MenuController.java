@@ -34,8 +34,8 @@ public class MenuController implements ActionListener {
            appController.switchCard(GAME);
            gameController.onGameViewShown();
        } else if (e.getActionCommand().equals(GO_STATS)) {
+           statsController.onViewOpened(authController.getLoggedInUsername());
            appController.switchCard(STATS);
-           statsController.onViewOpened();
        } else if (e.getActionCommand().equals(GO_CONFIG)) {
            appController.switchCard(CONFIG);
        } else if (e.getActionCommand().equals(LOGOUT)) {

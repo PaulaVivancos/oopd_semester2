@@ -18,14 +18,17 @@ import static Presentation.views.GameView.*;
 import static Presentation.views.MenuView.GO_GAME;
 import static Presentation.views.ShopView.*;
 
+/**
+ * Manages game interactions, coordinating between the game, shop, and upgrade views.
+ */
 public class GameController implements ActionListener, GameListener {
     private final AppController appController;
     private final StatsController statsController;
 
     private final GameManager gameManager;
     private final UserManager userManager;
-
     public static int NUM_GENERATORS = 4;
+    private final ActionListener[] genListeners;
 
     // views
     private final GameView gameView;
@@ -44,6 +47,12 @@ public class GameController implements ActionListener, GameListener {
     protected static final String UPGRADE = "upgrade";
     protected static final String SHOP = "shop";
 
+    /**
+     * @param appController   the main app controller for navigation and dialogs
+     * @param gameManager     the manager handling game logic and persistence
+     * @param userManager     the manager providing the current user session
+     * @param statsController the controller handling stats tracking
+     */
     public GameController(AppController appController, GameManager gameManager, UserManager userManager, StatsController statsController) {
         this.appController = appController;
         this.statsController = statsController;
@@ -58,10 +67,14 @@ public class GameController implements ActionListener, GameListener {
         appController.addCardToMainFrame(gameView, GAME);
         upgradeView = new UpgradeView();
         appController.addCardToMainFrame(upgradeView, UPGRADE);
+        genListeners = new ActionListener[NUM_GENERATORS];
 
         initListeners();
     }
 
+    /**
+     * Registers all action and event listeners for the game, shop, and upgrade views.
+     */
     private void initListeners() {
         // add listeners from game view
         gameView.addBuyListener(this);
@@ -122,16 +135,28 @@ public class GameController implements ActionListener, GameListener {
         });
     }
 
+    /**
+     * Stops the current game and stats tracker, cleaning up any running threads.
+     */
+    private void stopCurrentGame() {
+        if (statsTracker != null) {
+            statsTracker.stop();
+            if (statsThread != null) statsThread.interrupt();
+            statsTracker = null;
+            statsThread = null;
+        }
+        if (gameManager.getCurrentGame() != null) {
+            gameManager.getCurrentGame().stopGame();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
 
         if (cmd.equals(GO_GAME)) {
             appController.switchCard(GAME);
-
-            SwingUtilities.invokeLater(() -> {
-                gameView.showGamesPopUp(this);
-            });
+            gameView.showGamesPopUp(this);
         } else if (cmd.equals(BUY_COFFEE)) {
             handleBuyCoffee();
 
@@ -152,7 +177,9 @@ public class GameController implements ActionListener, GameListener {
         }
     }
 
-
+    /**
+     * Loads the user's unfinished game, or starts a new one if none exists.
+     */
     private void handleLoadGame () {
         int userId = userManager.getCurrentUser().getId();
 
@@ -166,6 +193,9 @@ public class GameController implements ActionListener, GameListener {
         }
     }
 
+    /**
+     * Creates and starts a new game for the current user.
+     */
     private void handleNewGame() {
         int userId = userManager.getCurrentUser().getId();
         appController.showInfoPopUp(NEW_GAME, CREATING_NEW_GAME);
@@ -179,6 +209,10 @@ public class GameController implements ActionListener, GameListener {
         refreshGameViewTable();
     }
 
+    /**
+     * Starts the stats tracker for the given game, stopping any previous one.
+     * @param game the game to track
+     */
     private void startStatsTracker(Game game) {
         if (statsTracker != null) {
             statsTracker.stop();
@@ -188,7 +222,9 @@ public class GameController implements ActionListener, GameListener {
             }
         }
 
-        statsTracker = new StatsTracker(statsController, game);
+        double minuteOffset = statsController.getLastMinute(game.getGameId());
+
+        statsTracker = new StatsTracker(statsController, game, minuteOffset);
         statsThread = new Thread(statsTracker);
         statsThread.start();
         game.startGame();
@@ -200,27 +236,36 @@ public class GameController implements ActionListener, GameListener {
         });
     }
 
-
+    /**
+     * Resets the game view counters to their initial state.
+     */
     private void setInitialConditions() {
         gameView.getJlCounter().setText("0");
     }
 
+    /**
+     * Stops any running game and shows the game selection popup.
+     */
     public void onGameViewShown() {
+        stopCurrentGame();
         gameView.showGamesPopUp(this);
     }
 
+    /**
+     * Applies a loaded game to the view and starts its stats tracker.
+     * @param loadGame the game to display and resume
+     */
     private void setGameInView(Game loadGame) {
-       // gameView.getJlCounter().setText(String.valueOf(loadGame.getNumCoffees()));
-
         loadGame.addListener(this);
         gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());
 
         startStatsTracker(loadGame);
         refreshGameViewTable();
-
-        //loadGame.startGame();
     }
 
+    /**
+     * Handles a manual coffee purchase, updating the counter and notifying the stats tracker.
+     */
     private void handleBuyCoffee() {
         gameManager.addCoffee();
         gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());
@@ -231,19 +276,31 @@ public class GameController implements ActionListener, GameListener {
         SwingUtilities.invokeLater(() ->{gameView.updateCounter(gameManager.getCurrentGame().getNumCoffees());});
     }
 
+    /**
+     * Handles purchasing a generator by index and refreshes the game view table.
+     * @param id the index of the generator to buy
+     */
     private void handleBuyGenerator(int id) {
         gameManager.addGenerator(id);
         refreshGameViewTable();
     }
 
+    /**
+     * Attaches buy listeners to each generator button in the shop view.
+     */
     private void attachGenListeners() {
         for (int i = 0; i < gameManager.getGeneratorTypes().size(); i++) {
             final int index = i;
-            shopView.addGenBuyListener(index, e -> {
-                handleBuyGenerator(index);
-            });
+
+            if (genListeners[index] != null) {
+                shopView.removeGenBuyListener(index, genListeners[index]);
+            }
+
+            genListeners[index] = e -> handleBuyGenerator(index);
+            shopView.addGenBuyListener(index, genListeners[index]);
         }
     }
+
 
     @Override
     public void onCoffeeChange(double newAmount) {
@@ -255,16 +312,35 @@ public class GameController implements ActionListener, GameListener {
         });
     }
 
+    /**
+     * Refreshes the upgrade view rows based on affordability and purchase state.
+     * @param currentCoffees the player's current coffee count
+     */
     private void refreshUpgradeView(double currentCoffees) {
         Game game = gameManager.getCurrentGame();
         for (int i = 0; i < UpgradeView.UPGRADES.length; i++) {
             Upgrade upg = UpgradeView.UPGRADES[i];
             boolean purchased = game != null && game.isUpgradePurchased(upg.getName());
             boolean canAfford = currentCoffees >= upg.getCost();
-            upgradeView.updateUpgradeRow(i, canAfford, purchased);
+
+            double currentMultiplier = 1.0;
+            if (game != null) {
+                for (Generator gen : game.getGenerators()) {
+                    if (gen.getType().getName().equalsIgnoreCase(upg.getTargetGeneratorName())) {
+                        currentMultiplier = gen.getUpgradeMultiplier();
+                        break;
+                    }
+                }
+            }
+
+            upgradeView.updateUpgradeRow(i, canAfford, purchased, currentMultiplier);
         }
     }
 
+    /**
+     * Refreshes the shop view rows based on affordability and generator quantities.
+     * @param currentCoffees the player's current coffee count
+     */
     private void refreshShopView(double currentCoffees) {
         Game game = gameManager.getCurrentGame();
         for (int i = 0; i < NUM_GENERATORS; i++) {
@@ -274,6 +350,9 @@ public class GameController implements ActionListener, GameListener {
         }
     }
 
+    /**
+     * Refreshes the owned generators table in the game view.
+     */
     private void refreshGameViewTable() {
         if (gameManager.getCurrentGame() != null) {
             ArrayList<Generator> ownedGens = gameManager.getGenerators();
@@ -283,6 +362,9 @@ public class GameController implements ActionListener, GameListener {
         }
     }
 
+    /**
+     * Saves the current game state, showing a success or error dialog accordingly.
+     */
     private void handleSaveGame() {
         try {
             if (gameManager.getCurrentGame() != null) {

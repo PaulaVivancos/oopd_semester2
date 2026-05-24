@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
+/**
+ * A zoomable, pannable chart panel that plots coffee count over time for a game session.
+ */
 public class PaintChart extends JPanel {
     private static final int PADDING = 60;
 
@@ -23,10 +26,15 @@ public class PaintChart extends JPanel {
 
     private int lastDragX, lastDragY;
 
+    private static final String NO_STATS = "No statistics have been recorded yet for this game.";
+
+    /**
+     * Constructs the chart panel and sets up mouse controls for zoom and pan.
+     */
     public PaintChart() {
         this.setLayout(new BorderLayout());
 
-        noDataLabel = new JLabel("No statistics have been recorded yet for this game.", SwingConstants.CENTER);
+        noDataLabel = new JLabel(NO_STATS, SwingConstants.CENTER);
         noDataLabel.setFont(new Font("Arial", Font.BOLD, 14));
         noDataLabel.setForeground(Color.GRAY);
 
@@ -40,10 +48,12 @@ public class PaintChart extends JPanel {
 
     }
 
-
+    /**
+     * Sets the stats data to display and repaints the chart.
+     * @param stats the list of {@link CoffeeStats} to plot
+     */
     public void setStats(List<CoffeeStats> stats) {
         this.stats = stats;
-
 
         stats.sort((a, b) ->
                 Double.compare(a.getTime(), b.getTime()));
@@ -51,7 +61,6 @@ public class PaintChart extends JPanel {
         computeWorldBounds();
 
         repaint();
-
 
         if (this.stats == null || this.stats.isEmpty()) {
             // Show the label text, hide any lines drawn by paintComponent
@@ -65,6 +74,9 @@ public class PaintChart extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Computes the world-space min/max bounds from the current stats data.
+     */
     private void computeWorldBounds() {
         if (stats == null || stats.isEmpty()) return;
 
@@ -95,6 +107,9 @@ public class PaintChart extends JPanel {
 
     }
 
+    /**
+     * Registers mouse wheel and drag listeners for zoom and pan interactions.
+     */
     private void setupMouseControls() {
         addMouseWheelListener(e -> {
             double delta = 0.1 * e.getPreciseWheelRotation();
@@ -122,6 +137,9 @@ public class PaintChart extends JPanel {
         });
     }
 
+    /**
+     * Computes the pixel-per-unit scale factors based on the panel size and zoom level.
+     */
     private void computeScale() {
 
         double drawableWidth = getWidth() - 2.0 * PADDING;
@@ -134,6 +152,10 @@ public class PaintChart extends JPanel {
         scaleY *= zoom;
     }
 
+    /**
+     * Draws the X and Y axes with tick marks and labels.
+     * @param g2 the graphics context to draw on
+     */
     private void drawAxes(Graphics2D g2) {
         g2.setColor(Color.GRAY);
         g2.setStroke(new BasicStroke(1.5f));
@@ -171,9 +193,13 @@ public class PaintChart extends JPanel {
 
         // Axis labels
         g2.drawString("Time (minutes)", getWidth() - PADDING - 60, y0 + 30);
-        g2.drawString("Coffees", x0 - 50, PADDING);
+        g2.drawString("Coffees", x0 - 50, PADDING-40);
     }
 
+    /**
+     * Draws lines connecting consecutive data points on the chart.
+     * @param g2 the graphics context to draw on
+     */
     private void drawLines(Graphics2D g2) {
         g2.setColor(new Color(255, 140, 0));
         g2.setStroke(new BasicStroke(2f));
@@ -191,6 +217,10 @@ public class PaintChart extends JPanel {
         }
     }
 
+    /**
+     * Draws a filled circle at each data point on the chart.
+     * @param g2 the graphics context to draw on
+     */
     private void drawPoints(Graphics2D g2) {
         for (CoffeeStats s : stats) {
             int x = toScreenX(s.getTime());
@@ -202,10 +232,20 @@ public class PaintChart extends JPanel {
 
     }
 
+    /**
+     * Converts a world X coordinate to a screen X coordinate.
+     * @param worldX the world-space X value
+     * @return the corresponding screen X pixel
+     */
     private int toScreenX(double worldX) {
         return (int) (PADDING + (worldX - worldMinX) * scaleX + offsetX);
     }
 
+    /**
+     * Converts a world Y coordinate to a screen Y coordinate.
+     * @param worldY the world-space Y value
+     * @return the corresponding screen Y pixel
+     */
     private int toScreenY(double worldY) {
         return (int) (PADDING + (worldMaxY - worldY) * scaleY + offsetY);
     }
@@ -233,15 +273,5 @@ public class PaintChart extends JPanel {
         return new Dimension(1000, 600);
     }
 
-    public void showNoStatsMessage() {
-        JLabel noDataLabel = new JLabel("No statistics have been recorded yet for this game.", SwingConstants.CENTER);
-        noDataLabel.setFont(new Font("Arial", Font.ITALIC, 14));
-        noDataLabel.setForeground(Color.RED);
-
-        removeAll();
-        add(noDataLabel, BorderLayout.CENTER);
-        revalidate();
-        repaint();
-    }
 
 }

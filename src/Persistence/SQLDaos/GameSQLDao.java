@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+/**
+ * SQL-based implementation of {@link GameDAO} for persisting and retrieving game state.
+ */
 public class GameSQLDao implements GameDAO {
 
     @Override
@@ -60,14 +63,13 @@ public class GameSQLDao implements GameDAO {
         saveGameUpgrades(game);
     }
 
-    @Override
-    public void deleteGame(int gameId) {
-        SQLConnector.getInstance().deleteQuery("DELETE FROM statistics WHERE game_id = " + gameId + ";");
-        SQLConnector.getInstance().deleteQuery("DELETE FROM game_upgrade WHERE game_id = " + gameId + ";");
-        SQLConnector.getInstance().deleteQuery("DELETE FROM game_generator WHERE game_id = " + gameId + ";");
-        SQLConnector.getInstance().deleteQuery("DELETE FROM game WHERE game_id = " + gameId + ";");
-    }
-
+    /**
+     * Maps the current row of the given ResultSet to a Game object,
+     * including its generators and upgrades.
+     * @param rs the ResultSet positioned at the row to map
+     * @return the reconstructed Game
+     * @throws SQLException if a database access error occurs
+     */
     private Game mapRow(ResultSet rs) throws SQLException {
         int gameId = rs.getInt("game_id");
         int userId = rs.getInt("user_id");
@@ -85,21 +87,6 @@ public class GameSQLDao implements GameDAO {
         game.reapplyPurchasedUpgrades();
 
         return game;
-    }
-
-    @Override
-    public int getLastGameIdByUser(int userId) {
-        String query = "SELECT MAX(game_id) FROM game WHERE user_id = " + userId;
-        ResultSet results = SQLConnector.getInstance().selectQuery(query);
-
-        try {
-            if (results != null && results.next()) {
-                return results.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     @Override
@@ -131,6 +118,7 @@ public class GameSQLDao implements GameDAO {
         return null;
     }
 
+    @Override
     public void saveGameGenerators(Game game) throws SQLException {
         SQLConnector.getInstance().deleteQuery("DELETE FROM game_generator WHERE game_id = " + game.getGameId() + ";");
 
@@ -148,6 +136,7 @@ public class GameSQLDao implements GameDAO {
         }
     }
 
+    @Override
     public void saveGameUpgrades(Game game) throws SQLException {
         SQLConnector.getInstance().deleteQuery("DELETE FROM game_upgrade WHERE game_id = " + game.getGameId() + ";");
 
@@ -162,7 +151,8 @@ public class GameSQLDao implements GameDAO {
         }
     }
 
-    private void loadGameGenerators(Game game) {
+    @Override
+    public void loadGameGenerators(Game game) {
         String query = "SELECT generator_id, quantity FROM game_generator WHERE game_id = " + game.getGameId() + ";";
         ResultSet rs = SQLConnector.getInstance().selectQuery(query);
         try {
@@ -170,8 +160,9 @@ public class GameSQLDao implements GameDAO {
                 int genId = rs.getInt("generator_id");
                 int quantity = rs.getInt("quantity");
 
-                if (genId >= 0 && genId < game.getGenerators().size()) {
-                    game.getGenerators().get(genId).setQuantity(quantity);
+                int index = genId - 1;
+                if (index >= 0 && index < game.getGenerators().size()) {
+                    game.getGenerators().get(index).setQuantity(quantity);
                 }
             }
         } catch (SQLException e) {
@@ -179,7 +170,8 @@ public class GameSQLDao implements GameDAO {
         }
     }
 
-    private void loadGameUpgrades(Game game) {
+    @Override
+    public void loadGameUpgrades(Game game) {
         String query = "SELECT u.name " +
                 "FROM game_upgrade gu " +
                 "INNER JOIN upgrade u ON gu.upgrade_id = u.upgrade_id " +

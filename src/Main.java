@@ -8,7 +8,6 @@ import Persistence.SQLDaos.UserSQLDao;
 import Persistence.StatsDAO;
 import Persistence.UserDAO;
 import Presentation.controllers.*;
-import Presentation.views.MenuView;
 
 import javax.swing.*;
 

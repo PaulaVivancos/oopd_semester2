@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Presentation.views.GameView.LOG_OUT;
 import static Presentation.views.ShopView.SAVE_GAME;
 
 /**
@@ -24,12 +25,20 @@ public class UpgradeView extends BaseView {
     private JLabel jlTitle;
 
     private List<JButton> jbBuyButtons;
+    private List<JLabel> jlCurrentImprovement;
+    private List<JLabel> jlPurchasableImprovement;
+
+    private final static String DELETE_ACCOUNT = "Delete account";
+    final static String OWNED = "OWNED";
+    protected final static String BUY = "BUY";
+    private final static String UPGRADE_SHOP = "Upgrade shop";
+
 
     public static final Upgrade[] UPGRADES = {
-            new Upgrade("Better Grinder", 100, 2.0, "Gas station clerk"),
-            new Upgrade("Lukewarm Special", 500, 3.0, "Gas station clerk"),
-            new Upgrade("Extra Shot", 2000, 3.0, "Starsbuck barista"),
-            new Upgrade("Oat Milk", 10000, 3.5, "Starsbuck barista"),
+            new Upgrade("Better Grinder", 100, 2.0, "Vivari Life"),
+            new Upgrade("Lukewarm Special", 500, 3.0, "Vivari Life"),
+            new Upgrade("Extra Shot", 2000, 3.0, "Starsbucks barista"),
+            new Upgrade("Oat Milk", 10000, 3.5, "Starsbucks barista"),
             new Upgrade("Better beans", 25000, 5.0, "365 Veteran"),
             new Upgrade("Black Belt Brew", 150000, 5.0, "365 Veteran"),
     };
@@ -47,6 +56,9 @@ public class UpgradeView extends BaseView {
     private ActionListener logoutListener;
     private ActionListener deleteListener;
 
+    /**
+     * Constructs the upgrade view and applies styling to all buy buttons.
+     */
     public UpgradeView() {
         super(false);
 
@@ -67,20 +79,17 @@ public class UpgradeView extends BaseView {
         }
     }
 
-    public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
-    public void addDeleteListener(ActionListener l) { this.deleteListener = l; }
-
     /**
      * Populates the top bar menu with save/load options and account actions.
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e -> System.out.println(SAVE_GAME));
+        addMenuItem(menu, SAVE_GAME, e -> System.out.println(SAVE_GAME));
         menu.addSeparator();
-        addMenuItem(menu, "Log out", e -> {
+        addMenuItem(menu, LOG_OUT, e -> {
             if (logoutListener != null) logoutListener.actionPerformed(e);
         });
-        addMenuItem(menu, "Delete account", e -> {
+        addMenuItem(menu, DELETE_ACCOUNT, e -> {
             if (deleteListener != null) deleteListener.actionPerformed(e);
         });
     }
@@ -91,8 +100,10 @@ public class UpgradeView extends BaseView {
     @Override
     protected void initComponents() {
         jbBuyButtons = new ArrayList<>();
+        jlCurrentImprovement = new ArrayList<>();
+        jlPurchasableImprovement = new ArrayList<>();
 
-        jlTitle = new JLabel("Upgrade shop");
+        jlTitle = new JLabel(UPGRADE_SHOP);
         jlTitle.setFont(new Font("Times New Roman", Font.BOLD, 22));
         jlTitle.setForeground(BACKGROUND_BUTTON);
         jlTitle.setBackground(BACKGROUND_BUTTON_PRESSED);
@@ -141,14 +152,27 @@ public class UpgradeView extends BaseView {
         costLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
         costLabel.setForeground(TEXT_DARK);
 
+        JLabel currentImprovLabel = new JLabel("Current: 1.0x");
+        currentImprovLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        currentImprovLabel.setForeground(TEXT_DARK);
+        jlCurrentImprovement.add(currentImprovLabel);
+
+        JLabel purchasableImprovLabel = new JLabel(String.format("Upgrade: %.1fx", upg.getMultiplier()));
+        purchasableImprovLabel.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        purchasableImprovLabel.setForeground(TEXT_DARK);
+        jlPurchasableImprovement.add(purchasableImprovLabel);
+
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setOpaque(false);
         infoPanel.add(nameLabel);
         infoPanel.add(Box.createVerticalStrut(3));
         infoPanel.add(costLabel);
+        infoPanel.add(Box.createVerticalStrut(2));
+        infoPanel.add(currentImprovLabel);
+        infoPanel.add(purchasableImprovLabel);
 
-        JButton buyBtn = new JButton("BUY");
+        JButton buyBtn = new JButton(BUY);
         styleButton(buyBtn, DIM_BUY_BUTTON);
         buyBtn.setEnabled(false);
         buyBtn.setActionCommand(String.valueOf(index));
@@ -199,17 +223,21 @@ public class UpgradeView extends BaseView {
     }
 
     /**
-     * Updates the affordability and purchase state of an upgrade row.
-     * @param index the upgrade row to update
-     * @param canAfford whether the player can currently afford this upgrade
-     * @param purchased whether this upgrade has already been bought
+     * Updates the state of an upgrade row based on affordability and purchase status.
+     * @param index             the upgrade row index
+     * @param canAfford         whether the player can currently afford the upgrade
+     * @param purchased         whether the upgrade has already been purchased
+     * @param currentMultiplier the generator's current multiplier to display
      */
-    public void updateUpgradeRow(int index, boolean canAfford, boolean purchased) {
+    public void updateUpgradeRow(int index, boolean canAfford, boolean purchased, double currentMultiplier) {
         JButton btn = jbBuyButtons.get(index);
         Container row = btn.getParent().getParent();
 
         btn.setEnabled(!purchased && canAfford);
-        btn.setText(purchased ? "OWNED" : "BUY");
+        btn.setText(purchased ? OWNED : BUY);
+
+        jlCurrentImprovement.get(index).setText(String.format("Current: %.1fx", currentMultiplier));
+        jlPurchasableImprovement.get(index).setVisible(!purchased);
 
         if (row instanceof JPanel) {
             row.setBackground(purchased || !canAfford ? BACKGROUND_ROW_DISABLED : BACKGROUND_ROW);
@@ -217,7 +245,8 @@ public class UpgradeView extends BaseView {
     }
 
     /**
-     * Attaches the given listener to all upgrade buy buttons.
+     * Registers a listener for all upgrade buy buttons.
+     * @param l the ActionListener to invoke on click
      */
     public void addBuyUpgradeListener(ActionListener l) {
         for (JButton btn : jbBuyButtons) {

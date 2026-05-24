@@ -6,24 +6,24 @@ import Presentation.PaintChart;
 import Presentation.views.StatsView;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List; // Colección genérica correcta
+import java.util.List;
 
-import static Presentation.views.MenuView.GO_STATS;
-
-public class StatsController implements ActionListener {
-    private final AppController appController;
+/**
+ * Controls the stats view, handling player and game selection to display coffee stats charts.
+ */
+public class StatsController  {
     private final StatsView statsView;
     private final StatsManager statsManager;
-
     protected final static String STATS = "stats";
-
     private final ActionListener playerChangedListener;
     private final ActionListener gameChangedListener;
 
+    /**
+     * @param appController the main app controller for navigation and panel registration
+     * @param statsManager  the manager providing stats data
+     */
     public StatsController(AppController appController, StatsManager statsManager) {
-        this.appController = appController;
         this.statsManager = statsManager;
 
         this.statsView = new StatsView();
@@ -37,45 +37,68 @@ public class StatsController implements ActionListener {
         attachListeners();
     }
 
+    /**
+     * Attaches player and game selection listeners to the stats view combo boxes.
+     */
     private void attachListeners() {
         statsView.addComboBoxListeners(playerChangedListener, gameChangedListener);
     }
 
+    /**
+     * Detaches player and game selection listeners from the stats view combo boxes.
+     */
     private void detachListeners() {
         statsView.removeComboBoxListeners(playerChangedListener, gameChangedListener);
     }
 
-    public void saveStat(int gameId, double minute, double coffees) {
-        statsManager.saveStat(gameId, minute, coffees);
+    /**
+     * Saves a stat entry for a given game and user.
+     * @param gameId  the game ID
+     * @param userId  the user ID
+     * @param minute  the in-game minute of the stat
+     * @param coffees the number of coffees recorded
+     */
+    public void saveStat(int gameId, int userId, double minute, double coffees) {
+        statsManager.saveStat(gameId, userId, minute, coffees);
     }
 
-    public void onViewOpened() {
+    /**
+     * Initializes and refreshes the stats view for the given logged-in user.
+     * @param loggedUsername the username to pre-select, or null to show all players
+     */
+    public void onViewOpened(String loggedUsername) {
         detachListeners();
 
         statsView.setChart(new PaintChart());
 
-        List<Integer> players = statsManager.getAllPlayers();
+        List<String> players = statsManager.getAllPlayers();
         statsView.setPlayersOptions(players);
-
         statsView.clearGamesOptions();
         statsView.setGameComboBoxEnabled(false);
         statsView.setTotalGamesCount(0);
 
+        if (loggedUsername != null) {
+            statsView.selectPlayer(loggedUsername);
+        }
+
         attachListeners();
+
+        if (loggedUsername != null) {
+            handlePlayerSelection();
+        }
     }
 
+    /**
+     * Updates the game combo box based on the currently selected player.
+     */
     private void handlePlayerSelection() {
-        int selectedPlayer = statsView.getSelectedPlayerId();
+        String selectedPlayer = statsView.getSelectedPlayer();
 
-        detachListeners(); // Always detach before altering ComboBox models to prevent loops
+        detachListeners();
 
-        if (selectedPlayer != -1) {
+        if (selectedPlayer != null) {
             List<Integer> games = statsManager.getGamesByPlayer(selectedPlayer);
-
             statsView.setGamesOptions(games);
-
-            statsView.setGameComboBoxEnabled(true);
-
             statsView.setTotalGamesCount(games.size());
         } else {
             statsView.clearGamesOptions();
@@ -86,29 +109,28 @@ public class StatsController implements ActionListener {
         attachListeners();
     }
 
+    /**
+     * Updates the chart based on the currently selected player and game.
+     */
     private void handleGameSelection() {
-        int selectedPlayer = statsView.getSelectedPlayerId();
+        String selectedPlayer = statsView.getSelectedPlayer();
         int selectedGame = statsView.getSelectedGameId();
 
-        if (selectedPlayer != -1 && selectedGame != -1) {
+        if (selectedPlayer != null && selectedGame != -1) {
             List<CoffeeStats> stats = statsManager.getStatsByUserAndGame(selectedPlayer, selectedGame);
-
-
             PaintChart chart = new PaintChart();
             chart.setStats(stats);
             statsView.setChart(chart);
-
-
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(GO_STATS)) {
-            appController.switchCard(STATS);
-            SwingUtilities.invokeLater(() -> {
-                onViewOpened();
-            });
-        }
+    /**
+     * Returns the last recorded minute for a given game.
+     * @param gameId the game ID
+     * @return the last minute recorded in that game
+     */
+    public double getLastMinute(int gameId) {
+        return statsManager.getLastMinute(gameId);
     }
+
 }

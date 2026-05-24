@@ -10,8 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static Presentation.views.ShopView.SAVE_GAME;
-import static java.lang.Math.round;
+import java.util.List;
 
 /**
  * View for the main gameplay screen, showing the coffee cup, counter, shop buttons, and a data table.
@@ -32,7 +31,6 @@ public class GameView extends BaseView {
     private final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
     // IMAGES
-    private final String BACKGROUND_URL = "resources/background.jpg";
     private final String TITLE_URL = "resources/title.png";
     private final String COFFEE_CUP = "resources/coffee_cup.png";
 
@@ -41,13 +39,11 @@ public class GameView extends BaseView {
     public static final String BUY_COFFEE = "BUY_COFFEE";
     public static final String GO_SHOP = "GO_TO_SHOP";
 
+    private static final String GENERATORS = "GENERATORS";
+    private static final String UPGRADES = "UPGRADES";
+    private static final String SAVE_GAME = "Save game";
+    protected static final String LOG_OUT = "Log out";
 
-    public GameView() {
-        super(true); // initMenu() + initComponents()
-
-        setButton(jbGen, DIMENSION_BUTTON);
-        setButton(jbUpg, DIMENSION_BUTTON);
-    }
 
     private ActionListener logoutListener;
     private ActionListener savegameListener;
@@ -55,17 +51,28 @@ public class GameView extends BaseView {
     private ActionListener loadGameListener;
 
     /**
+     * Constructs the game view and applies styling to the generator and upgrade buttons.
+     */
+    public GameView() {
+        super(true); // initMenu() + initComponents()
+
+        setButton(jbGen, DIMENSION_BUTTON);
+        setButton(jbUpg, DIMENSION_BUTTON);
+    }
+
+
+    /**
      * Populates the top bar menu with save/load game options and account actions.
      */
     @Override
     protected void buildMenu(JPopupMenu menu) {
-        addMenuItem(menu, "Save game", e-> {
+        addMenuItem(menu, SAVE_GAME, e-> {
             if (savegameListener != null) {
                 savegameListener.actionPerformed(e);
             }
         });
 
-        addMenuItem(menu,"Log out", e -> {
+        addMenuItem(menu,LOG_OUT, e -> {
             if (logoutListener != null) {
                 logoutListener.actionPerformed(e);
             }
@@ -87,13 +94,12 @@ public class GameView extends BaseView {
 
         // Images
         jipTitle = new JImagePanel(TITLE_URL);
-        //jipCoffeeCup = new JImagePanel(COFFEE_CUP);
         jipCoffeeCupSmall = new JImagePanel(COFFEE_CUP);
 
         // COFFEE clickable
         ImageIcon raw = new ImageIcon(COFFEE_CUP);
         Image scaled = raw.getImage().getScaledInstance(250, 300, Image.SCALE_SMOOTH);
-        jipCoffeeCup = new JButton(new ImageIcon(scaled)); //assign to field
+        jipCoffeeCup = new JButton(new ImageIcon(scaled));
         jipCoffeeCup.setContentAreaFilled(false);
         jipCoffeeCup.setBorderPainted(false);
         jipCoffeeCup.setFocusPainted(false);
@@ -104,11 +110,9 @@ public class GameView extends BaseView {
         jtTable = new JTable();
 
         // Buttons
-        //jbBuy = new JButton("BUY COFFEE");
-        //jbBuy.setActionCommand(BUY_COFFEE);
-        jbGen = new JButton("GENERATORS");
+        jbGen = new JButton(GENERATORS);
         jbGen.setActionCommand(GO_SHOP);
-        jbUpg = new JButton("UPGRADES");
+        jbUpg = new JButton(UPGRADES);
 
         // Sets everything
         setJipMain();
@@ -162,7 +166,7 @@ public class GameView extends BaseView {
         jpBot.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         jpBot.setOpaque(false);
 
-        String[] columns = {"ID", "Name", "Quantity", "Price"};
+        String[] columns = {"Name", "Quantity", "Unit production", "Total production", "% Global"};
 
         DefaultTableModel tableModel = new DefaultTableModel(new Object[][]{}, columns) {
             @Override
@@ -179,22 +183,34 @@ public class GameView extends BaseView {
         jpBot.add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void updateOwnedGeneratorsTable(java.util.List<Generator> ownedGenerators) {
+    /**
+     * Updates the generators table with the currently owned generators and their production stats.
+     * @param ownedGenerators the list of generators to display
+     */
+    public void updateOwnedGeneratorsTable(List<Generator> ownedGenerators) {
         DefaultTableModel model = (DefaultTableModel) jtTable.getModel();
-        model.setRowCount(0); // Clear old rows
+        model.setRowCount(0);
 
-        int displayId = 1; // Visual counter for the table rows
-
-        for (int i = 0; i < ownedGenerators.size(); i++) {
-            Generator gen = ownedGenerators.get(i);
-
+        // calculate total production for % column
+        double totalProduction = 0;
+        for (Generator gen : ownedGenerators) {
             if (gen.getQuantity() > 0) {
+                totalProduction += gen.getQuantity() * gen.getType().getBaseProduction() * gen.getUpgradeMultiplier();
+            }
+        }
+
+        for (Generator gen : ownedGenerators) {
+            if (gen.getQuantity() > 0) {
+                double unitProduction = gen.getType().getBaseProduction() * gen.getUpgradeMultiplier();
+                double totalGen = gen.getQuantity() * unitProduction;
+                double percent = totalProduction > 0 ? (totalGen / totalProduction) * 100 : 0;
+
                 model.addRow(new Object[]{
-                        i,
                         gen.getType().getName(),
                         gen.getQuantity(),
-                        String.format("$%.2f", gen.getCurrentPrice())
-                        //gen.getType().getBasePrice();
+                        String.format("%.2f", unitProduction),
+                        String.format("%.2f", totalGen),
+                        String.format("%.1f%%", percent)
                 });
             }
         }
@@ -375,50 +391,65 @@ public class GameView extends BaseView {
         return button;
     }
 
+    /**
+     * Registers a listener for the logout menu item.
+     * @param l the ActionListener to invoke on logout
+     */
     public void addLogoutListener(ActionListener l)  {
         this.logoutListener = l;
     }
+
+    /**
+     * Registers a listener for the save game menu item.
+     * @param l the ActionListener to invoke on save
+     */
     public void addSaveGameListener(ActionListener l)  { this.savegameListener = l; }
 
+    /**
+     * Registers a listener for the coffee cup click (buy coffee action).
+     * @param actionListener the ActionListener to invoke on click
+     */
     public void addBuyListener(ActionListener actionListener) {
         //jbBuy.addActionListener(actionListener);
         jipCoffeeCup.addActionListener(actionListener);
     }
 
+    /**
+     * Registers a listener for the generators/shop button.
+     * @param actionListener the ActionListener to invoke
+     */
     public void addShopListener(ActionListener actionListener) {
         jbGen.addActionListener(actionListener);
     }
 
+    /**
+     * Registers a listener for the new game option in the popup dialog.
+     * @param actionListener the ActionListener to invoke
+     */
     public void addNewGameListener(ActionListener actionListener) {
         this.newGameListener = actionListener;
     }
 
+    /**
+     * Registers a listener for the load game option in the popup dialog.
+     * @param actionListener the ActionListener to invoke
+     */
     public void addLoadGameListener(ActionListener actionListener) {
         this.loadGameListener = actionListener;
     }
 
-
-
-    // Getters
-
-    public JButton getJbBuy() {
-        return jbBuy;
-    }
-
-    public JButton getJbGen() {
-        return jbGen;
-    }
-
+    /**
+     * @return the upgrades button
+     */
     public JButton getJbUpg() {
         return jbUpg;
     }
 
+    /**
+     * @return the coffee counter label
+     */
     public JLabel getJlCounter() {
         return jlCounter;
-    }
-
-    public JTable getJtTable() {
-        return jtTable;
     }
 
     /**

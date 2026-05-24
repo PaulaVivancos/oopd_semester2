@@ -1,6 +1,5 @@
 package Presentation.views;
 
-import Presentation.JImagePanel;
 import Presentation.PaintChart;
 
 import javax.swing.*;
@@ -8,20 +7,24 @@ import java.awt.*;
 import java.util.List;
 import java.awt.event.ActionListener;
 
+/**
+ * View for the statistics screen, showing player and game selectors alongside a coffee chart.
+ */
 public class StatsView extends BaseView {
     private JPanel mainPanel;
     private JPanel topPanel, playersPanel, userGamePanel, numGamesPanel;
     private JLabel jlPlayers, jlGames, jlNumGames;
 
-    // 1. Configurados estrictamente como Integer
-    private JComboBox<Integer> jcbPlayers, jcbGames;
+    private JComboBox<String> jcbPlayers;
+    private JComboBox<Integer> jcbGames;
 
     private PaintChart paintChart;
-    private final String BACKGROUND_URL = "resources/background.jpg";
 
     private ActionListener logoutListener;
-    public void addLogoutListener(ActionListener l) { this.logoutListener = l; }
 
+    /**
+     * Constructs the stats view.
+     */
     public StatsView() {
         super(false);
     }
@@ -51,6 +54,9 @@ public class StatsView extends BaseView {
         addMenuItem(menu, "Log out", e -> { if (logoutListener != null) logoutListener.actionPerformed(e); });
     }
 
+    /**
+     * Assembles the main panel with the top selector bar and chart area.
+     */
     private void setMainPanel() {
         setTopPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -62,6 +68,10 @@ public class StatsView extends BaseView {
         addToCenter(mainPanel);
     }
 
+    /**
+     * Replaces the current chart with the given one and repaints the panel.
+     * @param chart the new {@link PaintChart} to display
+     */
     public void setChart(PaintChart chart) {
         if (paintChart != null) {
             mainPanel.remove(paintChart);
@@ -72,6 +82,9 @@ public class StatsView extends BaseView {
         mainPanel.repaint();
     }
 
+    /**
+     * Builds the top panel containing player, game, and total games count selectors.
+     */
     private void setTopPanel() {
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
 
@@ -91,6 +104,9 @@ public class StatsView extends BaseView {
         topPanel.add(numGamesPanel);
     }
 
+    /**
+     * Builds the player selector panel with its label and combo box.
+     */
     private void setPlayersPanel() {
         playersPanel.setLayout(new BoxLayout(playersPanel, BoxLayout.Y_AXIS));
         playersPanel.setPreferredSize(new Dimension(200, 100));
@@ -105,6 +121,9 @@ public class StatsView extends BaseView {
         playersPanel.add(jcbPlayers);
     }
 
+    /**
+     * Builds the game selector panel with its label and combo box.
+     */
     private void setGamesPanel() {
         userGamePanel.setLayout(new BoxLayout(userGamePanel, BoxLayout.Y_AXIS));
         userGamePanel.setPreferredSize(new Dimension(200, 100));
@@ -119,6 +138,10 @@ public class StatsView extends BaseView {
         userGamePanel.add(jcbGames);
     }
 
+    /**
+     * Builds the total games count panel displaying the given count.
+     * @param numGames the number of games to display initially
+     */
     private void setNumGamesPanel(int numGames) {
         numGamesPanel.setPreferredSize(new Dimension(200, 70));
         numGamesPanel.setMaximumSize(new Dimension(200, 70));
@@ -132,55 +155,102 @@ public class StatsView extends BaseView {
         numGamesPanel.add(jlNumGames, new GridBagConstraints());
     }
 
-    public int getSelectedPlayerId() {
-        Integer selected = (Integer) jcbPlayers.getSelectedItem();
-        return selected != null ? selected : -1;
-    }
-
+    /**
+     * @return the selected game ID, or -1 if none is selected
+     */
     public int getSelectedGameId() {
         Integer selected = (Integer) jcbGames.getSelectedItem();
         return selected != null ? selected : -1;
     }
 
-    public void setPlayersOptions(List<Integer> players) {
-        DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
-        for (Integer player : players) {
+    /**
+     * Populates the players combo box with the given list of usernames.
+     * @param players the list of player usernames
+     */
+    public void setPlayersOptions(List<String> players) {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        for (String player : players) {
             model.addElement(player);
         }
         jcbPlayers.setModel(model);
         jcbPlayers.setSelectedIndex(-1);
     }
 
+    /**
+     * @return the currently selected player username, or null if none
+     */
+    public String getSelectedPlayer() {
+        return (String) jcbPlayers.getSelectedItem();
+    }
+
+    /**
+     * Pre-selects the given username in the players combo box.
+     * @param username the username to select
+     */
+    public void selectPlayer(String username) {
+            jcbPlayers.setSelectedItem(username != null ? username.trim() : null);
+    }
+
+    /**
+     * Populates the games combo box with the given list of game IDs.
+     * @param games the list of game IDs to display
+     */
     public void setGamesOptions(List<Integer> games) {
         jcbGames.removeAllItems();
 
         DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
-        for (Integer game : games) {
-            model.addElement(game);
+        if (games.isEmpty()) {
+            jcbGames.setModel(model);
+            jcbGames.setEnabled(false);
+        } else {
+            for (Integer game : games) {
+                model.addElement(game);
+            }
+            jcbGames.setEnabled(true);
+            jcbGames.setModel(model);
+            jcbGames.setSelectedIndex(-1);
         }
-        jcbGames.setModel(model);
-
-        jcbGames.setSelectedIndex(-1);
     }
 
+    /**
+     * Attaches listeners to the player and game combo boxes.
+     * @param playerListener the listener for player selection changes
+     * @param gameListener   the listener for game selection changes
+     */
     public void addComboBoxListeners(ActionListener playerListener, ActionListener gameListener) {
         jcbPlayers.addActionListener(playerListener);
         jcbGames.addActionListener(gameListener);
     }
 
+    /**
+     * Removes listeners from the player and game combo boxes.
+     * @param playerListener the listener to remove from the player combo box
+     * @param gameListener   the listener to remove from the game combo box
+     */
     public void removeComboBoxListeners(ActionListener playerListener, ActionListener gameListener) {
         jcbPlayers.removeActionListener(playerListener);
         jcbGames.removeActionListener(gameListener);
     }
 
+    /**
+     * Updates the total games count label.
+     * @param count the number of games to display
+     */
     public void setTotalGamesCount(int count) {
         jlNumGames.setText("Number of games: " + count);
     }
 
+    /**
+     * Enables or disables the game combo box.
+     * @param enabled true to enable, false to disable
+     */
     public void setGameComboBoxEnabled(boolean enabled) {
         jcbGames.setEnabled(enabled);
     }
 
+    /**
+     * Removes all items from the games combo box.
+     */
     public void clearGamesOptions() {
         jcbGames.removeAllItems();
     }

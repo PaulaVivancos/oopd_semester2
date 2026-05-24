@@ -27,10 +27,14 @@ public class RegisterView extends JPanel {
 
     public static final String REGISTER_USER = "REGISTER_USER";
     public static final String GO_LOGIN = "GO_TO_LOGIN";
-
+    private static final String SIGN_UP = "Sign up";
+    private static final String EXISTING_ACCOUNT = "Already have an account. Log in.";
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
 
+    /**
+     * Constructs the register view and initializes all UI components.
+     */
     public RegisterView() {
         setLayout(new BorderLayout());
 
@@ -44,7 +48,7 @@ public class RegisterView extends JPanel {
         jpPasswordConfirmation = new JPanel();
 
         //Labels
-        jlTitle = new JLabel("Sign up");
+        jlTitle = new JLabel(SIGN_UP);
 
         //Text fields
         jtfUsername = new JTextField();
@@ -54,8 +58,8 @@ public class RegisterView extends JPanel {
 
 
         //Buttons
-        jbLogIn = new JButton("Already have an account. Log in.");
-        jbSignUp = new JButton("SIGN UP");
+        jbLogIn = new JButton(EXISTING_ACCOUNT);
+        jbSignUp = new JButton(SIGN_UP);
 
         jbLogIn.setActionCommand(GO_LOGIN);
         jbSignUp.setActionCommand(REGISTER_USER);
@@ -64,7 +68,8 @@ public class RegisterView extends JPanel {
     }
 
     /**
-     * Attaches the given listener to both the sign-up and log-in buttons.
+     * Registers a listener for the sign up and log in buttons.
+     * @param actionListener the ActionListener to invoke on click
      */
     public void addListeners(ActionListener actionListener) {
         jbLogIn.addActionListener(actionListener);
@@ -369,30 +374,38 @@ public class RegisterView extends JPanel {
         });
     }
 
-    public void addRegisterListener(ActionListener listener) {
-        jbSignUp.addActionListener(listener);
-    }
-
-    public JButton getLogInButton() {
-        return jbLogIn;
-    }
-
+    /**
+     * @return the text entered in the username field
+     */
     public String getUsername() {
         return jtfUsername.getText();
     }
 
+    /**
+     * @return the text entered in the password field
+     */
     public String getPassword() {
         return new String(jtfPassword.getPassword());
     }
 
+    /**
+     * @return the text entered in the email field
+     */
     public String getEmail() {
         return jtfEmail.getText();
     }
 
+    /**
+     * @return the text entered in the password confirmation field
+     */
     public String getPasswordConfirmation() {
         return new String(jtfPasswordConfirmation.getPassword());
     }
 
+    /**
+     * Displays an error dialog with the given message.
+     * @param message the error message to display
+     */
     public void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
