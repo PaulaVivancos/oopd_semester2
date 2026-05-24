@@ -13,8 +13,8 @@ public class StatsView extends BaseView {
     private JPanel topPanel, playersPanel, userGamePanel, numGamesPanel;
     private JLabel jlPlayers, jlGames, jlNumGames;
 
-    // 1. Configurados estrictamente como Integer
-    private JComboBox<Integer> jcbPlayers, jcbGames;
+    private JComboBox<String> jcbPlayers;
+    private JComboBox<Integer> jcbGames;
 
     private PaintChart paintChart;
     private final String BACKGROUND_URL = "resources/background.jpg";
@@ -132,35 +132,43 @@ public class StatsView extends BaseView {
         numGamesPanel.add(jlNumGames, new GridBagConstraints());
     }
 
-    public int getSelectedPlayerId() {
-        Integer selected = (Integer) jcbPlayers.getSelectedItem();
-        return selected != null ? selected : -1;
-    }
-
     public int getSelectedGameId() {
         Integer selected = (Integer) jcbGames.getSelectedItem();
         return selected != null ? selected : -1;
     }
 
-    public void setPlayersOptions(List<Integer> players) {
-        DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
-        for (Integer player : players) {
+    public void setPlayersOptions(List<String> players) {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        for (String player : players) {
             model.addElement(player);
         }
         jcbPlayers.setModel(model);
         jcbPlayers.setSelectedIndex(-1);
     }
 
+    public String getSelectedPlayer() {
+        return (String) jcbPlayers.getSelectedItem();
+    }
+
+    public void selectPlayer(String username) {
+            jcbPlayers.setSelectedItem(username != null ? username.trim() : null);
+        }
+
     public void setGamesOptions(List<Integer> games) {
         jcbGames.removeAllItems();
 
         DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
-        for (Integer game : games) {
-            model.addElement(game);
+        if (games.isEmpty()) {
+            jcbGames.setModel(model);
+            jcbGames.setEnabled(false);
+        } else {
+            for (Integer game : games) {
+                model.addElement(game);
+            }
+            jcbGames.setEnabled(true);
+            jcbGames.setModel(model);
+            jcbGames.setSelectedIndex(-1);
         }
-        jcbGames.setModel(model);
-
-        jcbGames.setSelectedIndex(-1);
     }
 
     public void addComboBoxListeners(ActionListener playerListener, ActionListener gameListener) {

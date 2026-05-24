@@ -122,16 +122,25 @@ public class GameController implements ActionListener, GameListener {
         });
     }
 
+    private void stopCurrentGame() {
+        if (statsTracker != null) {
+            statsTracker.stop();
+            if (statsThread != null) statsThread.interrupt();
+            statsTracker = null;
+            statsThread = null;
+        }
+        if (gameManager.getCurrentGame() != null) {
+            gameManager.getCurrentGame().stopGame();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
 
         if (cmd.equals(GO_GAME)) {
             appController.switchCard(GAME);
-
-            SwingUtilities.invokeLater(() -> {
-                gameView.showGamesPopUp(this);
-            });
+            gameView.showGamesPopUp(this);
         } else if (cmd.equals(BUY_COFFEE)) {
             handleBuyCoffee();
 
@@ -206,6 +215,7 @@ public class GameController implements ActionListener, GameListener {
     }
 
     public void onGameViewShown() {
+        stopCurrentGame();
         gameView.showGamesPopUp(this);
     }
 

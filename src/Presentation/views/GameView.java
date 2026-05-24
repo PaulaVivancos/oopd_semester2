@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.util.List;
 import static Presentation.views.ShopView.SAVE_GAME;
 import static java.lang.Math.round;
 
@@ -162,7 +163,7 @@ public class GameView extends BaseView {
         jpBot.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         jpBot.setOpaque(false);
 
-        String[] columns = {"ID", "Name", "Quantity", "Price"};
+        String[] columns = {"Name", "Quantity", "Unit production", "Total production", "% Global"};
 
         DefaultTableModel tableModel = new DefaultTableModel(new Object[][]{}, columns) {
             @Override
@@ -179,22 +180,30 @@ public class GameView extends BaseView {
         jpBot.add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void updateOwnedGeneratorsTable(java.util.List<Generator> ownedGenerators) {
+    public void updateOwnedGeneratorsTable(List<Generator> ownedGenerators) {
         DefaultTableModel model = (DefaultTableModel) jtTable.getModel();
-        model.setRowCount(0); // Clear old rows
+        model.setRowCount(0);
 
-        int displayId = 1; // Visual counter for the table rows
-
-        for (int i = 0; i < ownedGenerators.size(); i++) {
-            Generator gen = ownedGenerators.get(i);
-
+        // calculate total production for % column
+        double totalProduction = 0;
+        for (Generator gen : ownedGenerators) {
             if (gen.getQuantity() > 0) {
+                totalProduction += gen.getQuantity() * gen.getType().getBaseProduction() * gen.getUpgradeMultiplier();
+            }
+        }
+
+        for (Generator gen : ownedGenerators) {
+            if (gen.getQuantity() > 0) {
+                double unitProduction = gen.getType().getBaseProduction() * gen.getUpgradeMultiplier();
+                double totalGen = gen.getQuantity() * unitProduction;
+                double percent = totalProduction > 0 ? (totalGen / totalProduction) * 100 : 0;
+
                 model.addRow(new Object[]{
-                        i,
                         gen.getType().getName(),
                         gen.getQuantity(),
-                        String.format("$%.2f", gen.getCurrentPrice())
-                        //gen.getType().getBasePrice();
+                        String.format("%.2f", unitProduction),
+                        String.format("%.2f", totalGen),
+                        String.format("%.1f%%", percent)
                 });
             }
         }

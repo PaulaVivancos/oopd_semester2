@@ -8,10 +8,11 @@ public class StatsTracker implements Runnable {
     private final Game game;
     private final int gameId;
 
-    private boolean running = true;
+    private volatile boolean running = true;
     private double lastSavedCoffees = 0;
 
     private final static int SLEEP_MILIS = 60000;
+    private final static double SIXTY_SECONDS = 60;
 
     public StatsTracker(StatsController statsController, Game game) {
         this.statsController = statsController;
@@ -26,6 +27,7 @@ public class StatsTracker implements Runnable {
                 saveStat();
                 Thread.sleep(SLEEP_MILIS);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 running = false;
             }
         }
@@ -57,6 +59,6 @@ public class StatsTracker implements Runnable {
                 java.time.LocalDateTime.now()
         ).getSeconds();
 
-        return seconds / 60.0;
+        return seconds / SIXTY_SECONDS;
     }
 }

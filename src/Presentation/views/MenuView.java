@@ -194,13 +194,4 @@ public class MenuView extends JPanel {
 
     }
 
-    public void addPlayListener(ActionListener actionListener) {
-        jbPlay.addActionListener(actionListener);
-    }
-
-    public JButton getGameButton()   { return jbPlay; }
-    public JButton getStatsButton()  { return jbStats; }
-    public JButton getConfigButton() { return jbConfig; }
-    public JButton getLogOutButton() { return jbLogOut; }
-
 }

@@ -12,16 +12,16 @@ public class StatsManager {
         this.statsDAO = statsDAO;
     }
 
-    public List<Integer> getAllPlayers() {
+    public List<String> getAllPlayers() {
         return statsDAO.loadAllPlayers();
     }
 
-    public List<Integer> getGamesByPlayer(int playerId) {
-        return statsDAO.loadGamesByPlayer(playerId);
+    public List<Integer> getGamesByPlayer(String username) {
+        return statsDAO.loadGamesByPlayer(username);
     }
 
-    public List<CoffeeStats> getStatsByUserAndGame(int playerId, int gameId) {
-        return statsDAO.loadStatsByUserAndGame(playerId, gameId);
+    public List<CoffeeStats> getStatsByUserAndGame(String username, int gameId) {
+        return statsDAO.loadStatsByUserAndGame(username, gameId);
     }
 
     public void saveStat(int gameId, double minute, double coffees) {

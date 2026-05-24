@@ -86,6 +86,7 @@ public class Game {
     public void stopGame() {
         for (Generator g : generators) g.stop();
         for (Thread t : generatorThreads) t.interrupt();
+        generatorThreads.clear();
     }
 
     public synchronized void addListener(GameListener listener){
@@ -159,7 +160,6 @@ public class Game {
         for (String upgradeName : this.purchasedUpgradeNames) {
             if (upgradeName == null) continue;
 
-            // Clean up whitespace to prevent matching bugs
             String cleanName = upgradeName.trim().toLowerCase();
 
             // Map your database upgrade strings directly to your Generator Type names

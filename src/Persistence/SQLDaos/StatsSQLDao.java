@@ -46,14 +46,13 @@ public class StatsSQLDao implements StatsDAO {
     }
 
     @Override
-    public List<Integer> loadAllPlayers() {
-        List<Integer> players = new ArrayList<>();
-        String query = "SELECT DISTINCT user_id FROM game ORDER BY user_id;";
+    public List<String> loadAllPlayers() {
+        List<String> players = new ArrayList<>();
+        String query = "SELECT username FROM user ORDER BY username;";
         ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-
         try {
             while (rs != null && rs.next()) {
-                players.add(Integer.parseInt(rs.getString("user_id")));
+                players.add(rs.getString("username").trim());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,14 +61,16 @@ public class StatsSQLDao implements StatsDAO {
     }
 
     @Override
-    public List<Integer> loadGamesByPlayer(int playerId) {
+    public List<Integer> loadGamesByPlayer(String username) {
         List<Integer> games = new ArrayList<>();
-        String query = "SELECT game_id FROM game WHERE user_id = '" + playerId + "' ORDER BY game_id;";
+        String query = "SELECT g.game_id FROM game g " +
+                "JOIN user u ON g.user_id = u.user_id " +
+                "WHERE u.username = '" + username + "' ORDER BY g.game_id;";
         ResultSet rs = SQLConnector.getInstance().selectQuery(query);
 
         try {
             while (rs != null && rs.next()) {
-                games.add(Integer.parseInt(rs.getString("game_id")));
+                games.add(rs.getInt("game_id"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,13 +79,14 @@ public class StatsSQLDao implements StatsDAO {
     }
 
     @Override
-    public List<CoffeeStats> loadStatsByUserAndGame(int playerId, int gameId) {
-        List<CoffeeStats> list = new ArrayList<>();
+    public List<CoffeeStats> loadStatsByUserAndGame(String username, int gameId) {
+            List<CoffeeStats> list = new ArrayList<>();
+            String query = "SELECT s.minute, s.num_coffees FROM statistics s " +
+                    "JOIN game g ON s.game_id = g.game_id " +
+                    "JOIN user u ON g.user_id = u.user_id " +
+                    "WHERE u.username = '" + username + "' AND s.game_id = " + gameId + " " +
+                    "ORDER BY s.minute;";
 
-        String query = "SELECT s.minute, s.num_coffees FROM statistics s " +
-                "JOIN game g ON s.game_id = g.game_id " +
-                "WHERE g.user_id = '" + playerId + "' AND s.game_id = " + gameId + " " +
-                "ORDER BY s.minute;";
         ResultSet rs = SQLConnector.getInstance().selectQuery(query);
 
         try {

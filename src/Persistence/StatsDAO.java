@@ -12,7 +12,7 @@ public interface StatsDAO {
     public void insertStats(int gameId, double time, double num_coffees);
     public List<CoffeeStats> loadStats();
     public void deleteAll();
-    public List<Integer> loadAllPlayers();
-    public List<Integer> loadGamesByPlayer(int playerId);
-    public List<CoffeeStats> loadStatsByUserAndGame(int playerId, int gameId);
+    public List<String> loadAllPlayers();
+    public List<Integer> loadGamesByPlayer(String username);
+    public List<CoffeeStats> loadStatsByUserAndGame(String username, int gameId);
 }

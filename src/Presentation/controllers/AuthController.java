@@ -126,7 +126,7 @@ public class AuthController implements ActionListener {
 
         String error = userManager.signUp(username, email, password, password_confirmation);
         if (error == null) {
-            appController.switchCard("menu");
+            appController.switchCard(MENU);
         } else {
             registerView.showError(error);
         }
@@ -186,6 +186,10 @@ public class AuthController implements ActionListener {
             forgotPasswordView.showError(error);
             forgotPasswordView.showChangePassword(() -> handleChangePassword());
         }
+    }
+
+    public String getLoggedInUsername() {
+        return userManager.getLoggedInUsername();
     }
 
     /**

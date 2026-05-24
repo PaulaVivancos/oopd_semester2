@@ -170,7 +170,8 @@ public class GameSQLDao implements GameDAO {
                 int genId = rs.getInt("generator_id");
                 int quantity = rs.getInt("quantity");
 
-                if (genId >= 0 && genId < game.getGenerators().size()) {
+                int index = genId - 1;
+                if (index >= 0 && index < game.getGenerators().size()) {
                     game.getGenerators().get(genId).setQuantity(quantity);
                 }
             }

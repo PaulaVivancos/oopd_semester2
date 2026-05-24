@@ -8,11 +8,11 @@ import Presentation.views.StatsView;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List; // Colección genérica correcta
+import java.util.List;
 
 import static Presentation.views.MenuView.GO_STATS;
 
-public class StatsController implements ActionListener {
+public class StatsController  {
     private final AppController appController;
     private final StatsView statsView;
     private final StatsManager statsManager;
@@ -49,33 +49,36 @@ public class StatsController implements ActionListener {
         statsManager.saveStat(gameId, minute, coffees);
     }
 
-    public void onViewOpened() {
+    public void onViewOpened(String loggedUsername) {
         detachListeners();
 
         statsView.setChart(new PaintChart());
 
-        List<Integer> players = statsManager.getAllPlayers();
+        List<String> players = statsManager.getAllPlayers();
         statsView.setPlayersOptions(players);
-
         statsView.clearGamesOptions();
         statsView.setGameComboBoxEnabled(false);
         statsView.setTotalGamesCount(0);
 
+        if (loggedUsername != null) {
+            statsView.selectPlayer(loggedUsername);
+        }
+
         attachListeners();
+
+        if (loggedUsername != null) {
+            handlePlayerSelection();
+        }
     }
 
     private void handlePlayerSelection() {
-        int selectedPlayer = statsView.getSelectedPlayerId();
+        String selectedPlayer = statsView.getSelectedPlayer();
 
-        detachListeners(); // Always detach before altering ComboBox models to prevent loops
+        detachListeners();
 
-        if (selectedPlayer != -1) {
+        if (selectedPlayer != null) {
             List<Integer> games = statsManager.getGamesByPlayer(selectedPlayer);
-
             statsView.setGamesOptions(games);
-
-            statsView.setGameComboBoxEnabled(true);
-
             statsView.setTotalGamesCount(games.size());
         } else {
             statsView.clearGamesOptions();
@@ -87,28 +90,16 @@ public class StatsController implements ActionListener {
     }
 
     private void handleGameSelection() {
-        int selectedPlayer = statsView.getSelectedPlayerId();
+        String selectedPlayer = statsView.getSelectedPlayer();
         int selectedGame = statsView.getSelectedGameId();
 
-        if (selectedPlayer != -1 && selectedGame != -1) {
+        if (selectedPlayer != null && selectedGame != -1) {
             List<CoffeeStats> stats = statsManager.getStatsByUserAndGame(selectedPlayer, selectedGame);
-
-
             PaintChart chart = new PaintChart();
             chart.setStats(stats);
             statsView.setChart(chart);
-
-
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(GO_STATS)) {
-            appController.switchCard(STATS);
-            SwingUtilities.invokeLater(() -> {
-                onViewOpened();
-            });
-        }
-    }
+
 }

@@ -194,4 +194,8 @@ public class UserManager {
             return "Error updating the password in our records.";
         }
     }
+
+    public String getLoggedInUsername() {
+        return currentUser.getUsername();
+    }
 }
