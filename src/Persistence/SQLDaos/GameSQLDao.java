@@ -63,14 +63,6 @@ public class GameSQLDao implements GameDAO {
         saveGameUpgrades(game);
     }
 
-    @Override
-    public void deleteGame(int gameId) {
-        SQLConnector.getInstance().deleteQuery("DELETE FROM statistics WHERE game_id = " + gameId + ";");
-        SQLConnector.getInstance().deleteQuery("DELETE FROM game_upgrade WHERE game_id = " + gameId + ";");
-        SQLConnector.getInstance().deleteQuery("DELETE FROM game_generator WHERE game_id = " + gameId + ";");
-        SQLConnector.getInstance().deleteQuery("DELETE FROM game WHERE game_id = " + gameId + ";");
-    }
-
     /**
      * Maps the current row of the given ResultSet to a Game object,
      * including its generators and upgrades.
@@ -95,21 +87,6 @@ public class GameSQLDao implements GameDAO {
         game.reapplyPurchasedUpgrades();
 
         return game;
-    }
-
-    @Override
-    public int getLastGameIdByUser(int userId) {
-        String query = "SELECT MAX(game_id) FROM game WHERE user_id = " + userId;
-        ResultSet results = SQLConnector.getInstance().selectQuery(query);
-
-        try {
-            if (results != null && results.next()) {
-                return results.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     @Override

@@ -35,6 +35,9 @@ public class MenuView extends JPanel {
     private final String TITLE_BOT_URL = "resources/title.png";
     private final String COFFEE_CUP = "resources/coffee_cup.png";
 
+    /**
+     * Constructs the menu view and initializes all UI components.
+     */
     public MenuView() {
         setLayout(new BorderLayout());
 
@@ -64,7 +67,8 @@ public class MenuView extends JPanel {
     }
 
     /**
-     * Attaches the given listener to the logout and config buttons.
+     * Registers a listener for the logout and config buttons.
+     * @param actionListener the ActionListener to invoke on click
      */
     public void addAuthListeners(ActionListener actionListener) {
         jbLogOut.addActionListener(actionListener);
@@ -72,14 +76,16 @@ public class MenuView extends JPanel {
     }
 
     /**
-     * Attaches the given listener to the stats button.
+     * Registers a listener for the stats button.
+     * @param actionListener the ActionListener to invoke on click
      */
     public void addStatsListener(ActionListener actionListener) {
         jbStats.addActionListener(actionListener);
     }
 
     /**
-     * Attaches the given listener to the play button.
+     * Registers a listener for the play button.
+     * @param actionListener the ActionListener to invoke on click
      */
     public void addGameListener(ActionListener actionListener) {
         jbPlay.addActionListener(actionListener);

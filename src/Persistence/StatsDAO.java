@@ -17,16 +17,6 @@ public interface StatsDAO {
      */
     void insertStats(int gameId, int userId, double time, double num_coffees);
 
-    /**
-     * Returns all recorded stats across all games and players.
-     * @return list of all {@link CoffeeStats}
-     */
-    List<CoffeeStats> loadStats();
-
-    /**
-     * Deletes all stats from the database.
-     */
-    void deleteAll();
 
     /**
      * Returns all registered player usernames.

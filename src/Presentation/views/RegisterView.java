@@ -31,6 +31,9 @@ public class RegisterView extends JPanel {
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
 
+    /**
+     *
+     */
     public RegisterView() {
         setLayout(new BorderLayout());
 
@@ -64,7 +67,8 @@ public class RegisterView extends JPanel {
     }
 
     /**
-     * Attaches the given listener to both the sign-up and log-in buttons.
+     *
+     * @param actionListener
      */
     public void addListeners(ActionListener actionListener) {
         jbLogIn.addActionListener(actionListener);
@@ -369,30 +373,42 @@ public class RegisterView extends JPanel {
         });
     }
 
-    public void addRegisterListener(ActionListener listener) {
-        jbSignUp.addActionListener(listener);
-    }
-
-    public JButton getLogInButton() {
-        return jbLogIn;
-    }
-
+    /**
+     *
+     * @return
+     */
     public String getUsername() {
         return jtfUsername.getText();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPassword() {
         return new String(jtfPassword.getPassword());
     }
 
+    /**
+     *
+     * @return
+     */
     public String getEmail() {
         return jtfEmail.getText();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPasswordConfirmation() {
         return new String(jtfPasswordConfirmation.getPassword());
     }
 
+    /**
+     *
+     * @param message
+     */
     public void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }

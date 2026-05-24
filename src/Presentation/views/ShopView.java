@@ -309,8 +309,6 @@ public class ShopView extends BaseView {
 
     }
 
-    //listeners
-    // GameView
     public void addGenBuyListener(int index, ActionListener listener) {
         jbBuyButtons.get(index).addActionListener(listener);
     }

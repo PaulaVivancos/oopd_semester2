@@ -35,6 +35,9 @@ public class LoginView extends JPanel {
     //IMAGES
     private final String BACKGROUND_URL = "resources/background.jpg";
 
+    /**
+     * Constructs the login view and initializes all UI components.
+     */
     public LoginView() {
         setLayout(new BorderLayout());
 
@@ -309,34 +312,56 @@ public class LoginView extends JPanel {
         });
     }
 
+    /**
+     * Displays an error dialog with the given message.
+     * @param message the error message to display
+     */
     public void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * Registers a listener for the log in button.
+     * @param listener the ActionListener to invoke on click
+     */
     public void addLoginListener(ActionListener listener) {
         jbLogIn.addActionListener(listener);
     }
 
+    /**
+     * Registers a listener for the sign up button.
+     * @param listener the ActionListener to invoke on click
+     */
     public void addSignUpListener(ActionListener listener) {
         jbSignUp.addActionListener(listener);
     }
 
+    /**
+     * Registers a listener for the forgot password button.
+     * @param listener the ActionListener to invoke on click
+     */
     public void addForgotPasswordListener(ActionListener listener) {
         jbForgotPassword.addActionListener(listener);
     }
 
+    /**
+     * @return the text entered in the username/email field
+     */
     public String getUsernameEmail() {
         return jtfUsername.getText();
     }
 
+    /**
+     * @return the text entered in the password field
+     */
     public String getPassword() {
         return new String(jtfPassword.getPassword());
     }
 
-    public JButton getSingUpButton() {
-        return jbSignUp;
-    }
 
+    /**
+     * Clears the username and password fields.
+     */
     public void clearFields() {
         if (jtfUsername != null) {
             jtfUsername.setText("");

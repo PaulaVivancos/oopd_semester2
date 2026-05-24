@@ -30,7 +30,8 @@ public abstract class BaseView extends JPanel {
     protected final Color BACKGROUND_BUTTON_PRESSED = new Color(214, 196, 171);
 
     /**
-     * Sets up the background panel, top bar, and calls subclass initialization.
+     * Constructs the base view, optionally showing the menu button.
+     * @param showMenuButton whether to display the dropdown menu button in the top bar
      */
     public BaseView(boolean showMenuButton) {
         this.showMenuButton = showMenuButton;
@@ -51,7 +52,8 @@ public abstract class BaseView extends JPanel {
     }
 
     /**
-     * Sets the static global logout listener for ALL views that extend BaseView.
+     * Sets the shared logout listener used by all view instances.
+     * @param listener the ActionListener to invoke on logout
      */
     public static void setGlobalLogoutListener(ActionListener listener) {
         globalLogoutListener = listener;
@@ -149,20 +151,35 @@ public abstract class BaseView extends JPanel {
         arrowBackButton.setOpaque(false);
     }
 
+    /**
+     * Subclasses implement this to populate the dropdown menu with their own items.
+     * @param menu the popup menu to populate
+     */
     protected abstract void buildMenu(JPopupMenu menu);
+
+    /**
+     * Subclasses implement this to add their own components to the view.
+     */
     protected abstract void initComponents();
 
+    /**
+     * Adds a menu item with the given label and action to the popup menu.
+     * @param menu   the popup menu to add the item to
+     * @param label  the display text of the item
+     * @param action the listener to invoke when the item is selected
+     */
     protected void addMenuItem(JPopupMenu menu, String label, ActionListener action) {
         JMenuItem item = new JMenuItem(label);
         item.addActionListener(action);
         menu.add(item);
     }
 
+    /**
+     * Adds a component to the center region of the background panel.
+     * @param component the component to add
+     */
     protected void addToCenter(JComponent component) {
         panel.add(component, BorderLayout.CENTER);
     }
 
-    protected void addToSouth(JComponent component) {
-        panel.add(component, BorderLayout.SOUTH);
-    }
 }

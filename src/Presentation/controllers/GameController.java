@@ -27,7 +27,6 @@ public class GameController implements ActionListener, GameListener {
 
     private final GameManager gameManager;
     private final UserManager userManager;
-
     public static int NUM_GENERATORS = 4;
     private final ActionListener[] genListeners;
 
@@ -339,8 +338,8 @@ public class GameController implements ActionListener, GameListener {
     }
 
     /**
-     *
-     * @param currentCoffees
+     * Refreshes the shop view rows based on affordability and generator quantities.
+     * @param currentCoffees the player's current coffee count
      */
     private void refreshShopView(double currentCoffees) {
         Game game = gameManager.getCurrentGame();
@@ -352,7 +351,7 @@ public class GameController implements ActionListener, GameListener {
     }
 
     /**
-     *
+     * Refreshes the owned generators table in the game view.
      */
     private void refreshGameViewTable() {
         if (gameManager.getCurrentGame() != null) {
@@ -364,7 +363,7 @@ public class GameController implements ActionListener, GameListener {
     }
 
     /**
-     *
+     * Saves the current game state, showing a success or error dialog accordingly.
      */
     private void handleSaveGame() {
         try {

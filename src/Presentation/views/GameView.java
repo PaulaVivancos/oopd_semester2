@@ -40,9 +40,13 @@ public class GameView extends BaseView {
     public static final String BUY_COFFEE = "BUY_COFFEE";
     public static final String GO_SHOP = "GO_TO_SHOP";
 
+    private ActionListener logoutListener;
+    private ActionListener savegameListener;
+    private ActionListener newGameListener;
+    private ActionListener loadGameListener;
 
-    /*
-
+    /**
+     * Constructs the game view and applies styling to the generator and upgrade buttons.
      */
     public GameView() {
         super(true); // initMenu() + initComponents()
@@ -51,10 +55,6 @@ public class GameView extends BaseView {
         setButton(jbUpg, DIMENSION_BUTTON);
     }
 
-    private ActionListener logoutListener;
-    private ActionListener savegameListener;
-    private ActionListener newGameListener;
-    private ActionListener loadGameListener;
 
     /**
      * Populates the top bar menu with save/load game options and account actions.
@@ -179,6 +179,10 @@ public class GameView extends BaseView {
         jpBot.add(scrollPane, BorderLayout.CENTER);
     }
 
+    /**
+     * Updates the generators table with the currently owned generators and their production stats.
+     * @param ownedGenerators the list of generators to display
+     */
     public void updateOwnedGeneratorsTable(List<Generator> ownedGenerators) {
         DefaultTableModel model = (DefaultTableModel) jtTable.getModel();
         model.setRowCount(0);
@@ -383,50 +387,65 @@ public class GameView extends BaseView {
         return button;
     }
 
+    /**
+     * Registers a listener for the logout menu item.
+     * @param l the ActionListener to invoke on logout
+     */
     public void addLogoutListener(ActionListener l)  {
         this.logoutListener = l;
     }
+
+    /**
+     * Registers a listener for the save game menu item.
+     * @param l the ActionListener to invoke on save
+     */
     public void addSaveGameListener(ActionListener l)  { this.savegameListener = l; }
 
+    /**
+     * Registers a listener for the coffee cup click (buy coffee action).
+     * @param actionListener the ActionListener to invoke on click
+     */
     public void addBuyListener(ActionListener actionListener) {
         //jbBuy.addActionListener(actionListener);
         jipCoffeeCup.addActionListener(actionListener);
     }
 
+    /**
+     * Registers a listener for the generators/shop button.
+     * @param actionListener the ActionListener to invoke
+     */
     public void addShopListener(ActionListener actionListener) {
         jbGen.addActionListener(actionListener);
     }
 
+    /**
+     * Registers a listener for the new game option in the popup dialog.
+     * @param actionListener the ActionListener to invoke
+     */
     public void addNewGameListener(ActionListener actionListener) {
         this.newGameListener = actionListener;
     }
 
+    /**
+     * Registers a listener for the load game option in the popup dialog.
+     * @param actionListener the ActionListener to invoke
+     */
     public void addLoadGameListener(ActionListener actionListener) {
         this.loadGameListener = actionListener;
     }
 
-
-
-    // Getters
-
-    public JButton getJbBuy() {
-        return jbBuy;
-    }
-
-    public JButton getJbGen() {
-        return jbGen;
-    }
-
+    /**
+     * @return the upgrades button
+     */
     public JButton getJbUpg() {
         return jbUpg;
     }
 
+    /**
+     * @return the coffee counter label
+     */
     public JLabel getJlCounter() {
         return jlCounter;
-    }
-
-    public JTable getJtTable() {
-        return jtTable;
     }
 
     /**

@@ -17,6 +17,9 @@ public class MainFrame extends JFrame {
     private final int WIDTH_MAIN_FRAME = 1150;
     private final int HEIGHT_MAIN_FRAME = 800;
 
+    /**
+     *
+     */
     public MainFrame() {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
@@ -57,6 +60,10 @@ public class MainFrame extends JFrame {
         cardLayout.show(mainPanel, previous);
     }
 
+    /**
+     *
+     * @return
+     */
     public JPanel getContainer() {
         return mainPanel;
     }

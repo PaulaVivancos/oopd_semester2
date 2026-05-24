@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SQL-based implementation of {@link StatsDAO} for persisting and retrieving game's statictics.
+ */
 public class StatsSQLDao implements StatsDAO {
 
     @Override
@@ -19,32 +22,6 @@ public class StatsSQLDao implements StatsDAO {
                 num_coffees + ");";
 
         SQLConnector.getInstance().insertQuery(query);
-    }
-
-    @Override
-    public List<CoffeeStats> loadStats() {
-        List<CoffeeStats> list = new ArrayList<>();
-
-        String query = "SELECT minute, num_coffees FROM statistics ORDER BY minute;";
-        ResultSet rs = SQLConnector.getInstance().selectQuery(query);
-
-        try {
-            while (rs != null && rs.next()) {
-                double time = rs.getDouble("minute");
-                int coffees = rs.getInt("num_coffees");
-
-                list.add(new CoffeeStats(time, coffees));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-
-    public void deleteAll() {
-        String query = "DELETE FROM statistics;";
-        SQLConnector.getInstance().deleteQuery(query);
     }
 
     @Override

@@ -31,19 +31,6 @@ public interface GameDAO {
      */
     void updateGame(Game game) throws SQLException;
 
-    /**
-     * Deletes a game and all its associated data.
-     * @param gameId the ID of the game to delete
-     * @throws SQLException if a database access error occurs
-     */
-    void deleteGame(int gameId) throws SQLException;
-
-    /**
-     * Returns the most recent game ID for the given user.
-     * @param userId the user's ID
-     * @return the last game ID, or 0 if none found
-     */
-    int getLastGameIdByUser(int userId);
 
     /**
      * Returns the unfinished game for the given user, if any.
